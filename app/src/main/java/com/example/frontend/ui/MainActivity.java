@@ -1,4 +1,4 @@
-package com.example.frontend;
+package com.example.frontend.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
