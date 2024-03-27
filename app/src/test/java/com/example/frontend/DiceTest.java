@@ -1,0 +1,47 @@
+package com.example.frontend;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import com.example.frontend.gamelogic.Dice;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Random;
+
+public class DiceTest {
+    static Dice dices;
+
+    @BeforeEach
+    public void setup() {
+        dices = new Dice();
+    }
+
+    @Test
+    public void testCreateDices() {
+        assertNotNull(dices, "Dice-Instanz sollte nicht null sein.");
+    }
+
+    @Test
+    public void testUseDiceGeneratesValidValue() {
+        dices.useDice();
+        int diceValue = dices.getDice();
+        assertTrue(diceValue >= 1 && diceValue <= 6, "Der Würfelwert sollte zwischen 1 und 6 liegen.");
+    }
+
+    @Test
+    public void testGetDiceAfterUseDice() {
+        dices.useDice();
+        int result = dices.getDice();
+        assertNotNull(result, "Nach Aufruf von useDice() sollte getDice() einen Wert liefern.");
+        assertTrue(result >= 1 && result <= 6, "Der Wert von getDice() sollte zwischen 1 und 6 sein.");
+    }
+
+    @Test
+    public void testSetRanSetsRandomObjectCorrectly() {
+        Random newRandom = new Random();
+        dices.setRan(newRandom);
+        dices.useDice();
+        int diceValue = dices.getDice();
+        assertNotNull(diceValue, "Nach Setzen von Random und Aufruf von useDice() sollte ein Würfelwert vorhanden sein.");
+    }
+}
