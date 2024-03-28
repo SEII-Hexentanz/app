@@ -55,6 +55,8 @@
                 android:layout_marginBottom="20dp"
                 android:ems="10"
                 android:inputType="text"
+                android:hint="Enter text (3 to 25 characters)"
+                android:maxLength="25"
                 android:minHeight="48dp"
                 android:text="@string/username"
                 tools:ignore="LabelFor"
@@ -72,10 +74,11 @@
                 android:inputType="number"
                 android:minHeight="48dp"
                 android:text="@string/age"
+                android:maxLength="3"
                 tools:ignore="LabelFor" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/buttonStart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
