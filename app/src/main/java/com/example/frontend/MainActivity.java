@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
         checkInputUsername(inputUsername);
 
+        checkInputAge(inputAge);
+
 
         btnStart.setOnClickListener(new View.OnClickListener() {
             String responseUser = inputUsername.getText().toString();
@@ -68,7 +70,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
+    void checkInputAge(TextView age) {
+        inputAge.setFilters(new InputFilter[]{new InputFilterMinMax(8, 99)});
+    }
 }
 
 
