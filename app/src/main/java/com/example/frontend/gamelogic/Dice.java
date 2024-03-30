@@ -3,6 +3,8 @@ package com.example.frontend.gamelogic;
 import androidx.annotation.NonNull;
 
 import java.util.Random;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 public class Dice {
     private int dice;
