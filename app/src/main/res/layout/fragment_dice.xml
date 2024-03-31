@@ -10,15 +10,16 @@
 
     <ImageView
         android:id="@+id/diceImage"
-        android:layout_width="209dp"
-        android:layout_height="220dp"
-        android:layout_marginStart="122dp"
+        android:layout_width="360dp"
+        android:layout_height="427dp"
         android:layout_marginTop="95dp"
+        android:layout_marginEnd="40dp"
         android:layout_marginBottom="96dp"
         android:src="@drawable/inital_dice"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.203" />
 
     <Button
         android:id="@+id/continueButtonDiceFragment"
@@ -34,11 +35,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/sliderTooltip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="9dp"
-        android:layout_marginTop="1dp"
-        app:layout_constraintEnd_toEndOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

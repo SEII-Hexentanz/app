@@ -3,6 +3,7 @@ package com.example.frontend.ui;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.frontend.R;
 
@@ -13,16 +14,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_dice);
 
-        /*// Prüfen Sie, ob die Activity neu erstellt wird oder wiederhergestellt wird
         if (savedInstanceState == null) {
-            // Erstellen Sie eine Instanz Ihres Fragments
-            DiceFragment diceFragment = new DiceFragment();
-
-            // Fügen Sie das Fragment zum 'fragment_container' hinzu
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, diceFragment)
-                    .commit();
-        }*/
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.DiceFragment, new DiceFragment());
+            fragmentTransaction.commit();
+        }
     }
     @Override
     protected void onDestroy(){

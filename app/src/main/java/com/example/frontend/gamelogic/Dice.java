@@ -1,12 +1,9 @@
 package com.example.frontend.gamelogic;
 
-import androidx.annotation.NonNull;
-
+import java.io.Serializable;
 import java.util.Random;
-import android.os.Parcel;
-import android.os.Parcelable;
 
-public class Dice {
+public class Dice implements Serializable {
     private int dice;
     private Random ran;
 
@@ -29,9 +26,8 @@ public class Dice {
         this.ran = ran;
     }
 
-    @NonNull
     @Override
     public String toString(){
-        return String.format("dice=&d",dice);
+        return String.format("dice=%d", dice);
     }
 }
