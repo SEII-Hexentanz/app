@@ -6,12 +6,12 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -27,54 +27,54 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     private ImageView diceImage;
     private Button continueButton;
     private DiceView diceView;
+    private TextView diceResult;
 
-    private final float SHAKE_THRESHOLD = 15;
-    private long sensorCount;
-    private float lastX,lastY,lastZ;
-    public DiceFragment(){
+    private final float SHAKE_THRESHOLD = 10;
+    private long lastUpdate = 0;
+    private float last_x, last_y, last_z;
+    private boolean diceThrown = false;
+
+    public DiceFragment() {
 
     }
 
     public static DiceFragment newInstance() {
-        DiceFragment dicefrag = new DiceFragment();
+        DiceFragment diceFragment = new DiceFragment();
         Bundle args = new Bundle();
-        dicefrag.setArguments(args);
-        return dicefrag;
+        diceFragment.setArguments(args);
+        return diceFragment;
     }
-    //TODO: add onCreate für server
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.sensorManager = (SensorManager) requireActivity().getSystemService(Context.SENSOR_SERVICE);
-        this.dice = new Dice();
-        this.sensorCount=0;
-        this.lastX = -1f;
-        this.lastY = -1f;
-        this.lastZ = -1f;
-        this.accelerometer=sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        this.diceView = new ViewModelProvider(requireActivity()).get(DiceView.class);
+        sensorManager = (SensorManager) requireActivity().getSystemService(Context.SENSOR_SERVICE);
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
+        dice = new Dice();
+        diceView = new ViewModelProvider(requireActivity()).get(DiceView.class);
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dice, container, false);
         diceImage = view.findViewById(R.id.diceImage);
         continueButton = view.findViewById(R.id.continueButtonDiceFragment);
+        diceResult= view.findViewById(R.id.diceResult);
         continueButton.setOnClickListener(v -> {
-
-            // TODO: Weitere navigation zu anderen fragments
             diceView.setContinuePressed(true);
             diceView.setDices(dice);
 
-        });
 
+        });
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
+        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
     }
 
     @Override
@@ -84,28 +84,38 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     }
 
     @Override
-    public void onSensorChanged(SensorEvent sensorEvent) {
-        if(sensorEvent.sensor.getType() != Sensor.TYPE_ACCELEROMETER) return;
+    public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER || diceThrown)
+            return;
 
         long currentTime = System.currentTimeMillis();
-        if((currentTime - sensorCount) > 1000) {
+        if ((currentTime - lastUpdate) > 1000) {
+            long diffTime = (currentTime - lastUpdate);
+            lastUpdate = currentTime;
 
-            float x = sensorEvent.values[0];
-            float y = sensorEvent.values[1];
-            float z = sensorEvent.values[2];
+            float x = event.values[0];
+            float y = event.values[1];
+            float z = event.values[2];
 
+            float speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000;
 
-            if(x > 3.0 || y > 3.0 || z > 3.0){
-
+            if (speed > SHAKE_THRESHOLD) {
                 dice.useDice();
-
                 updateDiceImage(diceImage, dice.getDice());
-                System.out.println("Würfel:" + dice.getDice());
+                System.out.println("Würfel: " +dice.getDice());
+                if(diceResult != null) {
+                    getActivity().runOnUiThread(() ->
+                            diceResult.setText("Würfelergebnis: " + dice.getDice()));
+                }
 
+                diceThrown = true;
             }
+
+            last_x = x;
+            last_y = y;
+            last_z = z;
         }
     }
-
 
     private void updateDiceImage(ImageView diceImage,int diceValue) {
         //TODO: add pictures of dices
@@ -114,27 +124,27 @@ public class DiceFragment extends Fragment implements SensorEventListener {
                 diceImage.setImageResource(R.drawable.dice1);
                 break;
             case 2:
-                diceImage.setImageResource(R.drawable.dice1);
+                diceImage.setImageResource(R.drawable.dice2);
                 break;
             case 3:
-                diceImage.setImageResource(R.drawable.dice1);
+                diceImage.setImageResource(R.drawable.dice3);
                 break;
             case 4:
-                diceImage.setImageResource(R.drawable.dice1);
+                diceImage.setImageResource(R.drawable.dice4);
                 break;
             case 5:
-                diceImage.setImageResource(R.drawable.dice1);
+                diceImage.setImageResource(R.drawable.dice5);
                 break;
             case 6:
-                diceImage.setImageResource(R.drawable.dice1);
+                diceImage.setImageResource(R.drawable.dice6);
                 break;
+            default: diceImage.setImageResource(R.drawable.inital_dice);
         }
-        // statt switch: int resId = getResources().getIdentifier("dice_" + diceNumber, "drawable", requireActivity().getPackageName());
-        //        diceImage.setImageResource(resId);
+
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // Kann leer bleiben, falls nicht benötigt.
+        // Not needed for this example
     }
 }
