@@ -1,16 +1,18 @@
 package com.example.frontend.gamelogic;
 
 import java.io.Serializable;
+import java.security.SecureRandom;
 import java.util.Random;
 
 public class Dice implements Serializable {
     private int dice_number;
-    private Random ran;
+    private SecureRandom ran;
+    // as sonarcloud suggests due to security reason use security random instead of ran
 
     public Dice(){
         super();
         dice_number=0;
-        ran=new Random();
+        ran=new SecureRandom();
     }
 
     public void useDice(){
@@ -22,7 +24,7 @@ public class Dice implements Serializable {
         return dice_number;
     }
 
-    public void setRan(Random ran){
+    public void setRan(SecureRandom ran){
         this.ran = ran;
     }
 

@@ -6,6 +6,7 @@ import com.example.frontend.gamelogic.Dice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.security.SecureRandom;
 import java.util.Random;
 
 public class DiceTest {
@@ -37,7 +38,7 @@ public class DiceTest {
 
     @Test
     public void testSetRanSetsRandomObjectCorrectly() {
-        Random newRandom = new Random();
+        SecureRandom newRandom = new SecureRandom();
         dices.setRan(newRandom);
         dices.useDice();
         int diceValue = dices.getDice();
