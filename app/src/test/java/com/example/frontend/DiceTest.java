@@ -1,11 +1,13 @@
 package com.example.frontend;
 
 import static org.junit.jupiter.api.Assertions.*;
+import org.mockito.Mockito;
 
 import com.example.frontend.gamelogic.Dice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.when;
 import java.security.SecureRandom;
 import java.util.Random;
 
