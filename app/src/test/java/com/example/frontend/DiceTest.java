@@ -32,7 +32,6 @@ public class DiceTest {
     public void testGetDiceAfterUseDice() {
         dices.useDice();
         int result = dices.getDice();
-        assertNotNull(result, "Nach Aufruf von useDice() sollte getDice() einen Wert liefern.");
         assertTrue(result >= 1 && result <= 6, "Der Wert von getDice() sollte zwischen 1 und 6 sein.");
     }
 
@@ -42,6 +41,7 @@ public class DiceTest {
         dices.setRan(newRandom);
         dices.useDice();
         int diceValue = dices.getDice();
-        assertNotNull(diceValue, "Nach Setzen von Random und Aufruf von useDice() sollte ein Würfelwert vorhanden sein.");
+        assertTrue(diceValue >= 1 && diceValue <= 6, "Nach Setzen von Random und Aufruf von useDice() sollte ein gültiger Würfelwert zwischen 1 und 6 vorhanden sein.");
     }
+
 }

@@ -4,22 +4,22 @@ import java.io.Serializable;
 import java.util.Random;
 
 public class Dice implements Serializable {
-    private int dice;
+    private int dice_number;
     private Random ran;
 
     public Dice(){
         super();
-        dice=0;
+        dice_number=0;
         ran=new Random();
     }
 
     public void useDice(){
-        dice= ran.nextInt(6)+1;
+        dice_number= ran.nextInt(6)+1;
     }
 
     //is also sum of dice
     public int getDice() {
-        return dice;
+        return dice_number;
     }
 
     public void setRan(Random ran){
@@ -28,6 +28,6 @@ public class Dice implements Serializable {
 
     @Override
     public String toString(){
-        return String.format("dice=%d", dice);
+        return String.format("dice=%d", dice_number);
     }
 }

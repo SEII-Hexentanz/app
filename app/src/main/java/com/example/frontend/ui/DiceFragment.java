@@ -35,7 +35,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     private boolean diceThrown = false;
 
     public DiceFragment() {
-
+        //typical factory method constructor
     }
 
     public static DiceFragment newInstance() {
@@ -102,7 +102,6 @@ public class DiceFragment extends Fragment implements SensorEventListener {
             if (speed > SHAKE_THRESHOLD) {
                 dice.useDice();
                 updateDiceImage(diceImage, dice.getDice());
-                System.out.println("Würfel: " +dice.getDice());
                 if(diceResult != null) {
                     getActivity().runOnUiThread(() ->
                             diceResult.setText("Würfelergebnis: " + dice.getDice()));
