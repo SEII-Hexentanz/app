@@ -3,4 +3,7 @@
     <string name="age">Age</string>
     <string name="username">Username</string>
     <string name="imageview_hexentanzPlaceholder">TODO</string>
+    <string name="usernameHint">Username</string>
+    <string name="buttonSend">Button</string>
+    <string name="inputEnter">Enter the game:</string>
 </resources>

@@ -10,12 +10,15 @@
 
     <ImageView
         android:id="@+id/imageView3"
-        android:layout_width="297dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="345dp"
         android:layout_weight="1"
-        android:src="@drawable/hexentanz"
-        android:paddingStart="100dp"
         android:contentDescription="@string/imageview_hexentanzPlaceholder"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:paddingBottom="10dp"
+        android:src="@drawable/hexentanz"
         tools:ignore="RtlSymmetry" />
 
     <LinearLayout
@@ -41,49 +44,48 @@
                 android:id="@+id/txtView1"
                 android:layout_width="209dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="10dp"
-                android:text="Enter the game:"
-                android:textSize="24sp" />
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="15dp"
+                android:paddingStart="10dp"
+                android:paddingTop="10dp"
+
+                android:text="@string/inputEnter"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/startScreenUsername"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="249dp"
+                android:layout_height="48dp"
+                android:layout_marginBottom="5dp"
                 android:autofillHints=""
-                android:layout_marginLeft="100dp"
-                android:layout_marginBottom="20dp"
                 android:ems="10"
+                android:hint="@string/usernameHint"
                 android:inputType="text"
-                android:hint="Enter text (3 to 25 characters)"
-                android:maxLength="25"
-                android:minHeight="48dp"
-                android:text="@string/username"
-                tools:ignore="LabelFor"
-                android:paddingLeft="10dp"/>
+
+                tools:ignore="LabelFor" />
 
             <EditText
                 android:id="@+id/startScreenAge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:autofillHints=""
+                android:hint="Age"
                 android:ems="10"
-                android:layout_marginLeft="100dp"
+                android:layout_marginStart="100dp"
                 android:layout_marginBottom="35dp"
-                android:paddingLeft="10dp"
+                android:paddingStart="10dp"
                 android:inputType="number"
                 android:minHeight="48dp"
-                android:text="@string/age"
-                android:maxLength="3"
-                tools:ignore="LabelFor" />
+                tools:ignore="LabelFor,RtlSymmetry" />
 
             <Button
                 android:id="@+id/buttonStart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:layout_marginLeft="150dp"
-                android:text="Button" />
+                android:layout_marginStart="150dp"
+                android:text="@string/buttonSend" />
         </LinearLayout>
 
 

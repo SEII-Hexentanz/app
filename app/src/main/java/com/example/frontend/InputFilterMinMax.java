@@ -21,7 +21,9 @@ class InputFilterMinMax implements InputFilter {
     @Override
     public CharSequence filter(CharSequence charSequence, int i, int i1, Spanned spanned, int i2, int i3) {
         try {
-            int input = Integer.parseInt(spanned.toString() + charSequence.toString());
+            String newVal = spanned.toString().substring(0, i2) + charSequence.toString() + spanned.toString().substring(i3);
+
+            int input = Integer.parseInt(newVal);
             if (isInRange(min, max, input)) {
                 return null;
             }
