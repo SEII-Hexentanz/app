@@ -2,7 +2,6 @@ package com.example.frontend;
 
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -50,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void checkInputUsername(TextView inputUsername) {
-      //  inputUsername.setFilters(new InputFilter[]{new InputFilter.LengthFilter(25)});
         inputUsername.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -72,8 +70,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void checkInputAge(TextView inputAge) {
-       // inputAge.setFilters(new InputFilter[]{new InputFilterMinMax(8,99)});
-
         inputAge.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -94,9 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-       // inputAge.setFilters(new InputFilter[]{new InputFilterMinMax(8, 99)});
     }
-
     private boolean isValidAge(String ageTxt){
         if(ageTxt.isEmpty()){
             return false;

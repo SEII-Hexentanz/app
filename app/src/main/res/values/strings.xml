@@ -6,4 +6,5 @@
     <string name="usernameHint">Username</string>
     <string name="buttonSend">Button</string>
     <string name="inputEnter">Enter the game:</string>
+    <string name="agetxt">Age</string>
 </resources>
