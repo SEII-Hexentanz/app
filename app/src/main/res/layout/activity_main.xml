@@ -55,14 +55,14 @@
 
             <EditText
                 android:id="@+id/startScreenUsername"
-                android:layout_width="249dp"
-                android:layout_height="48dp"
-                android:layout_marginBottom="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="25dp"
                 android:autofillHints=""
                 android:ems="10"
                 android:hint="@string/usernameHint"
                 android:inputType="text"
-
+                android:layout_marginStart="100dp"
                 tools:ignore="LabelFor" />
 
             <EditText
@@ -70,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/agetxt"
-                android:autofillHints="username"
+                android:autofillHints="age"
                 android:ems="10"
                 android:layout_marginStart="100dp"
                 android:layout_marginBottom="35dp"
