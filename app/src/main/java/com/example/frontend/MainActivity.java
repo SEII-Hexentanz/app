@@ -1,5 +1,6 @@
 package com.example.frontend;
 
+
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,6 +17,8 @@ public class MainActivity extends AppCompatActivity {
     private Button btnStart;
     private TextView inputUsername;
     private TextView inputAge;
+    private View createLobbyFragment;
+    private View mainActivityView ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +43,15 @@ public class MainActivity extends AppCompatActivity {
 
             public void onClick(View v) {
                 Log.i("Change Fragement", "Fragment change event started");
-                changeFragment();
+                if(createLobbyFragment.getVisibility() == View.INVISIBLE){
+                    createLobbyFragment.setVisibility(View.GONE);
+                }else{
+
+                    mainActivityView.setVisibility(View.GONE);
+                    createLobbyFragment.setVisibility(View.VISIBLE);
+                    changeFragment();
+
+                }
 
             }
         });
@@ -50,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
         btnStart = findViewById(R.id.buttonStart);
         inputUsername = findViewById(R.id.startScreenUsername);
         inputAge = findViewById(R.id.startScreenAge);
+        createLobbyFragment = findViewById(R.id.fragmentContainerView2);
+        mainActivityView = findViewById(R.id.main2);
     }
 
     void checkInputUsername(TextView inputUsername) {
@@ -104,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void changeFragment(){
+
         CreateLobbyFragment createLobbyFragment = new CreateLobbyFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

@@ -13,7 +13,7 @@
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="match_parent"
-        android:layout_height="222dp"
+        android:layout_height="100dp"
         android:layout_marginBottom="10dp"
         android:layout_weight="1"
         android:contentDescription="@string/imageview_hexentanzPlaceholder"
@@ -27,10 +27,9 @@
     <LinearLayout
         android:id="@+id/main2"
         android:layout_width="match_parent"
-        android:layout_height="384dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical"
-
         tools:context=".MainActivity"
         tools:ignore="UselessParent">
 
@@ -53,7 +52,7 @@
             android:id="@+id/startScreenUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="100dp"
+            android:layout_marginStart="55dp"
             android:layout_marginBottom="25dp"
             android:autofillHints=""
             android:ems="10"
@@ -66,8 +65,8 @@
             android:id="@+id/startScreenAge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="100dp"
-            android:layout_marginBottom="35dp"
+            android:layout_marginStart="55dp"
+            android:layout_marginBottom="15dp"
             android:autofillHints="age"
             android:ems="10"
             android:hint="@string/agetxt"
@@ -80,9 +79,19 @@
             android:id="@+id/buttonStart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="150dp"
+            android:layout_marginStart="120dp"
             android:text="@string/buttonSend"
             android:textAlignment="center" />
     </LinearLayout>
-    </LinearLayout>
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentContainerView2"
+            android:name="com.example.frontend.CreateLobbyFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:visibility="gone" />
+
+
+
+</LinearLayout>
 
