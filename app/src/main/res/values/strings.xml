@@ -6,5 +6,10 @@
     <string name="usernameHint">Username</string>
     <string name="buttonSend">Enter</string>
     <string name="inputEnter">Enter the game:</string>
-    <string name="agetxt">Age</string>
+    <string name="ageTextView">Age</string>
+    <string name="welcome">Welcome</string>
+    <string name="join_game">Join Game</string>
+    <string name="new_game">New Game</string>
+    <string name="name">Name</string>
+    <string name="returnImgBtn">returnImageBtn</string>
 </resources>

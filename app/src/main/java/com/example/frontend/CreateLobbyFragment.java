@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,48 +20,25 @@ import android.widget.Button;
  */
 public class CreateLobbyFragment extends Fragment {
 
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
     private Button createGame;
     private Button joinGame;
     private View createLobbyLayout;
     private View lobbyFragment;
 
+    private ImageButton closeBtn;
     public CreateLobbyFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CreateLobbyFragment.
-     */
 
-    public static CreateLobbyFragment newInstance(String param1, String param2) {
-        CreateLobbyFragment fragment = new CreateLobbyFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         findViews();
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
 
-        }
+
 
         createGame.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,7 +69,15 @@ public class CreateLobbyFragment extends Fragment {
 
             }
         });
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                getParentFragmentManager().beginTransaction().remove(CreateLobbyFragment.this).commit();
+            }
+        });
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -105,6 +91,7 @@ public class CreateLobbyFragment extends Fragment {
         joinGame = joinGame.findViewById(R.id.btn_joinGame);
         lobbyFragment = lobbyFragment.findViewById(R.id.fragmentLobby);
         createLobbyLayout = createLobbyLayout.findViewById(R.id.createLobbyId);
+        closeBtn = closeBtn.findViewById(R.id.closeFragmentCreateLobby);
     }
 
     public void changeFragment() {

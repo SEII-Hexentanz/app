@@ -69,7 +69,7 @@
             android:layout_marginBottom="15dp"
             android:autofillHints="age"
             android:ems="10"
-            android:hint="@string/agetxt"
+            android:hint="@string/ageTextView"
             android:inputType="number"
             android:minHeight="48dp"
             android:paddingStart="10dp"

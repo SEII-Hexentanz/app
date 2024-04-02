@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/createLobbyId"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,44 +8,61 @@
     tools:context=".CreateLobbyFragment">
 
 
+    <ImageButton
+        android:id="@+id/closeFragmentCreateLobby"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/btn_dialog"
+        android:contentDescription="@string/returnImgBtn" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginBottom="20dp">
 
         <TextView
             android:id="@+id/txtViewUsername"
-            android:layout_width="227dp"
-            android:layout_height="38dp"
-            android:text="Welcome " />
+            android:layout_width="225dp"
+            android:layout_height="68dp"
+            android:text="@string/welcome"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            />
 
         <EditText
             android:id="@+id/editTextUsername"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="97dp"
+            android:layout_height="match_parent"
             android:ems="10"
             android:inputType="text"
-            android:text="Name"
-            />
+            android:text="@string/name"
+            android:clickable="false"
+            android:autofillHints=""
+            tools:ignore="LabelFor" />
+
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/txtViewCreateGame"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="SpielModi" />
 
     <Button
         android:id="@+id/btn_createGame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Game" />
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:layout_marginStart="120dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/new_game" />
 
     <Button
         android:id="@+id/btn_joinGame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Join Game" />
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:layout_marginStart="120dp"
+
+        android:text="@string/join_game" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentLobby"
@@ -54,5 +70,7 @@
         android:name="com.example.frontend.CreateLobbyFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+
 
 </LinearLayout>
