@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/createLobbyId"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -46,5 +47,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Join Game" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentLobby"
+        android:visibility="gone"
+        android:name="com.example.frontend.CreateLobbyFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
