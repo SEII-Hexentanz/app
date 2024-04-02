@@ -13,7 +13,7 @@
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="match_parent"
-        android:layout_height="222dp"
+        android:layout_height="212dp"
         android:layout_marginBottom="10dp"
         android:layout_weight="1"
         android:contentDescription="@string/imageview_hexentanzPlaceholder"
@@ -39,11 +39,12 @@
             android:id="@+id/txtView1"
             android:layout_width="209dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="200dp"
             android:layout_marginBottom="15dp"
             android:paddingLeft="10dp"
             android:paddingTop="10dp"
             android:paddingRight="10dp"
+            android:layout_marginLeft="200dp"
             android:text="@string/inputEnter"
             android:textAlignment="center"
             android:textSize="24sp"
@@ -51,9 +52,9 @@
 
         <EditText
             android:id="@+id/startScreenUsername"
-            android:layout_width="wrap_content"
+            android:layout_width="337dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="100dp"
+            android:layout_marginStart="200dp"
             android:layout_marginBottom="25dp"
             android:autofillHints=""
             android:ems="10"
@@ -64,9 +65,9 @@
 
         <EditText
             android:id="@+id/startScreenAge"
-            android:layout_width="wrap_content"
+            android:layout_width="337dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="100dp"
+            android:layout_marginStart="200dp"
             android:layout_marginBottom="35dp"
             android:autofillHints="age"
             android:ems="10"
@@ -78,9 +79,9 @@
 
         <Button
             android:id="@+id/buttonStart"
-            android:layout_width="wrap_content"
+            android:layout_width="148dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="150dp"
+            android:layout_marginStart="300dp"
             android:text="@string/buttonSend"
             android:textAlignment="center" />
     </LinearLayout>

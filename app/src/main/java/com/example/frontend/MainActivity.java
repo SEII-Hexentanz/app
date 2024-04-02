@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 public class MainActivity extends AppCompatActivity {
     private Button btnStart;
@@ -19,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
 
         findViews();
@@ -37,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
             public void onClick(View v) {
                 Log.i("Change Fragement", "Fragment change event started");
+                changeFragment();
 
             }
         });
@@ -97,6 +101,18 @@ public class MainActivity extends AppCompatActivity {
         }
         int age = Integer.parseInt(ageTxt);
         return age >= 8 && age <= 99;
+    }
+
+    public void changeFragment(){
+        CreateLobbyFragment createLobbyFragment = new CreateLobbyFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        fragmentTransaction.replace(R.id.fragmentContainerView2, createLobbyFragment);
+        fragmentTransaction.addToBackStack(null);
+
+        fragmentTransaction.commit();
+
     }
 }
 
