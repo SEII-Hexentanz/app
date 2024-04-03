@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">frontend</string>
+    <string name="age">Age</string>
+    <string name="username">Username</string>
+    <string name="imageview_hexentanzPlaceholder">TODO</string>
+    <string name="usernameHint">Username</string>
+    <string name="buttonSend">Enter</string>
+    <string name="inputEnter">Enter the game:</string>
+    <string name="ageTextView">Age</string>
+    <string name="welcome">Welcome</string>
+    <string name="join_game">Join Game</string>
+    <string name="new_game">New Game</string>
+    <string name="name">Name</string>
+    <string name="returnImgBtn">returnImageBtn</string>
+    <string name="btnReturnLobby">returnBtnLobby</string>
+    <string name="rules">Rules</string>
+    <string name="textview">Players</string>
+    <string name="start_game">Start Game</string>
+    <string name="_8_players">/8 Players</string>
+    <string name="txt_string">2.2</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
