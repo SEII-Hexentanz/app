@@ -10,8 +10,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 public class MainActivity extends AppCompatActivity {
     private Button btnStart;
@@ -49,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
                     mainActivityView.setVisibility(View.GONE);
                     createLobbyFragment.setVisibility(View.VISIBLE);
-                    changeFragment();
+                 //   changeFragment();
 
                 }
 
@@ -117,15 +115,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void changeFragment(){
-
-        CreateLobbyFragment createLobbyFragment = new CreateLobbyFragment();
+/*
+      //  CreateLobbyFragment createLobbyFragment = new CreateLobbyFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        fragmentTransaction.replace(R.id.fragmentContainerView2, createLobbyFragment);
+   //     fragmentTransaction.replace(R.id.fragmentContainerView2, createLobbyFragment);
         fragmentTransaction.addToBackStack(null);
 
         fragmentTransaction.commit();
+        */
+
 
     }
 }

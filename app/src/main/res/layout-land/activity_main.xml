@@ -44,7 +44,6 @@
             android:paddingLeft="10dp"
             android:paddingTop="10dp"
             android:paddingRight="10dp"
-            android:layout_marginLeft="200dp"
             android:text="@string/inputEnter"
             android:textAlignment="center"
             android:textSize="24sp"

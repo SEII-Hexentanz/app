@@ -83,9 +83,10 @@
             android:text="@string/buttonSend"
             android:textAlignment="center" />
     </LinearLayout>
+
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentContainerView2"
-            android:name="com.example.frontend.CreateLobbyFragment"
+            android:name="com.example.frontend.Lobby_Fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
