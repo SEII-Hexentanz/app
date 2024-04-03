@@ -10,19 +10,21 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 public class MainActivity extends AppCompatActivity {
     private Button btnStart;
     private TextView inputUsername;
     private TextView inputAge;
     private View createLobbyFragment;
-    private View mainActivityView ;
+    private View mainActivityView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
 
         findViews();
@@ -38,19 +40,15 @@ public class MainActivity extends AppCompatActivity {
 
             //Send to server the responseUser and responseAge
 
-
             public void onClick(View v) {
                 Log.i("Change Fragement", "Fragment change event started");
-                if(createLobbyFragment.getVisibility() == View.INVISIBLE){
+                if (createLobbyFragment.getVisibility() == View.INVISIBLE) {
                     createLobbyFragment.setVisibility(View.GONE);
-                }else{
-
+                } else {
                     mainActivityView.setVisibility(View.GONE);
                     createLobbyFragment.setVisibility(View.VISIBLE);
-                 //   changeFragment();
-
+                    changeFragment();
                 }
-
             }
         });
     }
@@ -67,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
         inputUsername.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //this method needs to be inherited from the TextWatcher Class
+                throw new UnsupportedOperationException("beforeTextChanged method is not supported in this context.");
             }
 
             @Override
@@ -80,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
+                //This method needs to be inherited by the TextWatcher Class
+                throw new UnsupportedOperationException("beforeTextChanged method is not supported in this context.");
             }
         });
     }
@@ -88,43 +90,44 @@ public class MainActivity extends AppCompatActivity {
         inputAge.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                //This method needs to be inherited by the TextWatcher Class
+                throw new UnsupportedOperationException("beforeTextChanged method is not supported in this context.");
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(!isValidAge(charSequence.toString())){
+                if (!isValidAge(charSequence.toString())) {
                     inputAge.setError("Age must be between 8 and 99.");
-                }else{
+                } else {
                     inputAge.setError(null);
                 }
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+                //This method needs to be inherited by the TextWatcher Class
+                throw new UnsupportedOperationException("beforeTextChanged method is not supported in this context.");
             }
         });
     }
-    private boolean isValidAge(String ageTxt){
-        if(ageTxt.isEmpty()){
+
+    private boolean isValidAge(String ageTxt) {
+        if (ageTxt.isEmpty()) {
             return false;
         }
         int age = Integer.parseInt(ageTxt);
         return age >= 8 && age <= 99;
     }
 
-    public void changeFragment(){
-/*
-      //  CreateLobbyFragment createLobbyFragment = new CreateLobbyFragment();
+    public void changeFragment() {
+
+        CreateLobbyFragment createLobbyFragment = new CreateLobbyFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-   //     fragmentTransaction.replace(R.id.fragmentContainerView2, createLobbyFragment);
+        fragmentTransaction.replace(R.id.fragmentContainerView2, createLobbyFragment);
         fragmentTransaction.addToBackStack(null);
-
         fragmentTransaction.commit();
-        */
 
 
     }
