@@ -5,8 +5,7 @@
     android:id="@+id/DiceFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#80FFFFFF"
-    tools:context=".ui.DiceFragment">
+    android:background="#80FFFFFF">
 
     <ImageView
         android:id="@+id/diceImage"

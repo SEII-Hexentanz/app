@@ -12,6 +12,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 
 public class MainActivity extends AppCompatActivity {
     private Button btnStart;
@@ -19,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView inputAge;
     private View createLobbyFragment;
     private View mainActivityView;
+    private Handler handler = new Handler(Looper.getMainLooper());
 
 
     @Override
@@ -49,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
                     createLobbyFragment.setVisibility(View.VISIBLE);
                     changeFragment();
                 }
+                startClientThread();
+
             }
         });
     }
@@ -130,6 +136,31 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
 
 
+    }
+
+    private void startClientThread() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // Hier kommt die Client-Logik (Verbindungsaufbau, Senden, Empfangen)
+                    // Beispiel:
+                    Client client = new Client();
+                    client.startClient();
+
+                    // Nach erfolgreichem Datenaustausch, UI im Hauptthread aktualisieren
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            // UI-Änderungen, z.B. eine Toast-Nachricht anzeigen
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    // Fehlerbehandlung, z.B. eine Fehlermeldung in der UI anzeigen
+                }
+            }
+        }).start();
     }
 }
 
