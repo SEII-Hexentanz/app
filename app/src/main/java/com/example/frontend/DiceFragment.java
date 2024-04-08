@@ -68,8 +68,11 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     @Override
     public void onResume() {
         super.onResume();
+        diceImage.setImageResource(R.drawable.inital_dice); // Reset to initial dice image
+        diceThrown = false;
         sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
     }
+
 
     @Override
     public void onPause() {
@@ -111,7 +114,6 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     }
 
     private void updateDiceImage(ImageView diceImage, int diceValue) {
-        //TODO: add pictures of dices
         switch (diceValue) {
             case 1:
                 diceImage.setImageResource(R.drawable.dice1);
