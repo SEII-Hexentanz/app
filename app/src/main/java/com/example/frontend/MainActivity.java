@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         findViews();
 
         checkInputUsername(inputUsername);
@@ -70,15 +69,14 @@ public class MainActivity extends AppCompatActivity {
     void checkInputUsername(TextView inputUsername) {
         inputUsername.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //this method needs to be inherited from the TextWatcher Class
-                throw new UnsupportedOperationException("beforeTextChanged method is not supported in this context.");
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
+                // Nichts zu tun hier
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence != null && charSequence.length() < 3) {
-                    inputUsername.setError("Input should be at least 3 characters");
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                if (charSequence.length() < 3) {
+                    inputUsername.setError("Input sollte mindestens 3 Zeichen lang sein");
                 } else {
                     inputUsername.setError(null);
                 }
@@ -86,8 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                //This method needs to be inherited by the TextWatcher Class
-                throw new UnsupportedOperationException("beforeTextChanged method is not supported in this context.");
+                // Nichts zu tun hier
             }
         });
     }
@@ -95,15 +92,14 @@ public class MainActivity extends AppCompatActivity {
     void checkInputAge(TextView inputAge) {
         inputAge.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //This method needs to be inherited by the TextWatcher Class
-                throw new UnsupportedOperationException("beforeTextChanged method is not supported in this context.");
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
+                // Nichts zu tun hier
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
                 if (!isValidAge(charSequence.toString())) {
-                    inputAge.setError("Age must be between 8 and 99.");
+                    inputAge.setError("Das Alter muss zwischen 8 und 99 liegen.");
                 } else {
                     inputAge.setError(null);
                 }
@@ -111,8 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                //This method needs to be inherited by the TextWatcher Class
-                throw new UnsupportedOperationException("beforeTextChanged method is not supported in this context.");
+                // Nichts zu tun hier
             }
         });
     }
