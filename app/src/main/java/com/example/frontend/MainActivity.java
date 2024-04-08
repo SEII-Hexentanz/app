@@ -12,7 +12,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -23,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private View createLobbyFragment;
     private View mainActivityView;
     private View fragment_dice;
-    private Handler handler = new Handler(Looper.getMainLooper());
+    private final Handler handler = new Handler(Looper.getMainLooper());
 
 
     @Override
@@ -32,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         if (savedInstanceState == null) {
-            showDiceFragment();
+         //   showDiceFragment();
         }
 
 
@@ -165,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
     }
+    /*
     private void showDiceFragment() {
         DiceFragment diceFragment = DiceFragment.newInstance();
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -172,6 +172,8 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.fragmentContainerView2, diceFragment);
         fragmentTransaction.commit();
     }
+    */
+
 }
 
 

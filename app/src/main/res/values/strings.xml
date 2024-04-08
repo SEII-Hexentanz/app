@@ -23,4 +23,6 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="würfel_btn">Würfel Button</string>
     <string name="continueButtonDiceFragment">Continue</string>
+    <string name="roll">Würfle</string>
+    <string name="dummyImg">DummyGameBoard</string>
 </resources>
