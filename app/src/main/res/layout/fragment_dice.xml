@@ -1,49 +1,61 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/DiceFragment"
+    android:id="@+id/dice"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#80FFFFFF">
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
-    <ImageView
-        android:id="@+id/diceImage"
-        android:layout_width="360dp"
-        android:layout_height="427dp"
-        android:layout_marginTop="95dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginBottom="96dp"
-        android:src="@drawable/inital_dice"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.203" />
+    <LinearLayout
+        android:id="@+id/dice2"
+        android:layout_width="match_parent"
+        android:layout_height="700dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingStart="23dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp"
+        tools:context=".MainActivity"
+        tools:ignore="UselessParent">
 
-    <Button
-        android:id="@+id/continueButtonDiceFragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:backgroundTint="@color/white"
-        android:drawableTint="@color/black"
-        android:foregroundTint="@color/black"
-        android:textColor="@color/black"
-        android:text="Continue"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <ImageView
+            android:id="@+id/diceImage"
+            android:layout_width="360dp"
+            android:layout_height="427dp"
+            android:layout_marginTop="95dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginBottom="96dp"
+            android:src="@drawable/inital_dice" />
 
-    <TextView
-        android:id="@+id/diceResult"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:textSize="24sp"
-        tools:layout_editor_absoluteX="121dp"
-        tools:layout_editor_absoluteY="585dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        <Button
+            android:id="@+id/continueButtonDiceFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_marginStart="125dp"
+            android:textSize="20sp"
+            android:text="@string/continueButtonDiceFragment" />
+
+        <TextView
+            android:id="@+id/diceResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="24sp"
+            tools:layout_editor_absoluteX="121dp"
+            tools:layout_editor_absoluteY="585dp" />
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentContainerView2"
+            android:name="com.example.frontend.Lobby_Fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:visibility="gone" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

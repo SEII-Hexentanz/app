@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView inputAge;
     private View createLobbyFragment;
     private View mainActivityView;
+    private View fragment_dice;
     private Handler handler = new Handler(Looper.getMainLooper());
 
 
@@ -30,11 +31,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (savedInstanceState == null) {
+            showDiceFragment();
+        }
+
+
         findViews();
 
         checkInputUsername(inputUsername);
 
         checkInputAge(inputAge);
+
 
 
         btnStart.setOnClickListener(new View.OnClickListener() {
@@ -64,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         inputAge = findViewById(R.id.startScreenAge);
         createLobbyFragment = findViewById(R.id.fragmentContainerView2);
         mainActivityView = findViewById(R.id.main2);
+        fragment_dice=findViewById(R.id.dice2);
     }
 
     void checkInputUsername(TextView inputUsername) {
@@ -156,6 +164,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }).start();
+    }
+    private void showDiceFragment() {
+        DiceFragment diceFragment = DiceFragment.newInstance();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentContainerView2, diceFragment);
+        fragmentTransaction.commit();
     }
 }
 
