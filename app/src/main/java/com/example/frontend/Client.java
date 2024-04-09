@@ -22,5 +22,9 @@ public class Client {
             System.err.println("I/O Fehler: " + e.getMessage());
         }
     }
+
+    protected void handleException(Exception e) {
+        System.err.println("Folgender Fehler: " + e.getMessage());
+    }
 }
 

@@ -144,22 +144,19 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                Client client = new Client();
                 try {
-                    // Hier kommt die Client-Logik (Verbindungsaufbau, Senden, Empfangen)
-                    // Beispiel:
-                    Client client = new Client();
-                    client.startClient();
 
-                    // Nach erfolgreichem Datenaustausch, UI im Hauptthread aktualisieren
+                    client.startClient();
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            // UI-Änderungen, z.B. eine Toast-Nachricht anzeigen
+
                         }
                     });
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    // Fehlerbehandlung, z.B. eine Fehlermeldung in der UI anzeigen
+                    //e.printStackTrace(); //Sensitive
+                    client.handleException(e);
                 }
             }
         }).start();
