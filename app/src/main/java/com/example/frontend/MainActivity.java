@@ -12,6 +12,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 
 public class MainActivity extends AppCompatActivity {
     private Button btnStart;
@@ -19,6 +22,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView inputAge;
     private View createLobbyFragment;
     private View mainActivityView;
+    private View fragment_dice;
+    private View endFrag;
+    private Handler handler = new Handler(Looper.getMainLooper());
 
 
     @Override
@@ -32,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         checkInputUsername(inputUsername);
 
         checkInputAge(inputAge);
+
 
 
         btnStart.setOnClickListener(new View.OnClickListener() {
@@ -49,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
                     createLobbyFragment.setVisibility(View.VISIBLE);
                     changeFragment();
                 }
+                startClientThread();
+
             }
         });
     }
@@ -59,20 +68,21 @@ public class MainActivity extends AppCompatActivity {
         inputAge = findViewById(R.id.startScreenAge);
         createLobbyFragment = findViewById(R.id.fragmentContainerView2);
         mainActivityView = findViewById(R.id.main2);
+        fragment_dice=findViewById(R.id.dice2);
+        endFrag=findViewById(R.id.endfragment);
     }
 
     void checkInputUsername(TextView inputUsername) {
         inputUsername.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //this method needs to be inherited from the TextWatcher Class
-                throw new UnsupportedOperationException("beforeTextChanged method is not supported in this context.");
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
+                // Nichts zu tun hier
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence != null && charSequence.length() < 3) {
-                    inputUsername.setError("Input should be at least 3 characters");
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                if (charSequence.length() < 3) {
+                    inputUsername.setError("Input sollte mindestens 3 Zeichen lang sein");
                 } else {
                     inputUsername.setError(null);
                 }
@@ -80,8 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                //This method needs to be inherited by the TextWatcher Class
-                throw new UnsupportedOperationException("beforeTextChanged method is not supported in this context.");
+                // Nichts zu tun hier
             }
         });
     }
@@ -89,15 +98,14 @@ public class MainActivity extends AppCompatActivity {
     void checkInputAge(TextView inputAge) {
         inputAge.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //This method needs to be inherited by the TextWatcher Class
-                throw new UnsupportedOperationException("beforeTextChanged method is not supported in this context.");
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
+                // Nichts zu tun hier
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
                 if (!isValidAge(charSequence.toString())) {
-                    inputAge.setError("Age must be between 8 and 99.");
+                    inputAge.setError("Das Alter muss zwischen 8 und 99 liegen.");
                 } else {
                     inputAge.setError(null);
                 }
@@ -105,8 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                //This method needs to be inherited by the TextWatcher Class
-                throw new UnsupportedOperationException("beforeTextChanged method is not supported in this context.");
+                // Nichts zu tun hier
             }
         });
     }
@@ -129,8 +136,51 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
 
+        //TODO:  maybe use switch-case statement for easier change Fragment
 
     }
+
+    private void startClientThread() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Client client = new Client();
+                try {
+
+                    client.startClient();
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+
+                        }
+                    });
+                } catch (Exception e) {
+                    //e.printStackTrace(); //Sensitive
+                    client.handleException(e);
+                }
+            }
+        }).start();
+    }
+    private void showDiceFragment() {
+        DiceFragment diceFragment = DiceFragment.newInstance();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentContainerView2, diceFragment);
+        fragmentTransaction.commit();
+    }
+
+    public void showWinner() {
+        String winnerName="Max Mustermann";
+        EndGame_Fragment endFragment = EndGame_Fragment.newInstance(winnerName);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentContainerView2, endFragment);
+        fragmentTransaction.commit();
+    }
+
+
+
+
 }
 
 
