@@ -4,8 +4,8 @@ import java.io.*;
 import java.net.*;
 
 public class Client {
-    private String serverAddress = "Server_IP"; // Server-IP ersetzen
-    private int serverPort = 8080;
+    protected String serverAddress = "Server_IP"; // Server-IP ersetzen
+    protected int serverPort = 8080;
 
     public void startClient() {
         try (Socket socket = new Socket(serverAddress, serverPort);
