@@ -25,5 +25,5 @@
     <string name="continueButtonDiceFragment">Continue</string>
     <string name="winnderName">Gewinner</string>
     <string name="restartGame">Restart Game</string>
-    <string name="winnerText">Siegestext</string>
+    <string name="winnerText">Der Gewinner ist: %1$s!</string>
 </resources>
