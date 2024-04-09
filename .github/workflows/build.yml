@@ -30,6 +30,8 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
+      - name: Authenticate with GitHub Packages
+        run: echo "//maven.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.m2/settings.xml
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
