@@ -16,7 +16,14 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        mavenLocal()
+//        mavenLocal()
+        maven {
+            url = uri("https://maven.pkg.github.com/SEII-Hexentanz/server")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME_GITHUB")
+                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN_GITHUB")
+            }
+        }
     }
 }
 
