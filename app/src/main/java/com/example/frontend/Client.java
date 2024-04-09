@@ -1,30 +1,58 @@
 package com.example.frontend;
 
-import java.io.*;
-import java.net.*;
+import android.util.Log;
 
-public class Client {
-    protected String serverAddress = "Server_IP"; // Server-IP ersetzen
-    protected int serverPort = 8080;
+import com.example.frontend.responseHandler.ResponseHandler;
 
-    public void startClient() {
-        try (Socket socket = new Socket(serverAddress, serverPort);
-             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
-            out.println("Hallo Server!");
-            String response = in.readLine();
-            System.out.println("Server antwortet: " + response);
+import at.aau.models.Request;
+import at.aau.models.Response;
 
+public class Client extends Thread {
+    private static final String serverAddress = "10.0.2.2";
+    private static final int serverPort = 8080;
+    private static Socket socket;
+    private static ObjectOutputStream out;
+    private static ObjectInputStream in;
+
+    public static void send(Request request) {
+        new Thread(() -> {
+            try {
+                out.writeObject(request);
+            } catch (IOException e) {
+                Log.e("Client", "Error while sending request to server", e);
+            }
+        }).start();
+    }
+
+    @Override
+    public void run() {
+        try {
+            socket = new Socket(serverAddress, serverPort);
+            out = new ObjectOutputStream(socket.getOutputStream());
+            in = new ObjectInputStream(socket.getInputStream());
+
+            Log.i("Client", "Client started");
+            while (true) {
+                Response response;
+                try {
+                    response = (Response) in.readObject();
+                } catch (ClassNotFoundException e) {
+                    Log.e("Client", "Error while reading object from server", e);
+                    continue;
+                }
+                Log.i("Client", "Received response from server: " + response);
+                ResponseHandler.execute(response.responseType(), response.payload());
+            }
         } catch (UnknownHostException e) {
-            System.err.println("Server nicht gefunden: " + e.getMessage());
+            throw new RuntimeException("Unknown host", e); // we can't work without a server
         } catch (IOException e) {
-            System.err.println("I/O Fehler: " + e.getMessage());
+            Log.e("Client", "Error while connecting to server", e);
         }
     }
-
-    protected void handleException(Exception e) {
-        System.err.println("Folgender Fehler: " + e.getMessage());
-    }
 }
-
