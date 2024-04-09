@@ -1,6 +1,7 @@
 package com.example.frontend;
 
 import android.annotation.SuppressLint;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
@@ -51,6 +52,19 @@ public class EndGame_Fragment extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Set screen orientation to landscape when GameBoardFragment is resumed
+        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Reset screen orientation to portrait when GameBoardFragment is paused
+        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
 }
