@@ -26,14 +26,13 @@
             android:textAlignment="center"
             android:textSize="20sp" />
 
-        <EditText
+        <TextView
             android:id="@+id/editTextUsername"
             android:layout_width="169dp"
             android:layout_height="100dp"
             android:autofillHints=""
             android:clickable="false"
             android:ems="10"
-            android:inputType="text"
             android:paddingStart="20dp"
             android:text="@string/name"
             tools:ignore="LabelFor,RtlSymmetry" />

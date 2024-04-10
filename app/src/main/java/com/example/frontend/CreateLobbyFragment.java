@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,13 +22,15 @@ import android.widget.Button;
 public class CreateLobbyFragment extends Fragment {
     private Button createGame;
     private Button joinGame;
+    private TextView nameBox;
 
     public CreateLobbyFragment() {
     }
 
-    public static CreateLobbyFragment newInstance(String param1, String param2) {
+    public static CreateLobbyFragment newInstance(String name) {
         CreateLobbyFragment fragment = new CreateLobbyFragment();
         Bundle args = new Bundle();
+        args.putString("name", name);
         fragment.setArguments(args);
         return fragment;
     }
@@ -40,12 +44,21 @@ public class CreateLobbyFragment extends Fragment {
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View view =  inflater.inflate(R.layout.fragment_create_lobby, container, false);
             findViews(view);
+            setUserName();
             onCreateGameCLick();
             onJoinClick();
             return view;
         }
 
-        private void onCreateGameCLick() {
+    private void setUserName() {
+        Bundle bundle = getArguments();
+        if(bundle != null){
+            String name = bundle.getString("name");
+            nameBox.setText(name + " !");
+        }
+    }
+
+    private void onCreateGameCLick() {
             createGame.setOnClickListener(v -> showFragmentLobby());
         }
 
@@ -55,9 +68,11 @@ public class CreateLobbyFragment extends Fragment {
         private void findViews(View view){
             createGame = view.findViewById(R.id.btn_createGame);
             joinGame = view.findViewById(R.id.btn_joinGame);
+            nameBox = view.findViewById(R.id.editTextUsername);
         }
 
         private void showFragmentLobby(){
+
             Lobby_Fragment lobbyFragment = new Lobby_Fragment();
 
             FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
@@ -68,7 +83,9 @@ public class CreateLobbyFragment extends Fragment {
             fragmentTransaction.commit();
         }
         private void showGameBoardFragment(){
-            GameBoardFragment gameBoardFragment = new GameBoardFragment();
+            String name = nameBox.getText().toString();
+
+            GameBoardFragment gameBoardFragment = GameBoardFragment.newInstance(name);
 
             FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
