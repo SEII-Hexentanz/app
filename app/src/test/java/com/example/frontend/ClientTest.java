@@ -9,7 +9,7 @@ import java.net.Socket;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ClientTest {
+ class ClientTest {
 
     private ServerSocket serverSocket;
     private final int testPort = 8080;

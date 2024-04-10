@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.security.SecureRandom;
 
-public class DiceTest {
+ class DiceTest {
     private Dice dices;
 
     @BeforeEach
@@ -15,7 +15,7 @@ public class DiceTest {
     }
 
     @Test
-    public void testDiceInitialization() {
+     void testDiceInitialization() {
         // Überprüfen, ob die Dice-Instanz korrekt initialisiert wurde
         assertNotNull(dices, "Dice-Instanz sollte nicht null sein.");
         // Überprüfen, ob der Startwert des Würfels 0 ist
@@ -23,7 +23,7 @@ public class DiceTest {
     }
 
     @Test
-    public void testDiceRollValueRange() {
+     void testDiceRollValueRange() {
         // Führe eine Reihe von Würfelwürfen aus, um sicherzustellen, dass alle Werte im gültigen Bereich liegen
         for (int i = 0; i < 1000; i++) {
             dices.useDice();
@@ -33,7 +33,7 @@ public class DiceTest {
     }
 
     @Test
-    public void testSetRandomObject() {
+     void testSetRandomObject() {
         // Erstellen eines neuen SecureRandom-Objekts und Setzen dieses als Random-Objekt für die Dice-Instanz
         SecureRandom newRandom = new SecureRandom();
         dices.setRan(newRandom);
