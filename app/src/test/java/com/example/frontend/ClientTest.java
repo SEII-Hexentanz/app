@@ -45,6 +45,7 @@ public class ClientTest {
 
     @Test
     void testStartClientWithLocalhost() {
+        final String expectedResponse = "Hallo Server!"; // Replace with the expected response from the server
         Client client = new Client() {
             @Override
             protected void handleException(Exception e) {
@@ -58,5 +59,27 @@ public class ClientTest {
 
         client.startClient();
 
+        assertEquals(expectedResponse, client.getResponseFromServer());
+
+
     }
+    @Test
+    void testGetServerPort(){
+        int expectedPort = 8080;
+        Client client = new Client();
+
+        int actualServerPort = client.getServerPort();
+
+        assertEquals(expectedPort, actualServerPort);
+    }
+    @Test
+    void testGetServerAdress(){
+        String expectedAdress = "Server_IP";
+        Client client = new Client();
+
+        String actualServerAdress = client.getServerAddress();
+
+        assertEquals(expectedAdress, actualServerAdress);
+    }
+
 }
