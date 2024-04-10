@@ -90,5 +90,5 @@ dependencies {
     androidTestImplementation libs.espresso.core
     //implementation libs.okhttp
     //testImplementation libs.junit.jupiter.api
-   // testRuntimeOnly libs.junit.jupiter.engine
+    // testRuntimeOnly libs.junit.jupiter.engine
 }

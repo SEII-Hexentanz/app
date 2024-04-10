@@ -14,6 +14,9 @@ import android.widget.TextView;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 public class DiceFragment extends Fragment implements SensorEventListener {
     private SensorManager sensorManager;
@@ -22,6 +25,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     private ImageView diceImage;
     private Button continueButton;
     private TextView diceResult;
+    private FragmentContainerView fragmentContainerView;
 
     private final static float shakeThreshold = 10;
     private long lastUpdate = 0;
@@ -53,16 +57,29 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dice, container, false);
-
         findViews(view);
+        onContinueClick();
 
-        /*continueButton.setOnClickListener(v -> {
-            diceView.setContinuePressed(true);
-            diceView.setDices(dice);
-
-
-        });*/
         return view;
+    }
+
+    private void findViews(View view) {
+        diceImage = view.findViewById(R.id.diceImage);
+        continueButton = view.findViewById(R.id.continueButtonDiceFragment);
+        diceResult = view.findViewById(R.id.diceResult);
+        fragmentContainerView = view.findViewById(R.id.fragmentContainerView2);
+    }
+
+    private void onContinueClick() {
+        continueButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fragmentContainerView.setVisibility(View.VISIBLE);
+                showGameBoardFragment();
+
+
+            }
+        });
     }
 
     @Override
@@ -99,10 +116,11 @@ public class DiceFragment extends Fragment implements SensorEventListener {
             if (speed > shakeThreshold) {
                 dice.useDice();
                 updateDiceImage(diceImage, dice.getDice());
+                /*
                 if (diceResult != null) {
                     getActivity().runOnUiThread(() ->
                             diceResult.setText("Würfelergebnis: " + dice.getDice()));
-                }
+                }*/
 
                 diceThrown = true;
             }
@@ -143,9 +161,14 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Not needed for this example
     }
-    public void findViews(View view){
-        diceImage = view.findViewById(R.id.diceImage);
-        //continueButton = view.findViewById(R.id.continueButtonDiceFragment);
-        diceResult = view.findViewById(R.id.diceResult);
+
+    private void showGameBoardFragment(){
+
+        GameBoardFragment gameBoardFragment = new GameBoardFragment();
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(android.R.id.content,gameBoardFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }

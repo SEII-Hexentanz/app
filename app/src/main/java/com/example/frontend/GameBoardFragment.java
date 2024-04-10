@@ -80,8 +80,6 @@ public class GameBoardFragment extends Fragment {
             public void onClick(View view) {
                 fragmentContainerView.setVisibility(View.VISIBLE);
                 showDiceFragment();
-
-
             }
         });
     }
@@ -96,7 +94,7 @@ public class GameBoardFragment extends Fragment {
         DiceFragment diceFragment = DiceFragment.newInstance();
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.fragmentContainerDice, diceFragment);
+        fragmentTransaction.add(R.id.gridLayoutGameBoard, diceFragment);
         fragmentTransaction.commit();
     }
 

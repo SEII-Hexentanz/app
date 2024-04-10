@@ -30,4 +30,3 @@ mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
-
