@@ -13,16 +13,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 
 public class GameBoardFragment extends Fragment {
     private Button diceBtn;
     private FragmentContainerView fragmentContainerView;
+    private TextView usernameTxt;
 
     public GameBoardFragment() {
         //leerer Konstruktor notwendig
     }
 
+
+    public static GameBoardFragment newInstance(String username) {
+        GameBoardFragment fragment = new GameBoardFragment();
+        Bundle args = new Bundle();
+        args.putString("username", username);
+        fragment.setArguments(args);
+        return fragment;
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,18 +59,29 @@ public class GameBoardFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_game_board, container, false);
 
         findViews(view);
+        setGameBoardUsername();
+        onRollDiceClick();
 
-     //   onRollDiceClick();
 
         return view;
+    }
+
+    private void setGameBoardUsername() {
+        Bundle bundle = getArguments();
+        if(bundle != null){
+            String name = bundle.getString("username");
+            usernameTxt.setText(name);
+        }
     }
 
     private void onRollDiceClick() {
         diceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDiceFragment();
                 fragmentContainerView.setVisibility(View.VISIBLE);
+                showDiceFragment();
+
+
             }
         });
     }
@@ -68,7 +89,7 @@ public class GameBoardFragment extends Fragment {
     private void findViews(View view) {
         diceBtn = view.findViewById(R.id.btn_rollDice);
         fragmentContainerView = view.findViewById(R.id.fragmentContainerDice);
-
+        usernameTxt = view.findViewById(R.id.txtViewUsername);
     }
 
     private void showDiceFragment() {
