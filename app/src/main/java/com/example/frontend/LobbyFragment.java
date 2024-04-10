@@ -66,11 +66,11 @@ public class LobbyFragment extends Fragment {
         userList = new ArrayList<>();
         Player player1 = new Player();
         player1.setUsername("Maximus");
-        player1.setImageResource(R.drawable.hexentanz);
+        player1.setImageResource(R.drawable.bluehat);
 
         Player player2 = new Player();
         player2.setUsername("Susimaus");
-        player2.setImageResource(R.drawable.dummy_gameboard);
+        player2.setImageResource(R.drawable.greenhat);
 
         userList.add(player1);
         userList.add(player2);
