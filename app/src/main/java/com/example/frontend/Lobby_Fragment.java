@@ -43,9 +43,9 @@ public class Lobby_Fragment extends Fragment {
         retCreateLobby.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              /*  FragmentManager manager = requireActivity().getSupportFragmentManager();
-                manager.beginTransaction().remove(Lobby_Fragment.this).commit();
-                */
+                // Inside your Fragment class where you want to close and return
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                fragmentManager.popBackStack();;
 
             }
         });
@@ -63,6 +63,7 @@ public class Lobby_Fragment extends Fragment {
         retCreateLobby = view.findViewById(R.id.imgBtnRetCL);
     }
     private void showGameBoardFragment(){
+
         GameBoardFragment gameBoardFragment = new GameBoardFragment();
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
