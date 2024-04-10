@@ -13,18 +13,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class EngGameFragment extends Fragment {
+public class EndGameFragment extends Fragment {
 
     private static final String ARG_WINNER_NAME = "winnerName";
 
     private String sieger;
 
-    public EngGameFragment() {
+    public EndGameFragment() {
         // Required empty public constructor
     }
 
-    public static EngGameFragment newInstance(String winnerName) {
-        EngGameFragment fragment = new EngGameFragment();
+    public static EndGameFragment newInstance(String winnerName) {
+        EndGameFragment fragment = new EndGameFragment();
         Bundle args = new Bundle();
         args.putString(ARG_WINNER_NAME, winnerName);
         fragment.setArguments(args);
@@ -61,7 +61,7 @@ public class EngGameFragment extends Fragment {
     public void showLobbyFragment() {
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.remove(EngGameFragment.this);
+        fragmentTransaction.remove(EndGameFragment.this);
         LobbyFragment lobbyFragment = new LobbyFragment();
         fragmentTransaction.replace(R.id.fragmentContainerView2, lobbyFragment);
         fragmentTransaction.commit();
