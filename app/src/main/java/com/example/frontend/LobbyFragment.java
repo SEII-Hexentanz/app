@@ -58,7 +58,7 @@ public class LobbyFragment extends Fragment {
 
        playerCount.setText(allPlayer + "");
 
-        onClckStart();
+        onClickStart();
         onReturnBtnClick();
 
         return view;
