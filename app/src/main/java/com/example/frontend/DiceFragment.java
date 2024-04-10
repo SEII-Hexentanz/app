@@ -143,7 +143,8 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Not needed for this example
     }
-    public void findViews(View view){
+
+    public void findViews(View view) {
         diceImage = view.findViewById(R.id.diceImage);
         //continueButton = view.findViewById(R.id.continueButtonDiceFragment);
         diceResult = view.findViewById(R.id.diceResult);

@@ -12,6 +12,7 @@ public class Client {
     public String getServerAddress() {
         return this.serverAddress;
     }
+
     public int getServerPort() {
         return this.serverPort;
     }
@@ -23,7 +24,7 @@ public class Client {
              BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
 
             out.println("Hallo Server!");
-             response = in.readLine();
+            response = in.readLine();
             System.out.println("Server antwortet: " + response);
 
         } catch (UnknownHostException e) {
@@ -36,7 +37,8 @@ public class Client {
     protected void handleException(Exception e) {
         System.err.println("Folgender Fehler: " + e.getMessage());
     }
-    public String getResponseFromServer(){
+
+    public String getResponseFromServer() {
         return response;
     }
 }
