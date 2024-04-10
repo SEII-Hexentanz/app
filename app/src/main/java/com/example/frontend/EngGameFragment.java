@@ -62,7 +62,7 @@ public class EngGameFragment extends Fragment {
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.remove(EngGameFragment.this);
-        Lobby_Fragment lobbyFragment = new Lobby_Fragment();
+        LobbyFragment lobbyFragment = new LobbyFragment();
         fragmentTransaction.replace(R.id.fragmentContainerView2, lobbyFragment);
         fragmentTransaction.commit();
     }

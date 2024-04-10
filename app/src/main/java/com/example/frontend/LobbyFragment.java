@@ -14,12 +14,12 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 
-public class Lobby_Fragment extends Fragment {
+public class LobbyFragment extends Fragment {
 
     private Button startGame;
     private ImageButton retCreateLobby;
 
-    public Lobby_Fragment() {
+    public LobbyFragment() {
         // Required empty public constructor
     }
     @Override

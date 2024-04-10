@@ -99,4 +99,17 @@ public class GameBoardFragment extends Fragment {
         fragmentTransaction.add(R.id.fragmentContainerDice, diceFragment);
         fragmentTransaction.commit();
     }
+
+/*
+//necessary in next Sprint
+//EPIC method that will be used in END Game
+    public void showWinner() {
+        String winnerName="Max Mustermann";
+        EngGameFragment endFragment = EngGameFragment.newInstance(winnerName);
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentContainerView2, endFragment);
+        fragmentTransaction.commit();
+    }
+*/
 }

@@ -176,23 +176,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
     }
-    private void showDiceFragment() {
-        DiceFragment diceFragment = DiceFragment.newInstance();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragmentContainerView2, diceFragment);
-        fragmentTransaction.commit();
-    }
-
-    public void showWinner() {
-        String winnerName="Max Mustermann";
-        EngGameFragment endFragment = EngGameFragment.newInstance(winnerName);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragmentContainerView2, endFragment);
-        fragmentTransaction.commit();
-    }
-
 
     private void hideKeyboard(View view) {
 
