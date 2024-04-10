@@ -116,10 +116,11 @@ public class DiceFragment extends Fragment implements SensorEventListener {
             if (speed > shakeThreshold) {
                 dice.useDice();
                 updateDiceImage(diceImage, dice.getDice());
+                /*
                 if (diceResult != null) {
                     getActivity().runOnUiThread(() ->
                             diceResult.setText("Würfelergebnis: " + dice.getDice()));
-                }
+                }*/
 
                 diceThrown = true;
             }
