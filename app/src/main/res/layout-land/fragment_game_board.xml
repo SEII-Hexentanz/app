@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/gameBoardID"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:textAlignment="center"
+    tools:context=".GameBoardFragment"
+    android:orientation="horizontal"
+    android:focusable="true">
+
+
+    <TextView
+        android:id="@+id/txtViewUsername"
+        android:layout_width="129dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="32dp"
+        android:layout_weight="1"
+        android:text="@string/username"
+        app:layout_constraintBottom_toTopOf="@+id/btn_rollDice"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.312" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerDice"
+        android:name="com.example.frontend.DiceFragment"
+        android:layout_width="228dp"
+        android:layout_height="424dp"
+        android:layout_marginStart="4dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageView"
+        app:layout_constraintHorizontal_bias="0.025"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="418dp"
+        android:layout_height="366dp"
+        android:contentDescription="DummyImg"
+        android:src="@drawable/dummy_gameboard"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.806"
+        app:layout_constraintStart_toEndOf="@+id/textView3"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.488" />
+
+    <Button
+        android:id="@+id/btn_rollDice"
+        android:layout_width="119dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="56dp"
+        android:text="Roll"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textView3"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

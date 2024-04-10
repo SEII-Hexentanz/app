@@ -5,55 +5,57 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    >
 
     <LinearLayout
         android:id="@+id/dice2"
         android:layout_width="match_parent"
-        android:layout_height="700dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:paddingStart="23dp"
         android:paddingEnd="10dp"
         android:paddingBottom="10dp"
-        tools:context=".MainActivity"
         tools:ignore="UselessParent">
 
         <ImageView
             android:id="@+id/diceImage"
-            android:layout_width="360dp"
-            android:layout_height="427dp"
+            android:layout_width="129dp"
+            android:layout_height="129dp"
             android:layout_marginTop="95dp"
             android:layout_marginEnd="40dp"
-            android:layout_marginBottom="96dp"
+            android:layout_marginBottom="5dp"
             android:src="@drawable/inital_dice" />
 
         <Button
             android:id="@+id/continueButtonDiceFragment"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
-            android:layout_marginStart="125dp"
+            android:layout_marginStart="75dp"
+            android:layout_marginBottom="5dp"
             android:text="@string/continueButtonDiceFragment"
             android:textSize="20sp" />
+    </LinearLayout>
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/diceResult"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="50sp"
-            tools:layout_editor_absoluteX="120dp"
-            tools:layout_editor_absoluteY="200dp" />
+    <TextView
+        android:id="@+id/diceResult"
+        android:layout_width="243dp"
+        android:layout_height="230dp"
+        android:textSize="50sp"
+        tools:layout_editor_absoluteX="120dp"
+        tools:layout_editor_absoluteY="200dp" />
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/fragmentDice"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:visibility="gone" />
-
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentDice"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:visibility="visible" />
+</LinearLayout>
 
 
     </LinearLayout>
-
-
-</LinearLayout>

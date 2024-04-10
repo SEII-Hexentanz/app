@@ -1,18 +1,20 @@
 package com.example.frontend;
 
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -32,13 +34,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         findViews();
 
         checkInputUsername(inputUsername);
 
         checkInputAge(inputAge);
+        // Get the root layout of your activity
+        View rootView = findViewById(android.R.id.content);
 
+        // Set a touch listener to the root layout
+        rootView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // Hide the keyboard when touched
+                hideKeyboard(v);
+                return false;
+            }
+        });
 
 
         btnStart.setOnClickListener(new View.OnClickListener() {
@@ -54,7 +66,8 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     mainActivityView.setVisibility(View.GONE);
                     createLobbyFragment.setVisibility(View.VISIBLE);
-                    changeFragment();
+                    showCreateLobbyFragment();
+
                 }
                 startClientThread();
 
@@ -126,9 +139,13 @@ public class MainActivity extends AppCompatActivity {
         return age >= 8 && age <= 99;
     }
 
-    public void changeFragment() {
+    public void showCreateLobbyFragment() {
+        String name = inputUsername.getText().toString();
 
-        CreateLobbyFragment createLobbyFragment = new CreateLobbyFragment();
+        CreateLobbyFragment createLobbyFragment = CreateLobbyFragment.newInstance(name);
+
+        GameBoardFragment gameBoardFragment = GameBoardFragment.newInstance(name);
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -179,7 +196,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
+    private void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 
 }
 
