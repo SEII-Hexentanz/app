@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
                 if (createLobbyFragment.getVisibility() == View.INVISIBLE) {
                     createLobbyFragment.setVisibility(View.GONE);
                 } else {
-                    mainActivityView.setVisibility(View.GONE);
                     createLobbyFragment.setVisibility(View.VISIBLE);
                     showCreateLobbyFragment();
 

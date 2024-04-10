@@ -29,10 +29,9 @@
 
         <Button
             android:id="@+id/continueButtonDiceFragment"
-            android:layout_width="87dp"
-            android:layout_height="35dp"
-            android:layout_marginStart="2dp"
-
+            android:layout_width="120dp"
+            android:layout_height="48dp"
+            android:layout_marginBottom="40dp"
             android:text="@string/continueButtonDiceFragment"
             android:textSize="10sp" />
 
