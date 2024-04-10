@@ -22,14 +22,15 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <TextView
             android:id="@+id/rulesText"
-            android:layout_width="400dp"
-            android:layout_height="350dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/rules_text"
-            android:padding="150dp" />
+            android:padding="16dp" />
     </ScrollView>
 
 </LinearLayout>
