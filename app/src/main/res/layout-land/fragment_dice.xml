@@ -1,0 +1,61 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dice"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+   >
+
+    <LinearLayout
+        android:id="@+id/dice2"
+        android:layout_width="match_parent"
+        android:layout_height="700dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingStart="23dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp"
+        tools:ignore="UselessParent">
+
+        <ImageView
+            android:id="@+id/diceImage"
+            android:layout_width="84dp"
+            android:layout_height="89dp"
+            android:layout_marginTop="65dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/inital_dice" />
+
+        <Button
+            android:id="@+id/continueButtonDiceFragment"
+            android:layout_width="87dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="2dp"
+
+            android:text="@string/continueButtonDiceFragment"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/diceResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="24sp"
+            tools:layout_editor_absoluteX="121dp"
+            tools:layout_editor_absoluteY="585dp" />
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentContainerView2"
+            android:name="com.example.frontend.Lobby_Fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:visibility="gone" />
+
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
