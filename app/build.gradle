@@ -57,6 +57,10 @@ tasks.register('jacocoTestReport', JacocoReport) {
     executionData.from = files("${project.layout.buildDirectory.get().asFile}/jacoco/testDebugUnitTest.exec")
 }
 
+jacoco {
+    toolVersion = "0.8.12"
+}
+
 sonar {
     properties {
         property "sonar.projectKey", "SEII-Hexentanz_app"
@@ -78,7 +82,7 @@ dependencies {
     implementation libs.legacy.support.v4
     implementation libs.lifecycle.livedata.ktx
     implementation libs.lifecycle.viewmodel.ktx
-    testImplementation libs.junit
+
     testImplementation libs.junit.jupiter
     testRuntimeOnly libs.junit.jupiter.engine
     testImplementation libs.mockito.core
