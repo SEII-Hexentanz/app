@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void showWinner() {
         String winnerName="Max Mustermann";
-        EndGame_Fragment endFragment = EndGame_Fragment.newInstance(winnerName);
+        EngGameFragment endFragment = EngGameFragment.newInstance(winnerName);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragmentContainerView2, endFragment);

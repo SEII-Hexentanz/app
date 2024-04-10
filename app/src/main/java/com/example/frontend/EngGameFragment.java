@@ -1,8 +1,8 @@
 package com.example.frontend;
 
-import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -13,18 +13,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class EndGame_Fragment extends Fragment {
+public class EngGameFragment extends Fragment {
 
     private static final String ARG_WINNER_NAME = "winnerName";
 
     private String sieger;
 
-    public EndGame_Fragment() {
+    public EngGameFragment() {
         // Required empty public constructor
     }
 
-    public static EndGame_Fragment newInstance(String winnerName) {
-        EndGame_Fragment fragment = new EndGame_Fragment();
+    public static EngGameFragment newInstance(String winnerName) {
+        EngGameFragment fragment = new EngGameFragment();
         Bundle args = new Bundle();
         args.putString(ARG_WINNER_NAME, winnerName);
         fragment.setArguments(args);
@@ -50,26 +50,21 @@ public class EndGame_Fragment extends Fragment {
         winnerNameTextView.setText(getString(R.string.winnerText, sieger));
 
         restartGameButton.setOnClickListener(v -> {
-            // TODO implemtieren zum rückkehren zum Start screen
-            // Get the FragmentManager
-            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+            showLobbyFragment();
 
-            // Begin a FragmentTransaction
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-            // Remove the endScreenFragment
-            fragmentTransaction.remove(EndGame_Fragment.this);
-
-            // Add or replace the LobbyFragment
-            Lobby_Fragment lobbyFragment = new Lobby_Fragment();
-            fragmentTransaction.replace(R.id.fragmentContainerView2, lobbyFragment);
-
-            // Commit the transaction
-            fragmentTransaction.commit();
 
         });
 
         return view;
+    }
+
+    public void showLobbyFragment() {
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.remove(EngGameFragment.this);
+        Lobby_Fragment lobbyFragment = new Lobby_Fragment();
+        fragmentTransaction.replace(R.id.fragmentContainerView2, lobbyFragment);
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -78,6 +73,7 @@ public class EndGame_Fragment extends Fragment {
         // Set screen orientation to landscape when GameBoardFragment is resumed
         requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
+
     @Override
     public void onPause() {
         super.onPause();
