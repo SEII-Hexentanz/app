@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -26,6 +27,7 @@ public class LobbyFragment extends Fragment {
     private ArrayList<Player> userList;
     private PlayerAdapter adapter;
 
+    private TextView playerCount;
     public LobbyFragment() {
         // Required empty public constructor
     }
@@ -44,9 +46,15 @@ public class LobbyFragment extends Fragment {
         findViews(view);
         getDummyDataForRecylerView();
 
+
         adapter = new PlayerAdapter(userList);
+
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        int allPlayer = adapter.getItemCount();
+
+       playerCount.setText(allPlayer + "");
 
         onClckStart();
         onReturnBtnClick();
@@ -94,6 +102,7 @@ public class LobbyFragment extends Fragment {
         startGame = view.findViewById(R.id.btn_StartGame);
         retCreateLobby = view.findViewById(R.id.imgBtnRetCL);
         recyclerView = view.findViewById(R.id.lobbyPlayerRecyclerView);
+        playerCount = view.findViewById(R.id.txtlistPlayerCount);
     }
 
     private void showGameBoardFragment() {
