@@ -60,7 +60,7 @@ public class Client extends Thread {
                     continue;
                 }
                 Log.i(TAG, "Received response from server: " + response);
-                ResponseHandler.execute(response.responseType(), response.payload());
+                ResponseHandler.execute(response.responseType(), response.payload(), Game.INSTANCE);
             }
         } catch (UnknownHostException e) {
             throw new IllegalArgumentException("Unknown host", e); // we can't work without a server

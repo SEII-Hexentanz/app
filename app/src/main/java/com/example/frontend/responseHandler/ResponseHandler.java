@@ -1,5 +1,6 @@
 package com.example.frontend.responseHandler;
 
+import com.example.frontend.Game;
 import com.example.frontend.actions.DefaultAction;
 import com.example.frontend.actions.PongAction;
 import com.example.frontend.actions.UpdateStateAction;
@@ -21,7 +22,7 @@ public class ResponseHandler {
         put(ResponseType.UPDATE_STATE, new UpdateStateAction());
     }};
 
-    public static void execute(ResponseType responseType, Payload payload) {
-        Objects.requireNonNull(actions.getOrDefault(responseType, new DefaultAction())).execute(payload);
+    public static void execute(ResponseType responseType, Payload payload, Game game) {
+        Objects.requireNonNull(actions.getOrDefault(responseType, new DefaultAction())).execute(game, payload);
     }
 }

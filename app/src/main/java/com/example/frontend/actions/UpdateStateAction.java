@@ -10,10 +10,10 @@ import at.aau.payloads.UpdateStatePayload;
 
 public class UpdateStateAction implements Action {
     @Override
-    public void execute(Payload payload) {
+    public void execute(Game game, Payload payload) {
         if (payload instanceof UpdateStatePayload updateStatePayload) {
-            Game.INSTANCE.setGameState(updateStatePayload.game().gameState());
-            Game.INSTANCE.setPlayers(updateStatePayload.game().players());
+            game.setGameState(updateStatePayload.game().gameState());
+            game.setPlayers(updateStatePayload.game().players());
         } else Log.e("App", "Payload is not an instance of UpdateStatePayload");
     }
 }
