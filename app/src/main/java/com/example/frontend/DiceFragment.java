@@ -20,12 +20,12 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     private Sensor accelerometer;
     private Dice dice;
     private ImageView diceImage;
-    //private Button continueButton;
+    private Button continueButton;
     private TextView diceResult;
 
-    private final float SHAKE_THRESHOLD = 10;
+    private final static float shakeThreshold = 10;
     private long lastUpdate = 0;
-    private float last_x, last_y, last_z;
+    private float lastX, lastY, lastZ;
     private boolean diceThrown = false;
 
     public DiceFragment() {
@@ -53,9 +53,9 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dice, container, false);
-        diceImage = view.findViewById(R.id.diceImage);
-        //continueButton = view.findViewById(R.id.continueButtonDiceFragment);
-        diceResult = view.findViewById(R.id.diceResult);
+
+        findViews(view);
+
         /*continueButton.setOnClickListener(v -> {
             diceView.setContinuePressed(true);
             diceView.setDices(dice);
@@ -94,9 +94,9 @@ public class DiceFragment extends Fragment implements SensorEventListener {
             float y = event.values[1];
             float z = event.values[2];
 
-            float speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000;
+            float speed = Math.abs(x + y + z - lastX - lastY - lastZ) / diffTime * 10000;
 
-            if (speed > SHAKE_THRESHOLD) {
+            if (speed > shakeThreshold) {
                 dice.useDice();
                 updateDiceImage(diceImage, dice.getDice());
                 if (diceResult != null) {
@@ -107,9 +107,9 @@ public class DiceFragment extends Fragment implements SensorEventListener {
                 diceThrown = true;
             }
 
-            last_x = x;
-            last_y = y;
-            last_z = z;
+            lastX = x;
+            lastY = y;
+            lastZ = z;
         }
     }
 
@@ -142,5 +142,10 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Not needed for this example
+    }
+    public void findViews(View view){
+        diceImage = view.findViewById(R.id.diceImage);
+        //continueButton = view.findViewById(R.id.continueButtonDiceFragment);
+        diceResult = view.findViewById(R.id.diceResult);
     }
 }

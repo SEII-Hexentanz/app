@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView inputAge;
     private View createLobbyFragment;
     private View mainActivityView;
-    private View fragment_dice;
+    private View fragmentDice;
     private View endFrag;
     private Handler handler = new Handler(Looper.getMainLooper());
 
@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
                 if (createLobbyFragment.getVisibility() == View.INVISIBLE) {
                     createLobbyFragment.setVisibility(View.GONE);
                 } else {
-                    mainActivityView.setVisibility(View.GONE);
                     createLobbyFragment.setVisibility(View.VISIBLE);
                     showCreateLobbyFragment();
 
@@ -81,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         inputAge = findViewById(R.id.startScreenAge);
         createLobbyFragment = findViewById(R.id.fragmentContainerView2);
         mainActivityView = findViewById(R.id.main2);
-        fragment_dice=findViewById(R.id.dice2);
+        fragmentDice =findViewById(R.id.dice2);
         endFrag=findViewById(R.id.endfragment);
     }
 
@@ -144,8 +143,6 @@ public class MainActivity extends AppCompatActivity {
 
         CreateLobbyFragment createLobbyFragment = CreateLobbyFragment.newInstance(name);
 
-        GameBoardFragment gameBoardFragment = GameBoardFragment.newInstance(name);
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -153,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
 
-        //TODO:  maybe use switch-case statement for easier change Fragment
+        //maybe use switch-case statement for easier change Fragment
 
     }
 
@@ -178,28 +175,12 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
     }
-    private void showDiceFragment() {
-        DiceFragment diceFragment = DiceFragment.newInstance();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragmentContainerView2, diceFragment);
-        fragmentTransaction.commit();
-    }
-
-    public void showWinner() {
-        String winnerName="Max Mustermann";
-        EndGame_Fragment endFragment = EndGame_Fragment.newInstance(winnerName);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragmentContainerView2, endFragment);
-        fragmentTransaction.commit();
-    }
-
 
     private void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
+
+        InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(),0);
+        }
 
 }
 

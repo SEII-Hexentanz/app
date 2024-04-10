@@ -25,6 +25,7 @@ public class CreateLobbyFragment extends Fragment {
     private TextView nameBox;
 
     public CreateLobbyFragment() {
+        //empty constructor needed
     }
 
     public static CreateLobbyFragment newInstance(String name) {
@@ -73,7 +74,7 @@ public class CreateLobbyFragment extends Fragment {
 
         private void showFragmentLobby(){
 
-            Lobby_Fragment lobbyFragment = new Lobby_Fragment();
+            LobbyFragment lobbyFragment = new LobbyFragment();
 
             FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
