@@ -26,6 +26,6 @@
     <string name="winnderName">Gewinner</string>
     <string name="restartGame">Restart Game</string>
     <string name="winnerText">Der Gewinner ist: %1$s!</string>
-    <string name="return_button">Back to starting page</string>
+    <string name="return_button">X</string>
     <string name="rules_text">Regelerklärung\n</string>
 </resources>

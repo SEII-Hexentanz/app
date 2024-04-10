@@ -60,9 +60,6 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         findViews(view);
         onContinueClick();
 
-        findViews(view);
-
-
         return view;
     }
 
@@ -70,7 +67,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         diceImage = view.findViewById(R.id.diceImage);
         continueButton = view.findViewById(R.id.continueButtonDiceFragment);
         diceResult = view.findViewById(R.id.diceResult);
-        fragmentContainerView = view.findViewById(R.id.fragmentContainerDice);
+        fragmentContainerView = view.findViewById(R.id.fragmentContainerView2);
     }
 
     private void onContinueClick() {
@@ -78,7 +75,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
             @Override
             public void onClick(View view) {
                 fragmentContainerView.setVisibility(View.VISIBLE);
-                showDiceFragment();
+                showGameBoardFragment();
 
 
             }
@@ -164,12 +161,13 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         // Not needed for this example
     }
 
-    private void showDiceFragment() {
-        DiceFragment diceFragment = DiceFragment.newInstance();
+    private void showGameBoardFragment(){
+
+        GameBoardFragment gameBoardFragment = new GameBoardFragment();
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.fragmentContainerDice, diceFragment);
+        fragmentTransaction.replace(android.R.id.content,gameBoardFragment);
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
-
     }
 }

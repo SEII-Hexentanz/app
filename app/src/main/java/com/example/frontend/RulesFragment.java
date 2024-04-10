@@ -39,7 +39,7 @@ public class RulesFragment extends Fragment {
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Schließt dieses Fragment und kehrt zum vorherigen zurück
+
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 fragmentManager.popBackStack();
             }
