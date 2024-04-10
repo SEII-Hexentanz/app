@@ -25,6 +25,7 @@ public class CreateLobbyFragment extends Fragment {
     private TextView nameBox;
 
     public CreateLobbyFragment() {
+        //empty constructor needed
     }
 
     public static CreateLobbyFragment newInstance(String name) {
