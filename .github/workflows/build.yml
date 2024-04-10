@@ -30,8 +30,12 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
+      - name: Authenticate to GitHub Packages
+        run: echo "//maven.pkg.github.com/:_authToken=${{ secrets.TOKEN_GITHUB }}" > ~/.gradle/gradle.properties
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          TOKEN_GITHUB: ${{ secrets.TOKEN_GITHUB }} # Needed for GH Packages
+          USERNAME_GITHUB: ${{ secrets.USERNAME_GITHUB }} # Needed for GH Packages
         run: ./gradlew build sonar --info
