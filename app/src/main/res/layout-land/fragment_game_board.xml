@@ -9,7 +9,9 @@
     android:textAlignment="center"
     tools:context=".GameBoardFragment"
     android:orientation="horizontal"
-    android:focusable="true">
+    android:focusable="true"
+    android:background="@color/black">
+
 
 
     <GridLayout

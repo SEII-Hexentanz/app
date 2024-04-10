@@ -6,14 +6,24 @@ import java.net.*;
 public class Client {
     protected String serverAddress = "Server_IP"; // Server-IP ersetzen
     protected int serverPort = 8080;
+    private String response;
+
+
+    public String getServerAddress() {
+        return this.serverAddress;
+    }
+    public int getServerPort() {
+        return this.serverPort;
+    }
 
     public void startClient() {
+
         try (Socket socket = new Socket(serverAddress, serverPort);
              PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
              BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
 
             out.println("Hallo Server!");
-            String response = in.readLine();
+             response = in.readLine();
             System.out.println("Server antwortet: " + response);
 
         } catch (UnknownHostException e) {
@@ -25,6 +35,9 @@ public class Client {
 
     protected void handleException(Exception e) {
         System.err.println("Folgender Fehler: " + e.getMessage());
+    }
+    public String getResponseFromServer(){
+        return response;
     }
 }
 
