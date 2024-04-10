@@ -23,6 +23,7 @@ public class LobbyFragment extends Fragment {
 
     private Button startGame;
     private ImageButton retCreateLobby;
+    private Button rulesBtn;
     private RecyclerView recyclerView;
     private ArrayList<Player> userList;
     private PlayerAdapter adapter;
@@ -44,6 +45,7 @@ public class LobbyFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_lobby_, container, false);
         findViews(view);
+        onClickStart();
         getDummyDataForRecylerView();
 
 
@@ -86,12 +88,18 @@ public class LobbyFragment extends Fragment {
             }
         });
     }
-
-    private void onClckStart() {
+    private void onClickStart() {
         startGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showGameBoardFragment();
+            }
+        });
+
+        rulesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showRulesFragment();
             }
         });
     }
@@ -101,6 +109,7 @@ public class LobbyFragment extends Fragment {
         retCreateLobby = view.findViewById(R.id.imgBtnRetCL);
         recyclerView = view.findViewById(R.id.lobbyPlayerRecyclerView);
         playerCount = view.findViewById(R.id.txtlistPlayerCount);
+        rulesBtn = view.findViewById(R.id.button);
     }
 
     private void showGameBoardFragment() {
@@ -109,6 +118,16 @@ public class LobbyFragment extends Fragment {
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(android.R.id.content, gameBoardFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    private void showRulesFragment(){
+
+        RulesFragment rulesfragment = new RulesFragment();
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(android.R.id.content,rulesfragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

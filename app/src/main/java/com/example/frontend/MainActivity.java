@@ -19,7 +19,12 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Handler;
 import android.os.Looper;
 
+import at.aau.models.Request;
+import at.aau.payloads.RegisterPayload;
+import at.aau.values.CommandType;
+
 public class MainActivity extends AppCompatActivity {
+    private final Client client = new Client();
     private Button btnStart;
     private TextView inputUsername;
     private TextView inputAge;
@@ -33,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        client.start();
 
         findViews();
 
@@ -55,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         btnStart.setOnClickListener(new View.OnClickListener() {
             final String responseUser = inputUsername.getText().toString();
-            final String responesAge = inputAge.getText().toString();
+            String responesAge = inputAge.getText().toString();
 
             //Send to server the responseUser and responseAge
 
@@ -68,8 +75,8 @@ public class MainActivity extends AppCompatActivity {
                     showCreateLobbyFragment();
 
                 }
-                startClientThread();
-
+                responesAge = "20"; //TODO: responseUser & responseAge currently can't be updated by UI. Hardcoded for now so below line doesn't throw. Fix this.
+                Client.send(new Request(CommandType.REGISTER, new RegisterPayload(responseUser, Integer.parseInt(responesAge))));
             }
         });
     }
@@ -149,30 +156,16 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
 
-        //maybe use switch-case statement for easier change Fragment
+        //TODO:  maybe use switch-case statement for easier change Fragment
 
     }
 
-    private void startClientThread() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Client client = new Client();
-                try {
-
-                    client.startClient();
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-
-                        }
-                    });
-                } catch (Exception e) {
-                    //e.printStackTrace(); //Sensitive
-                    client.handleException(e);
-                }
-            }
-        }).start();
+    private void showDiceFragment() {
+        DiceFragment diceFragment = DiceFragment.newInstance();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentContainerView2, diceFragment);
+        fragmentTransaction.commit();
     }
 
     private void hideKeyboard(View view) {
