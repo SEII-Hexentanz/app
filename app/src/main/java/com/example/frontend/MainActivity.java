@@ -1,8 +1,6 @@
 package com.example.frontend;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -27,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
     private View mainActivityView;
     private View fragment_dice;
     private View endFrag;
-    private Handler handler = new Handler(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -12,6 +12,10 @@ import at.aau.payloads.Payload;
 import at.aau.values.ResponseType;
 
 public class ResponseHandler {
+    private ResponseHandler() {
+        throw new IllegalStateException("Utility class");
+    }
+
     private static final Map<ResponseType, Action> actions = new HashMap<>() {{
         put(ResponseType.PONG, new PongAction());
         put(ResponseType.UPDATE_STATE, new UpdateStateAction());
