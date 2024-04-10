@@ -10,6 +10,7 @@
         android:id="@+id/user_image"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:contentDescription="@string/imageview_hexentanzPlaceholder"
         android:src="@drawable/hexentanz"
         android:scaleType="centerCrop"/>
 

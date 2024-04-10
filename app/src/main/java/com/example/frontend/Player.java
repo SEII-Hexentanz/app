@@ -7,6 +7,7 @@ public class Player {
     public Player(){
         //Empty construktor
     }
+    //is currently empty
     public Player(String username, int age, int imageResource) {
         this.username = username;
         this.age = age;
@@ -31,11 +32,5 @@ public class Player {
         this.username = username;
     }
 
-    public int getAge() {
-        return age;
-    }
 
-    public void setAge(int age) {
-        this.age = age;
-    }
 }

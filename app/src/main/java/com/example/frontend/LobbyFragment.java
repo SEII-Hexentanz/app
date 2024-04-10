@@ -83,8 +83,6 @@ public class LobbyFragment extends Fragment {
                 // Inside your Fragment class where you want to close and return
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 fragmentManager.popBackStack();
-                ;
-
             }
         });
     }

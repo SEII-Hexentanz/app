@@ -24,10 +24,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView inputUsername;
     private TextView inputAge;
     private View createLobbyFragment;
-    private View mainActivityView;
     private View fragmentDice;
     private View endFrag;
-    private Handler handler = new Handler(Looper.getMainLooper());
+    private final Handler handler = new Handler(Looper.getMainLooper());
 
 
     @Override
@@ -80,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
         inputUsername = findViewById(R.id.startScreenUsername);
         inputAge = findViewById(R.id.startScreenAge);
         createLobbyFragment = findViewById(R.id.fragmentContainerView2);
-        mainActivityView = findViewById(R.id.main2);
         fragmentDice = findViewById(R.id.dice2);
         endFrag = findViewById(R.id.endfragment);
     }
