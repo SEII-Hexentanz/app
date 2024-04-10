@@ -18,6 +18,7 @@ public class Lobby_Fragment extends Fragment {
 
     private Button startGame;
     private ImageButton retCreateLobby;
+    private Button rulesBtn;
 
     public Lobby_Fragment() {
         // Required empty public constructor
@@ -34,7 +35,7 @@ public class Lobby_Fragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_lobby_, container, false);
         findViews(view);
-        onClckStart();
+        onClickStart();
         onReturnBtnClick();
 
         return view;
@@ -50,17 +51,25 @@ public class Lobby_Fragment extends Fragment {
             }
         });
     }
-    private void onClckStart() {
+    private void onClickStart() {
         startGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showGameBoardFragment();
             }
         });
+
+        rulesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showRulesFragment();
+            }
+        });
     }
     private void findViews(View view){
         startGame = view.findViewById(R.id.btn_StartGame);
         retCreateLobby = view.findViewById(R.id.imgBtnRetCL);
+        rulesBtn = view.findViewById(R.id.button);
     }
     private void showGameBoardFragment(){
 
@@ -68,6 +77,16 @@ public class Lobby_Fragment extends Fragment {
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(android.R.id.content,gameBoardFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    private void showRulesFragment(){
+
+        RulesFragment rulesfragment = new RulesFragment();
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(android.R.id.content,rulesfragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
