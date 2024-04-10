@@ -4,6 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +51,21 @@ public class EndGame_Fragment extends Fragment {
 
         restartGameButton.setOnClickListener(v -> {
             // TODO implemtieren zum rückkehren zum Start screen
+            // Get the FragmentManager
+            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+
+            // Begin a FragmentTransaction
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+            // Remove the endScreenFragment
+            fragmentTransaction.remove(EndGame_Fragment.this);
+
+            // Add or replace the LobbyFragment
+            Lobby_Fragment lobbyFragment = new Lobby_Fragment();
+            fragmentTransaction.replace(R.id.fragmentContainerView2, lobbyFragment);
+
+            // Commit the transaction
+            fragmentTransaction.commit();
 
         });
 
