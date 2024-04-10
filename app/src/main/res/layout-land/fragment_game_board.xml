@@ -9,7 +9,8 @@
     android:textAlignment="center"
     tools:context=".GameBoardFragment"
     android:orientation="horizontal"
-    android:focusable="true">
+    android:focusable="true"
+    android:background="@color/black">
 
 
     <TextView
@@ -40,8 +41,8 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="418dp"
-        android:layout_height="366dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:contentDescription="DummyImg"
         android:src="@drawable/dummy_gameboard"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -55,11 +56,11 @@
         android:id="@+id/btn_rollDice"
         android:layout_width="119dp"
         android:layout_height="48dp"
-        android:layout_marginBottom="56dp"
+        android:layout_marginBottom="40dp"
         android:text="Roll"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/txtViewUsername"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.38"
         app:layout_constraintStart_toStartOf="parent" />
 
 
