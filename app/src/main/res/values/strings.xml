@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">frontend</string>
+    <string name="app_name">Hexentanz</string>
     <string name="age">Age</string>
     <string name="username">Username</string>
     <string name="imageview_hexentanzPlaceholder">TODO</string>

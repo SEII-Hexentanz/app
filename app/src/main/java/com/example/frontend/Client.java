@@ -36,7 +36,11 @@ public class Client extends Thread {
     public static void send(Request request) {
         new Thread(() -> {
             try {
-                out.writeObject(request);
+                if (out != null) {
+                    out.writeObject(request);
+                } else {
+                    Log.e(TAG, "ObjectOutputStream is null, unable to send request");
+                }
             } catch (IOException e) {
                 Log.e(TAG, "Error while sending request to server", e);
             }
