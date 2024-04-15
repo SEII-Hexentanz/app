@@ -60,7 +60,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         View view = inflater.inflate(R.layout.fragment_dice, container, false);
         findViews(view);
         onContinueClick();
-        setupCheating();
+        onCheatingClick();
         return view;
     }
 
@@ -78,8 +78,18 @@ public class DiceFragment extends Fragment implements SensorEventListener {
             public void onClick(View view) {
                 fragmentContainerView.setVisibility(View.VISIBLE);
                 showGameBoardFragment();
+            }
+        });
+    }
 
-
+    private void onCheatingClick(){
+        cheatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dice.setDice(6);
+                updateDiceImage(diceImage, 6);
+                diceThrown = false;
+                //add updating player position method
             }
         });
     }
@@ -157,18 +167,6 @@ public class DiceFragment extends Fragment implements SensorEventListener {
                 diceImage.setImageResource(R.drawable.inital_dice);
         }
 
-    }
-
-    private void setupCheating(){
-        cheatButton.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                updateDiceImage(diceImage, 6);
-                diceThrown = false;
-                //add updating player position method
-                return true;
-            }
-        });
     }
 
     @Override

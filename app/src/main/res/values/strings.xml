@@ -28,4 +28,5 @@
     <string name="winnerText">Der Gewinner ist: %1$s!</string>
     <string name="return_button">X</string>
     <string name="rules_text">Regelerklärung\n</string>
+    <string name="cheatButton">Cheat\n</string>
 </resources>

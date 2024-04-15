@@ -29,23 +29,22 @@
 
         <Button
             android:id="@+id/continueButtonDiceFragment"
-            android:layout_width="119dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="48dp"
-            android:layout_marginStart="75dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginEnd="10dp"
             android:text="@string/continueButtonDiceFragment"
             android:textSize="20sp" />
 
         <Button
             android:id="@+id/cheatButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cheat"
-            android:textSize="12sp"
-            android:layout_marginTop="100dp"
-            android:alpha="0.3"
-            android:onLongClick="@{()->viewModel.onCheatButtonPressed()}"
-            android:visibility="gone" />
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            android:text="@string/cheatButton"
+            android:textSize="20sp" />
+
     </LinearLayout>
 <LinearLayout
     android:layout_width="wrap_content"
