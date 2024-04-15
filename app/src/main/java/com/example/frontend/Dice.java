@@ -22,6 +22,8 @@ public class Dice {
         return diceNumber;
     }
 
+    public void setDice(int diceNumber){this.diceNumber=diceNumber;}
+
     public void setRan(SecureRandom ran){
         this.ran = ran;
     }

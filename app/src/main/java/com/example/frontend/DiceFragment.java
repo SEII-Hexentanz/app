@@ -23,7 +23,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     private Sensor accelerometer;
     private Dice dice;
     private ImageView diceImage;
-    private Button continueButton;
+    private Button continueButton, cheatButton;
     private TextView diceResult;
     private FragmentContainerView fragmentContainerView;
 
@@ -51,6 +51,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
         dice = new Dice();
 
+
     }
 
     @Override
@@ -59,13 +60,14 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         View view = inflater.inflate(R.layout.fragment_dice, container, false);
         findViews(view);
         onContinueClick();
-
+        setupCheating();
         return view;
     }
 
     private void findViews(View view) {
         diceImage = view.findViewById(R.id.diceImage);
         continueButton = view.findViewById(R.id.continueButtonDiceFragment);
+        cheatButton = view.findViewById(R.id.cheatButton);
         diceResult = view.findViewById(R.id.diceResult);
         fragmentContainerView = view.findViewById(R.id.fragmentContainerView2);
     }
@@ -155,6 +157,18 @@ public class DiceFragment extends Fragment implements SensorEventListener {
                 diceImage.setImageResource(R.drawable.inital_dice);
         }
 
+    }
+
+    private void setupCheating(){
+        cheatButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                updateDiceImage(diceImage, 6);
+                diceThrown = false;
+                //add updating player position method
+                return true;
+            }
+        });
     }
 
     @Override
