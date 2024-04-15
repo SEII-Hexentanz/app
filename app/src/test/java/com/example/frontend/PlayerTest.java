@@ -28,8 +28,8 @@ public class PlayerTest {
 
     @Test
     public void testSetAndGetAge() {
-        Player player = new Player();
-        int newAge = 30;
+        Player player = new Player("Rolf", 20, R.drawable.greenhat);
+        int newAge = 20;
         assertEquals(newAge, player.getAge());
     }
 
