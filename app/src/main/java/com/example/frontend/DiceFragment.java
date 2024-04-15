@@ -57,6 +57,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dice, container, false);
+
         findViews(view);
         onContinueClick();
 
