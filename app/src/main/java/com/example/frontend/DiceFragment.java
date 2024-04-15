@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.example.frontend.actions.PongAction;
+
+import at.aau.models.Request;
+import at.aau.payloads.Payload;
+import at.aau.values.CommandType;
 
 public class DiceFragment extends Fragment implements SensorEventListener {
     private SensorManager sensorManager;
@@ -89,7 +96,9 @@ public class DiceFragment extends Fragment implements SensorEventListener {
                 dice.setDice(6);
                 updateDiceImage(diceImage, 6);
                 diceThrown = false;
+                Log.i("cheat", "Set dice to 6");
                 //add updating player position method
+                //Client.send(new Request(CommandType.CHEAT, (Payload) new PongAction()));
             }
         });
     }
@@ -135,6 +144,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
                 }*/
 
                 diceThrown = true;
+                //Client.send(new Request(CommandType.DICE_ROLL, (Payload) new PongAction()));
             }
 
             lastX = x;
