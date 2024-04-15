@@ -22,11 +22,11 @@ import java.util.ArrayList;
 public class LobbyFragment extends Fragment {
 
     private Button startGame;
-    private ImageButton retCreateLobby;
+    ImageButton retCreateLobby;
     private Button rulesBtn;
     private RecyclerView recyclerView;
-    private ArrayList<Player> userList;
-    private PlayerAdapter adapter;
+    ArrayList<Player> userList;
+    PlayerAdapter adapter;
 
     private TextView playerCount;
     public LobbyFragment() {
