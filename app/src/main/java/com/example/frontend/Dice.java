@@ -7,14 +7,14 @@ public class Dice {
     private SecureRandom ran;
     // as sonarcloud suggests due to security reason use security random instead of ran
 
-    public Dice(){
+    public Dice() {
         super();
-        diceNumber =0;
-        ran=new SecureRandom();
+        diceNumber = 0;
+        ran = new SecureRandom();
     }
 
-    public void useDice(){
-        diceNumber = ran.nextInt(6)+1;
+    public void useDice() {
+        diceNumber = ran.nextInt(6) + 1;
     }
 
     //is also sum of dice
@@ -22,14 +22,15 @@ public class Dice {
         return diceNumber;
     }
 
+
     public void setDice(int diceNumber){this.diceNumber=diceNumber;}
 
-    public void setRan(SecureRandom ran){
+    public void setRan(SecureRandom ran) {
         this.ran = ran;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return String.format("dice=%d", diceNumber);
     }
 

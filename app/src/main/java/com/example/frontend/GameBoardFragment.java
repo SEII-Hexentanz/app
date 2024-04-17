@@ -33,11 +33,13 @@ public class GameBoardFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //Display Gameboard only in Landscape Mode
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -68,7 +70,7 @@ public class GameBoardFragment extends Fragment {
 
     private void setGameBoardUsername() {
         Bundle bundle = getArguments();
-        if(bundle != null){
+        if (bundle != null) {
             String name = bundle.getString("username");
             usernameTxt.setText(name);
         }

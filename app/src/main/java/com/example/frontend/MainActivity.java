@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
 import android.os.Handler;
 import android.os.Looper;
 
@@ -28,9 +29,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView inputUsername;
     private TextView inputAge;
     private View createLobbyFragment;
-    private View mainActivityView;
     private View fragmentDice;
     private View endFrag;
+    private final Handler handler = new Handler(Looper.getMainLooper());
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,9 +86,8 @@ public class MainActivity extends AppCompatActivity {
         inputUsername = findViewById(R.id.startScreenUsername);
         inputAge = findViewById(R.id.startScreenAge);
         createLobbyFragment = findViewById(R.id.fragmentContainerView2);
-        mainActivityView = findViewById(R.id.main2);
-        fragmentDice =findViewById(R.id.dice2);
-        endFrag=findViewById(R.id.endfragment);
+        fragmentDice = findViewById(R.id.dice2);
+        endFrag = findViewById(R.id.endfragment);
     }
 
     void checkInputUsername(TextView inputUsername) {
@@ -170,8 +171,8 @@ public class MainActivity extends AppCompatActivity {
     private void hideKeyboard(View view) {
 
         InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(),0);
-        }
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 
 }
 

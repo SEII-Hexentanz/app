@@ -18,6 +18,7 @@ dependencyResolutionManagement {
         mavenCentral()
         mavenLocal()
         maven {
+
             url = uri("https://maven.pkg.github.com/SEII-Hexentanz/server")
             credentials {
                 username = System.getenv("USERNAME_GITHUB")
