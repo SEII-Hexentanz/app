@@ -3,6 +3,7 @@ package com.example.frontend;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 import at.aau.models.Player;
 import at.aau.values.GameState;
@@ -11,8 +12,8 @@ public enum Game {
     INSTANCE;
 
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
-    private SortedSet<Player> players;
-    private GameState gameState;
+    private SortedSet<Player> players = new TreeSet<>();
+    private GameState gameState = GameState.LOBBY;
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);

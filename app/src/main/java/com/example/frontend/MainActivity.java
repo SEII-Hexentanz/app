@@ -3,6 +3,8 @@ package com.example.frontend;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -15,9 +17,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
-import android.os.Handler;
-import android.os.Looper;
 
 import at.aau.models.Request;
 import at.aau.payloads.RegisterPayload;
@@ -61,22 +60,18 @@ public class MainActivity extends AppCompatActivity {
 
 
         btnStart.setOnClickListener(new View.OnClickListener() {
-            final String responseUser = inputUsername.getText().toString();
-            String responesAge = inputAge.getText().toString();
-
-            //Send to server the responseUser and responseAge
-
             public void onClick(View v) {
+                final String responseUser = inputUsername.getText().toString();
+                final String responseAge = inputAge.getText().toString();
+
                 Log.i("Change Fragement", "Fragment change event started");
                 if (createLobbyFragment.getVisibility() == View.INVISIBLE) {
                     createLobbyFragment.setVisibility(View.GONE);
                 } else {
                     createLobbyFragment.setVisibility(View.VISIBLE);
                     showCreateLobbyFragment();
-
                 }
-                responesAge = "20"; //TODO: responseUser & responseAge currently can't be updated by UI. Hardcoded for now so below line doesn't throw. Fix this.
-                Client.send(new Request(CommandType.REGISTER, new RegisterPayload(responseUser, Integer.parseInt(responesAge))));
+                Client.send(new Request(CommandType.REGISTER, new RegisterPayload(responseUser, Integer.parseInt(responseAge))));
             }
         });
     }
