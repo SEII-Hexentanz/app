@@ -21,22 +21,26 @@ public class Client extends Thread {
     private static ObjectOutputStream out;
     private static ObjectInputStream in;
 
-    private synchronized static void setSocket(Socket socket) {
+    public synchronized static void setSocket(Socket socket) {
         Client.socket = socket;
     }
 
-    private synchronized static void setOut(ObjectOutputStream out) {
+    public synchronized static void setOut(ObjectOutputStream out) {
         Client.out = out;
     }
 
-    private synchronized static void setIn(ObjectInputStream in) {
+    public synchronized static void setIn(ObjectInputStream in) {
         Client.in = in;
     }
 
     public static void send(Request request) {
         new Thread(() -> {
             try {
-                out.writeObject(request);
+                if (out != null) {
+                    out.writeObject(request);
+                } else {
+                    Log.e(TAG, "ObjectOutputStream is null, unable to send request");
+                }
             } catch (IOException e) {
                 Log.e(TAG, "Error while sending request to server", e);
             }

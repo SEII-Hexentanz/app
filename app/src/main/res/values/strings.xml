@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">frontend</string>
+    <string name="app_name">Hexentanz</string>
     <string name="age">Age</string>
     <string name="username">Username</string>
     <string name="imageview_hexentanzPlaceholder">TODO</string>
@@ -28,4 +28,5 @@
     <string name="winnerText">Der Gewinner ist: %1$s!</string>
     <string name="return_button">X</string>
     <string name="rules_text">Regelerklärung\n</string>
+    <string name="cheatButton">Cheat\n</string>
 </resources>
