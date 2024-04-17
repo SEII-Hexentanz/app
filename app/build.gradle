@@ -84,7 +84,7 @@ dependencies {
     implementation libs.lifecycle.viewmodel.ktx
     testImplementation libs.junit.jupiter
     testImplementation libs.junit
-    testImplementation 'junit:junit:4.12'
+    testImplementation libs.junit.v412
     testRuntimeOnly libs.junit.jupiter.engine
     testImplementation libs.mockito.core
     androidTestImplementation libs.ext.junit
