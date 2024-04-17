@@ -61,12 +61,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         btnStart.setOnClickListener(new View.OnClickListener() {
-            final String responseUser = inputUsername.getText().toString();
-            String responesAge = inputAge.getText().toString();
+
 
             //Send to server the responseUser and responseAge
 
             public void onClick(View v) {
+                final String responseUser = inputUsername.getText().toString();
+                String responesAge = inputAge.getText().toString();
                 Log.i("Change Fragement", "Fragment change event started");
                 if (createLobbyFragment.getVisibility() == View.INVISIBLE) {
                     createLobbyFragment.setVisibility(View.GONE);
@@ -75,8 +76,9 @@ public class MainActivity extends AppCompatActivity {
                     showCreateLobbyFragment();
 
                 }
-                responesAge = "20"; //TODO: responseUser & responseAge currently can't be updated by UI. Hardcoded for now so below line doesn't throw. Fix this.
                 Client.send(new Request(CommandType.REGISTER, new RegisterPayload(responseUser, Integer.parseInt(responesAge))));
+                Log.i("ResponseAge", responesAge.toString());
+
             }
         });
     }
@@ -159,15 +161,6 @@ public class MainActivity extends AppCompatActivity {
         //TODO:  maybe use switch-case statement for easier change Fragment
 
     }
-
-    private void showDiceFragment() {
-        DiceFragment diceFragment = DiceFragment.newInstance();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragmentContainerView2, diceFragment);
-        fragmentTransaction.commit();
-    }
-
     private void hideKeyboard(View view) {
 
         InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
