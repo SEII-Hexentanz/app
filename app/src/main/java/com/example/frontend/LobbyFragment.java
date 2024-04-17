@@ -1,14 +1,7 @@
-
 package com.example.frontend;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,21 +9,36 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.SortedSet;
+
+import at.aau.models.Request;
+import at.aau.payloads.EmptyPayload;
+import at.aau.values.CommandType;
+import at.aau.values.GameState;
 
 
-public class LobbyFragment extends Fragment {
+public class LobbyFragment extends Fragment implements PropertyChangeListener {
 
-    private Button startGame;
     ImageButton retCreateLobby;
+    ArrayList<Player> userList = new ArrayList<>();
+    PlayerAdapter adapter;
+    private Button startGame;
     private Button rulesBtn;
     private RecyclerView recyclerView;
-    ArrayList<Player> userList;
-    PlayerAdapter adapter;
-
     private TextView playerCount;
+
     public LobbyFragment() {
         // Required empty public constructor
+        Game.INSTANCE.addPropertyChangeListener(this);
     }
 
     @Override
@@ -46,7 +54,7 @@ public class LobbyFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_lobby_, container, false);
         findViews(view);
         onClickStart();
-        getDummyDataForRecylerView();
+        updatePlayerData(Game.INSTANCE.players());
 
 
         adapter = new PlayerAdapter(userList);
@@ -56,7 +64,7 @@ public class LobbyFragment extends Fragment {
 
         int allPlayer = adapter.getItemCount();
 
-       playerCount.setText(allPlayer + "");
+        playerCount.setText(allPlayer + "");
 
         onClickStart();
         onReturnBtnClick();
@@ -64,18 +72,23 @@ public class LobbyFragment extends Fragment {
         return view;
     }
 
-    private void getDummyDataForRecylerView() {
-        userList = new ArrayList<>();
-        Player player1 = new Player();
-        player1.setUsername("Maximus");
-        player1.setImageResource(R.drawable.bluehat);
-
-        Player player2 = new Player();
-        player2.setUsername("Susimaus");
-        player2.setImageResource(R.drawable.greenhat);
-
-        userList.add(player1);
-        userList.add(player2);
+    private void updatePlayerData(SortedSet<at.aau.models.Player> players) {
+        userList.clear();
+        for (at.aau.models.Player player : players) {
+            Player newPlayer = new Player();
+            newPlayer.setUsername(player.name());
+            newPlayer.setAge(player.age());
+            switch (player.color()) {
+                case YELLOW -> newPlayer.setImageResource(R.drawable.yellowhat);
+                case PINK -> newPlayer.setImageResource(R.drawable.pinkhat);
+                case RED -> newPlayer.setImageResource(R.drawable.redhat);
+                case GREEN -> newPlayer.setImageResource(R.drawable.greenhat);
+                case LIGHT_BLUE -> newPlayer.setImageResource(R.drawable.lightbluehat);
+                case DARK_BLUE -> newPlayer.setImageResource(R.drawable.bluehat);
+            }
+            userList.add(newPlayer);
+        }
+        if (adapter != null) requireActivity().runOnUiThread(adapter::notifyDataSetChanged);
     }
 
     private void onReturnBtnClick() {
@@ -88,10 +101,12 @@ public class LobbyFragment extends Fragment {
             }
         });
     }
+
     private void onClickStart() {
         startGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Client.send(new Request(CommandType.START, new EmptyPayload()));
                 showGameBoardFragment();
             }
         });
@@ -122,13 +137,24 @@ public class LobbyFragment extends Fragment {
         fragmentTransaction.commit();
     }
 
-    private void showRulesFragment(){
+    private void showRulesFragment() {
 
         RulesFragment rulesfragment = new RulesFragment();
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(android.R.id.content,rulesfragment);
+        fragmentTransaction.replace(android.R.id.content, rulesfragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
+        Log.i("App", "PropertyChangeEvent received: " + propertyChangeEvent.getPropertyName());
+        if (propertyChangeEvent.getPropertyName().equals(Game.Property.PLAYERS.name())) {
+            updatePlayerData((SortedSet<at.aau.models.Player>) propertyChangeEvent.getNewValue());
+        } else if (propertyChangeEvent.getPropertyName().equals(Game.Property.GAME_STATE.name()) &&
+                propertyChangeEvent.getNewValue() == GameState.RUNNING) {
+            showGameBoardFragment();
+        }
     }
 }
