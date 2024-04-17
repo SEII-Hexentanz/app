@@ -20,7 +20,6 @@ import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.frontend.actions.PongAction;
 
 import at.aau.models.Request;
 import at.aau.payloads.EmptyPayload;
@@ -120,7 +119,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
             updateDiceImage(diceImage, 6);
             diceThrown = false;
             Log.i("cheat", "Set dice to 6 with sensor covered and button long pressed");
-            //Client.send(new Request(CommandType.CHEAT, new EmptyPayload()));
+            Client.send(new Request(CommandType.CHEAT, new EmptyPayload()));
         }
     }
 
@@ -151,7 +150,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
                 dice.useDice();
                 updateDiceImage(diceImage, dice.getDice());
                 diceThrown = true;
-                //Client.send(new Request(CommandType.DICE_ROLL, new EmptyPayload()));
+                Client.send(new Request(CommandType.DICE_ROLL, new EmptyPayload()));
             }
 
             lastX = x;
