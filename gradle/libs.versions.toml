@@ -11,7 +11,7 @@ legacySupportV4 = "1.0.0"
 lifecycleLivedataKtx = "2.7.0"
 lifecycleViewmodelKtx = "2.7.0"
 mockitoCore = "5.11.0"
-shared = "1.0.2"
+shared = "1.+"
 
 [libraries]
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "extJunit" }
