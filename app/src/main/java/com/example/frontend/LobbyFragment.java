@@ -92,31 +92,20 @@ public class LobbyFragment extends Fragment implements PropertyChangeListener {
     }
 
     private void onReturnBtnClick() {
-        retCreateLobby.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Inside your Fragment class where you want to close and return
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                fragmentManager.popBackStack();
-            }
+        retCreateLobby.setOnClickListener(view -> {
+            // Inside your Fragment class where you want to close and return
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            fragmentManager.popBackStack();
         });
     }
 
     private void onClickStart() {
-        startGame.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Client.send(new Request(CommandType.START,new EmptyPayload()));
-                showGameBoardFragment();
-            }
+        startGame.setOnClickListener(view -> {
+            Client.send(new Request(CommandType.START,new EmptyPayload()));
+            showGameBoardFragment();
         });
 
-        rulesBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showRulesFragment();
-            }
-        });
+        rulesBtn.setOnClickListener(v -> showRulesFragment());
     }
 
     private void findViews(View view) {
