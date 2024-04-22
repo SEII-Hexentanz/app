@@ -15,8 +15,8 @@
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerDice"
         android:name="com.example.frontend.DiceFragment"
-        android:layout_width="216dp"
-        android:layout_height="match_parent"
+        android:layout_width="250dp"
+        android:layout_height="391dp"
         android:layout_marginStart="4dp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -26,44 +26,59 @@
 
         />
 
-    <GridLayout
-        android:id="@+id/gridLayoutGameBoard"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:columnCount="10"
-        android:rowCount="10"
-        android:background="@drawable/dummy_gameboard"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+
+    <com.example.frontend.CustomScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="144dp"
+        android:layout_marginTop="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
+
+        <ImageView
+            android:id="@+id/gridLayoutGameBoard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/dummy_gameboard"
+            android:columnCount="10"
+            android:rowCount="10"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.428"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            android:scaleType="fitCenter" />
+
+        />
+    </com.example.frontend.CustomScrollView>
+
+    <TextView
             android:id="@+id/txtViewUsername"
             android:layout_width="129dp"
             android:layout_height="45dp"
             android:layout_marginStart="32dp"
             android:layout_weight="1"
             android:text="@string/username"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/btn_rollDice"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.312"
-            android:visibility="invisible"/>
-
-        <Button
-            android:id="@+id/btn_rollDice"
-            android:layout_width="119dp"
-            android:layout_height="48dp"
-            android:layout_row="1"
-            android:layout_column="0"
-            android:layout_marginBottom="36dp"
-            android:text="Roll Dice"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/txtViewUsername"
-            app:layout_constraintHorizontal_bias="0.48" />
+            app:layout_constraintVertical_bias="0.312" />
 
 
-    </GridLayout>
+    <Button
+        android:id="@+id/btn_rollDice"
+        android:layout_width="119dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="52dp"
+        android:text="Roll Dice"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/txtViewUsername"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
