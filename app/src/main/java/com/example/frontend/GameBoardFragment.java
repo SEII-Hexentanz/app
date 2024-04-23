@@ -58,8 +58,36 @@ public class GameBoardFragment extends Fragment {
     private ImageView btnYellowHome3;
     private ImageView btnYellowHome4;
 
+    private ImageView btnGreenGoal1;
+    private ImageView btnGreenGoal2;
+    private ImageView btnGreenGoal3;
+    private ImageView btnGreenGoal4;
+
+    private ImageView btnRedGoal1;
+    private ImageView btnRedGoal2;
+    private ImageView btnRedGoal3;
+    private ImageView btnRedGoal4;
+
+    private ImageView btnBlueGoal1;
+    private ImageView btnBlueGoal2;
+    private ImageView btnBlueGoal3;
+    private ImageView btnBlueGoal4;
 
 
+    private ImageView btnLilaGoal1;
+    private ImageView btnLilaGoal2;
+    private ImageView btnLilaGoal3;
+    private ImageView btnLilaGoal4;
+
+    private ImageView btnRosaGoal1;
+    private ImageView btnRosaGoal2;
+    private ImageView btnRosaGoal3;
+    private ImageView btnRosaGoal4;
+
+    private ImageView btnYellowGoal1;
+    private ImageView btnYellowGoal2;
+    private ImageView btnYellowGoal3;
+    private ImageView btnYellowGoal4;
 
 
 
@@ -206,6 +234,39 @@ public class GameBoardFragment extends Fragment {
         btnYellowHome2 = view.findViewById(R.id.btnHomeYellow2);
         btnYellowHome3 = view.findViewById(R.id.btnHomeYellow3);
         btnYellowHome4 = view.findViewById(R.id.btnHomeYellow4);
+
+
+
+        btnGreenGoal1 = view.findViewById(R.id.btnGoalGreen1);
+        btnGreenGoal2 = view.findViewById(R.id.btnGoalGreen2);
+        btnGreenGoal3 = view.findViewById(R.id.btnGoalGreen3);
+        btnGreenGoal4 = view.findViewById(R.id.btnGoalGreen4);
+
+        btnRedGoal1 = view.findViewById(R.id.btnGoalRed1);
+        btnRedGoal2 = view.findViewById(R.id.btnGoalRed2);
+        btnRedGoal3 = view.findViewById(R.id.btnGoalRed3);
+        btnRedGoal4 = view.findViewById(R.id.btnGoalRed4);
+
+        btnBlueGoal1 = view.findViewById(R.id.btnGoalBlue1);
+        btnBlueGoal2 = view.findViewById(R.id.btnGoalBlue2);
+        btnBlueGoal3 = view.findViewById(R.id.btnGoalBlue3);
+        btnBlueGoal4 = view.findViewById(R.id.btnGoalBlue4);
+
+        btnLilaGoal1 = view.findViewById(R.id.btnGoalLila1);
+        btnLilaGoal2 = view.findViewById(R.id.btnGoalLila2);
+        btnLilaGoal3 = view.findViewById(R.id.btnGoalLila3);
+        btnLilaGoal4 = view.findViewById(R.id.btnGoalLila4);
+
+        btnRosaGoal1 = view.findViewById(R.id.btnGoalRosa1);
+        btnRosaGoal2 = view.findViewById(R.id.btnGoalRosa2);
+        btnRosaGoal3 = view.findViewById(R.id.btnGoalRosa3);
+        btnRosaGoal4 = view.findViewById(R.id.btnGoalRosa4);
+
+        btnYellowGoal1 = view.findViewById(R.id.btnGoalYellow1);
+        btnYellowGoal2 = view.findViewById(R.id.btnGoalYellow2);
+        btnYellowGoal3 = view.findViewById(R.id.btnGoalYellow3);
+        btnYellowGoal4 = view.findViewById(R.id.btnGoalYellow4);
+
 
     }
 
