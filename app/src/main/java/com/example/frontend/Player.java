@@ -4,14 +4,17 @@ public class Player {
     private String username;
     private int age;
     private int ImageResource;
+
+    int[] playerPosition;
     public Player(){
-        //Empty construktor
+        //Empty constructor
     }
     //is currently empty
     public Player(String username, int age, int imageResource) {
         this.username = username;
         this.age = age;
         this.ImageResource = imageResource;
+        this.playerPosition = new int[4];
     }
 
     public int getImageResource() {
@@ -39,5 +42,13 @@ public class Player {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public int[] getPositions(){
+        return playerPosition;
+    }
+
+    public void setPlayerPosition(){
+        this.playerPosition = playerPosition;
     }
 }
