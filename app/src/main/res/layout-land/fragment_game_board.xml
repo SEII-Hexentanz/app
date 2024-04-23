@@ -27,33 +27,327 @@
         />
 
 
-    <com.example.frontend.CustomScrollView
-        android:id="@+id/scrollView"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="144dp"
-        android:layout_marginTop="4dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
+
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scrollbars="horizontal">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
 
         <ImageView
             android:id="@+id/gridLayoutGameBoard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="1506dp"
+            android:layout_height="1000dp"
+            android:layout_marginLeft="250dp"
+            android:layout_marginBottom="5dp"
             android:background="@drawable/dummy_gameboard"
-            android:columnCount="10"
-            android:rowCount="10"
+
+            android:contentDescription="@string/imageview_hexentanzPlaceholder"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.428"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0"
-            android:scaleType="fitCenter" />
+            app:layout_constraintVertical_bias="1.0" />
 
-        />
-    </com.example.frontend.CustomScrollView>
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="42dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="200dp"
+            android:layout_marginTop="200dp"
+            android:layout_marginLeft="200dp"
+            android:text="Button" />
+
+        <!-- StartButton GreenWitch-->
+
+        <ImageView
+            android:id="@+id/btnHomeGreen1"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="1100dp"
+            android:layout_marginTop="785dp"
+            android:background="#00FFFFFF"
+            tools:layout_editor_absoluteX="119dp"
+            tools:layout_editor_absoluteY="269dp"
+            android:contentDescription="Home1"/>
+
+        <ImageView
+            android:id="@+id/btnHomeGreen2"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="#00FFFFFF"
+            tools:layout_editor_absoluteX="143dp"
+            tools:layout_editor_absoluteY="258dp"
+            android:layout_marginStart="1035dp"
+            android:layout_marginTop="799dp"
+            android:contentDescription="Home2"/>
+
+        <ImageView
+            android:id="@+id/btnHomeGreen3"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="#00FFFFFF"
+            tools:layout_editor_absoluteX="161dp"
+            tools:layout_editor_absoluteY="245dp"
+            android:layout_marginStart="1025dp"
+            android:layout_marginTop="735dp"
+            android:contentDescription="Home3"/>
+
+        <ImageView
+            android:id="@+id/btnHomeGreen4"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="#00FFFFFF"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="180dp"
+            android:layout_marginStart="1100dp"
+            android:layout_marginTop="725dp"
+            android:contentDescription="Home4"/>
+
+
+        <ImageView
+            android:id="@+id/btnHomeLila4"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="#00FFFFFF"
+            tools:layout_editor_absoluteX="119dp"
+            tools:layout_editor_absoluteY="269dp"
+            android:layout_marginStart="875dp"
+            android:layout_marginTop="240dp"
+            android:contentDescription="LilaHome4"/>
+
+        <ImageView
+            android:id="@+id/btnHomeLila3"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+
+            android:background="#00FFFFFF"
+            tools:layout_editor_absoluteX="143dp"
+            tools:layout_editor_absoluteY="258dp"
+            android:layout_marginStart="930dp"
+            android:layout_marginTop="220dp"
+            android:contentDescription="LilaHome3"/>
+
+        <ImageView
+            android:id="@+id/btnHomeLila2"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+
+            android:background="#00FFFFFF"
+            tools:layout_editor_absoluteX="161dp"
+            tools:layout_editor_absoluteY="245dp"
+            android:layout_marginStart="920dp"
+            android:layout_marginTop="166dp"
+            android:contentDescription="LilaHome2" />
+
+        <ImageView
+            android:id="@+id/btnHomeLila1"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="#00FFFFFF"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="180dp"
+            android:layout_marginStart="850dp"
+            android:layout_marginTop="180dp"
+            android:contentDescription="LilaHome1" />
+
+        <ImageView
+            android:id="@+id/btnHomeYellow1"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="#00FFFFFF"
+            tools:layout_editor_absoluteX="119dp"
+            tools:layout_editor_absoluteY="269dp"
+
+            android:layout_marginStart="680dp"
+            android:layout_marginTop="668dp"
+            android:contentDescription="YellowHome1"/>
+
+        <ImageView
+            android:id="@+id/btnHomeYellow2"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+
+            android:background="#00FFFFFF"
+            tools:layout_editor_absoluteX="143dp"
+            tools:layout_editor_absoluteY="258dp"
+
+            android:layout_marginStart="730dp"
+            android:layout_marginTop="718dp"
+            android:contentDescription="YellowHome2"/>
+
+        <ImageView
+            android:id="@+id/btnHomeYellow3"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+
+            android:background="#00FFFFFF"
+            tools:layout_editor_absoluteX="161dp"
+            tools:layout_editor_absoluteY="245dp"
+            android:layout_marginStart="770dp"
+            android:layout_marginTop="680dp"
+            android:contentDescription="YellowHome3"/>
+
+        <ImageView
+            android:id="@+id/btnHomeYellow4"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+
+
+            android:background="#00FFFFFF"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="180dp"
+            android:layout_marginStart="720dp"
+            android:layout_marginTop="640dp"
+            android:contentDescription="YellowHome2"/>
+
+        <ImageView
+            android:id="@+id/btnHomeRosa1"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="#00FFFFFF"
+            tools:layout_editor_absoluteX="119dp"
+            tools:layout_editor_absoluteY="269dp"
+            android:layout_marginStart="610dp"
+            android:layout_marginTop="370dp"
+            android:contentDescription="RosaHome1"/>
+
+        <ImageView
+            android:id="@+id/btnHomeRosa2"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="#00FFFFFF"
+            tools:layout_editor_absoluteX="143dp"
+            tools:layout_editor_absoluteY="258dp"
+            android:layout_marginStart="670dp"
+            android:layout_marginTop="385dp"
+            android:contentDescription="RosaHome2"/>
+
+        <ImageView
+            android:id="@+id/btnHomeRosa3"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="#00FFFFFF"
+            tools:layout_editor_absoluteX="161dp"
+            tools:layout_editor_absoluteY="245dp"
+            android:layout_marginStart="656dp"
+            android:layout_marginTop="440dp"
+            android:contentDescription="RosaHome3"/>
+
+        <ImageView
+            android:id="@+id/btnHomeRosa4"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="#00FFFFFF"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="180dp"
+            android:layout_marginStart="600dp"
+            android:layout_marginTop="420dp"
+            android:contentDescription="RosaHome4"/>
+
+        <ImageView
+            android:id="@+id/btnHomeBlue1"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="#00FFFFFF"
+            tools:layout_editor_absoluteX="119dp"
+            tools:layout_editor_absoluteY="269dp"
+            android:layout_marginStart="1280dp"
+            android:layout_marginTop="280dp"
+            android:contentDescription="BlueHome1"/>
+
+        <ImageView
+            android:id="@+id/btnHomeBlue2"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="#00FFFFFF"
+            tools:layout_editor_absoluteX="143dp"
+            tools:layout_editor_absoluteY="258dp"
+            android:layout_marginStart="1230dp"
+            android:layout_marginTop="245dp"
+            android:contentDescription="BlueHome2"/>
+
+        <ImageView
+            android:id="@+id/btnHomeBlue3"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="#00FFFFFF"
+            tools:layout_editor_absoluteX="161dp"
+            tools:layout_editor_absoluteY="245dp"
+            android:layout_marginStart="1190dp"
+            android:layout_marginTop="280dp"
+            android:contentDescription="BlueHome3"/>
+
+        <ImageView
+            android:id="@+id/btnHomeBlue4"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="#00FFFFFF"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="180dp"
+            android:layout_marginStart="1230dp"
+            android:layout_marginTop="320dp"
+            android:contentDescription="BlueHome4"/>
+
+        <ImageView
+            android:id="@+id/btnHomeRed1"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="#00FFFFFF"
+            tools:layout_editor_absoluteX="119dp"
+            tools:layout_editor_absoluteY="269dp"
+            android:layout_marginStart="1355dp"
+            android:layout_marginTop="535dp"
+            android:contentDescription="RedHome1"/>
+
+        <ImageView
+            android:id="@+id/btnHomeRed2"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+
+            android:background="#00FFFFFF"
+            tools:layout_editor_absoluteX="143dp"
+            tools:layout_editor_absoluteY="258dp"
+            android:layout_marginStart="1295dp"
+            android:layout_marginTop="520dp"
+            android:contentDescription="RedHome2"/>
+
+        <ImageView
+            android:id="@+id/btnHomeRed3"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="#00FFFFFF"
+            tools:layout_editor_absoluteX="161dp"
+            tools:layout_editor_absoluteY="245dp"
+            android:layout_marginStart="1285dp"
+            android:layout_marginTop="575dp"
+            android:contentDescription="RedHome3"/>
+
+        <ImageView
+            android:id="@+id/btnHomeRed4"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="#00FFFFFF"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="180dp"
+            android:layout_marginStart="1345dp"
+            android:layout_marginTop="585dp"
+            android:contentDescription="RedHome4"/>
+
+    </FrameLayout>
+        </HorizontalScrollView>
+
+    </ScrollView>
 
     <TextView
             android:id="@+id/txtViewUsername"
@@ -75,7 +369,7 @@
         android:layout_height="48dp"
         android:layout_marginStart="40dp"
         android:layout_marginBottom="52dp"
-        android:text="Roll Dice"
+        android:text="@string/roll_dice"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/txtViewUsername"
         app:layout_constraintHorizontal_bias="1.0"
