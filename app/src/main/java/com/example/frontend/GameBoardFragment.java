@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import android.view.ScaleGestureDetector;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import java.util.SortedSet;
 
@@ -138,6 +137,7 @@ public class GameBoardFragment extends Fragment {
         setGameBoardUsername();
         onRollDiceClick();
         scaleGestureDetector = new ScaleGestureDetector(requireContext(), new ScaleListener());
+        initalizePlayerHomePositions(Game.INSTANCE.players());
 
         return view;
     }
@@ -252,7 +252,6 @@ public class GameBoardFragment extends Fragment {
                     btnYellowHome4.setImageResource(R.drawable.playericon);
                 }
 
-
                 case PINK -> {
                     btnRosaHome1.setImageResource(R.drawable.playericon);
                     btnRosaHome2.setImageResource(R.drawable.playericon);
@@ -284,8 +283,6 @@ public class GameBoardFragment extends Fragment {
                     btnLilaHome2.setImageResource(R.drawable.playericon);
                     btnLilaHome3.setImageResource(R.drawable.playericon);
                     btnLilaHome4.setImageResource(R.drawable.playericon);
-
-
                 }
             }
         }

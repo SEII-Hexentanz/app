@@ -16,9 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+
+import java.util.Objects;
 
 
 public class LobbyFragmentTest {
@@ -72,7 +73,7 @@ public class LobbyFragmentTest {
 
         FragmentManager mockedFragmentManager = Mockito.mock(FragmentManager.class);
         Mockito.when(lobbyFragment.getActivity()).thenReturn(Mockito.mock(MainActivity.class));
-        Mockito.when(lobbyFragment.getActivity().getSupportFragmentManager()).thenReturn(mockedFragmentManager);
+        Mockito.when(Objects.requireNonNull(lobbyFragment.getActivity()).getSupportFragmentManager()).thenReturn(mockedFragmentManager);
 
         // Verify popBackStack is called
         verify(mockedFragmentManager).popBackStack();
