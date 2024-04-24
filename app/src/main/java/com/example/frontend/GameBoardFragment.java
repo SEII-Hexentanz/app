@@ -20,6 +20,8 @@ import android.view.ScaleGestureDetector;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.util.SortedSet;
+
 public class GameBoardFragment extends Fragment {
     private Button diceBtn;
     private FragmentContainerView fragmentContainerView;
@@ -270,6 +272,58 @@ public class GameBoardFragment extends Fragment {
 
     }
 
+    private void initalizePlayerHomePositions(SortedSet<at.aau.models.Player> players) {
+        for (at.aau.models.Player player : players) {
+            Player newPlayer = new Player();
+
+            switch (player.color()) {
+                case YELLOW -> {
+                    btnYellowHome1.setImageResource(R.drawable.playericon);
+                    btnYellowHome2.setImageResource(R.drawable.playericon);
+                    btnYellowHome3.setImageResource(R.drawable.playericon);
+                    btnYellowHome4.setImageResource(R.drawable.playericon);
+                }
+
+
+                case PINK -> {
+                    btnRosaHome1.setImageResource(R.drawable.playericon);
+                    btnRosaHome2.setImageResource(R.drawable.playericon);
+                    btnRosaHome3.setImageResource(R.drawable.playericon);
+                    btnRosaHome4.setImageResource(R.drawable.playericon);
+                }
+                case RED -> {
+                    btnRosaHome1.setImageResource(R.drawable.playericon);
+                    btnRosaHome2.setImageResource(R.drawable.playericon);
+                    btnRosaHome3.setImageResource(R.drawable.playericon);
+                    btnRosaHome4.setImageResource(R.drawable.playericon);
+                }
+
+                case GREEN -> {
+                    btnGreenHome1.setImageResource(R.drawable.playericon);
+                    btnGreenHome2.setImageResource(R.drawable.playericon);
+                    btnGreenHome3.setImageResource(R.drawable.playericon);
+                    btnGreenHome4.setImageResource(R.drawable.playericon);
+                }
+                case LIGHT_BLUE -> {
+                    btnBlueHome1.setImageResource(R.drawable.playericon);
+                    btnBlueHome2.setImageResource(R.drawable.playericon);
+                    btnBlueHome3.setImageResource(R.drawable.playericon);
+                    btnBlueHome4.setImageResource(R.drawable.playericon);
+                }
+
+                case DARK_BLUE -> {
+                    btnLilaHome1.setImageResource(R.drawable.playericon);
+                    btnLilaHome2.setImageResource(R.drawable.playericon);
+                    btnLilaHome3.setImageResource(R.drawable.playericon);
+                    btnLilaHome4.setImageResource(R.drawable.playericon);
+
+
+                }
+            }
+        }
+    }
+
+
     private void showDiceFragment() {
         DiceFragment diceFragment = DiceFragment.newInstance();
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
@@ -278,9 +332,6 @@ public class GameBoardFragment extends Fragment {
         fragmentTransaction.commit();
     }
 
-    private void BoardFragment() {
-
-    }
 
 /*
 //necessary in next Sprint
