@@ -139,37 +139,6 @@ public class GameBoardFragment extends Fragment {
         onRollDiceClick();
         scaleGestureDetector = new ScaleGestureDetector(requireContext(), new ScaleListener());
 
-//ImageViewTest for BTNGreen
-        btnGreenHome1.setOnClickListener(v -> {
-            Toast.makeText(requireContext(), "I am button 1", Toast.LENGTH_SHORT).show();
-
-        });
-        btnGreenHome2.setOnClickListener(v -> {
-            Toast.makeText(requireContext(), "I am button 2", Toast.LENGTH_SHORT).show();
-
-        });
-
-        btnGreenHome3.setOnClickListener(v->{
-            Toast.makeText(requireContext(), "I am button 3", Toast.LENGTH_SHORT).show();
-
-        });
-
-
-        btnGreenHome4.setOnClickListener(v-> {
-            Toast.makeText(requireContext(), "I am button 4", Toast.LENGTH_SHORT).show();
-        });
-    /*    gameBoard.setOnTouchListener((v, event) -> {
-
-            if(event.getAction() == MotionEvent.ACTION_MOVE){
-                //do something
-                scaleGestureDetector.onTouchEvent(event);
-                return true;
-            }
-            return true;
-        });
-*/
-
-
         return view;
     }
 
@@ -274,7 +243,6 @@ public class GameBoardFragment extends Fragment {
 
     private void initalizePlayerHomePositions(SortedSet<at.aau.models.Player> players) {
         for (at.aau.models.Player player : players) {
-            Player newPlayer = new Player();
 
             switch (player.color()) {
                 case YELLOW -> {
@@ -324,6 +292,8 @@ public class GameBoardFragment extends Fragment {
     }
 
 
+
+
     private void showDiceFragment() {
         DiceFragment diceFragment = DiceFragment.newInstance();
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
@@ -334,7 +304,7 @@ public class GameBoardFragment extends Fragment {
 
 
 /*
-//necessary in next Sprint
+//necessary in Sprint 2
 //EPIC method that will be used in END Game
     public void showWinner() {
         String winnerName="Max Mustermann";
