@@ -752,7 +752,7 @@
             tools:layout_editor_absoluteX="119dp"
             tools:layout_editor_absoluteY="269dp"/>
         <ImageView
-            android:id="@+id/gameboardpos013"
+            android:id="@+id/gameboardpos13"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="1410dp"
