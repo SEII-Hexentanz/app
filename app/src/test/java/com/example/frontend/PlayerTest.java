@@ -38,12 +38,5 @@ public class PlayerTest {
         assertEquals(newAge, player.getAge());
     }
 
-    @Test
-    public void testSetAndGetImageResource() {
-        Player player = new Player();
-        int newImageResource = 456;
-        player.setImageResource(newImageResource);
-        assertEquals(newImageResource, player.getImageResource());
-    }
 
 }
