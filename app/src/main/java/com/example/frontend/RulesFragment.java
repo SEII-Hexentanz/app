@@ -36,13 +36,10 @@ public class RulesFragment extends Fragment {
     }
 
     private void onReturnButtonClick(){
-        returnButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        returnButton.setOnClickListener(view -> {
 
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                fragmentManager.popBackStack();
-            }
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            fragmentManager.popBackStack();
         });
     }
 

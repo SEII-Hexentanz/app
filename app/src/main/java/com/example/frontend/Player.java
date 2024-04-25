@@ -3,25 +3,19 @@ package com.example.frontend;
 public class Player {
     private String username;
     private int age;
-    private int ImageResource;
+    Character[] characters;
+    private int imageResource;
+
     public Player(){
-        //Empty construktor
+        //Empty constructor
     }
     //is currently empty
-    public Player(String username, int age, int imageResource) {
+    public Player(String username, int age, Character[] characters,int imageResource) {
         this.username = username;
         this.age = age;
-        this.ImageResource = imageResource;
+        this.imageResource = imageResource;
+        this.characters = new Character[4];
     }
-
-    public int getImageResource() {
-        return ImageResource;
-    }
-
-    public void setImageResource(int imageResource) {
-        ImageResource = imageResource;
-    }
-
 
 
     public String getUsername() {
@@ -40,4 +34,20 @@ public class Player {
     public void setAge(int age) {
         this.age = age;
     }
+
+    public Character[] getCharacter(){
+        return characters;
+    }
+
+    public void setCharacter(){
+        this.characters = characters;
+    }
+
+    public int getImageResource() {
+        return imageResource;
+    }
+    public void setImageResource(int imageResource) {
+        imageResource = imageResource;
+    }
+
 }

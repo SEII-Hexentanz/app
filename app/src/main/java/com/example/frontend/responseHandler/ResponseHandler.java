@@ -20,6 +20,8 @@ public class ResponseHandler {
     private static final Map<ResponseType, Action> actions = new HashMap<>() {{
         put(ResponseType.PONG, new PongAction());
         put(ResponseType.UPDATE_STATE, new UpdateStateAction());
+
+
     }};
 
     public static void execute(ResponseType responseType, Payload payload, Game game) {
