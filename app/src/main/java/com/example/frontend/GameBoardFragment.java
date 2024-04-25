@@ -3,7 +3,6 @@ package com.example.frontend;
 
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
-import android.media.Image;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,17 +11,15 @@ import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import android.view.ScaleGestureDetector;
 import android.widget.ImageView;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
@@ -130,6 +127,7 @@ public class GameBoardFragment extends Fragment {
     private ImageView boardField32;
     private ImageView boardField33;
     private ImageView boardField34;
+    private ArrayList<ImageView> list;
     private ScaleGestureDetector scaleGestureDetector;
 
     public GameBoardFragment() {
@@ -170,15 +168,14 @@ public class GameBoardFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_game_board, container, false);
-        List<ImageView> imageViews = new ArrayList<>();
+
         findViews(view);
         setGameBoardUsername();
         onRollDiceClick();
-        initializeGameBoard();
+     //   initializeGameBoard(view);
         scaleGestureDetector = new ScaleGestureDetector(requireContext(), new ScaleListener());
         initalizePlayerHomePositions(Game.INSTANCE.players());
-       // displayImageViews(imageViews);
-
+       // getBoardContent(list);
 
         return view;
     }
@@ -362,83 +359,27 @@ public class GameBoardFragment extends Fragment {
             }
         }
     }
-    private void initializeGameBoard(){
-        ArrayList<ImageView> listView = new ArrayList<>();
-        boardField0.setImageResource(R.drawable.playericon);
-        boardField1.setImageResource(R.drawable.playericon);
-        boardField2.setImageResource(R.drawable.playericon);
-        boardField3.setImageResource(R.drawable.playericon);
-        boardField4.setImageResource(R.drawable.playericon);
-        boardField5.setImageResource(R.drawable.playericon);
-        boardField6.setImageResource(R.drawable.playericon);
-        boardField7.setImageResource(R.drawable.playericon);
-        boardField8.setImageResource(R.drawable.playericon);
-        boardField9.setImageResource(R.drawable.playericon);
-        boardField10.setImageResource(R.drawable.playericon);
-        boardField11.setImageResource(R.drawable.playericon);
-        boardField12.setImageResource(R.drawable.playericon);
-        boardField13.setImageResource(R.drawable.playericon);
-        boardField14.setImageResource(R.drawable.playericon);
-        boardField15.setImageResource(R.drawable.playericon);
-        boardField16.setImageResource(R.drawable.playericon);
-        boardField17.setImageResource(R.drawable.playericon);
-        boardField18.setImageResource(R.drawable.playericon);
-        boardField19.setImageResource(R.drawable.playericon);
-        boardField20.setImageResource(R.drawable.playericon);
-        boardField21.setImageResource(R.drawable.playericon);
-        boardField22.setImageResource(R.drawable.playericon);
-        boardField23.setImageResource(R.drawable.playericon);
-        boardField24.setImageResource(R.drawable.playericon);
-        boardField25.setImageResource(R.drawable.playericon);
-        boardField26.setImageResource(R.drawable.playericon);
-        boardField27.setImageResource(R.drawable.playericon);
-        boardField28.setImageResource(R.drawable.playericon);
-        boardField29.setImageResource(R.drawable.playericon);
-        boardField30.setImageResource(R.drawable.playericon);
-        boardField31.setImageResource(R.drawable.playericon);
-        boardField32.setImageResource(R.drawable.playericon);
-        boardField33.setImageResource(R.drawable.playericon);
-        boardField34.setImageResource(R.drawable.playericon);
+    private ArrayList<ImageView> initializeGameBoard(View view){
+        ArrayList<ImageView> listView = new ArrayList<ImageView>();
+        int numFields = 35; // Assuming you have 35 board fields
 
-        listView.add(boardField0);
-        listView.add(boardField1);
-        listView.add(boardField2);
-        listView.add(boardField3);
-        listView.add(boardField4);
-        listView.add(boardField5);
-        listView.add(boardField6);
-        listView.add(boardField7);
-        listView.add(boardField8);
-        listView.add(boardField9);
-        listView.add(boardField10);
-        listView.add(boardField11);
-        listView.add(boardField12);
-        listView.add(boardField13);
-        listView.add(boardField14);
-        listView.add(boardField15);
-        listView.add(boardField16);
-        listView.add(boardField17);
-        listView.add(boardField18);
-        listView.add(boardField19);
-        listView.add(boardField20);
-        listView.add(boardField21);
-        listView.add(boardField22);
-        listView.add(boardField23);
-        listView.add(boardField24);
-        listView.add(boardField25);
-        listView.add(boardField26);
-        listView.add(boardField27);
-        listView.add(boardField28);
-        listView.add(boardField29);
-        listView.add(boardField30);
-        listView.add(boardField31);
-        listView.add(boardField32);
-        listView.add(boardField33);
-        listView.add(boardField34);
+        for (int i = 0; i < numFields; i++) {
+            ImageView boardField = view.findViewById(getResources().getIdentifier("gameboardpos" + i, "id", requireContext().getPackageName()));
+            boardField.setImageResource(R.drawable.playericon);
+            listView.add(boardField);
+        }
+
+        return listView;
+
 
     }
 
-
+private void getBoardContent(ArrayList<ImageView> list){
+        for(int i = 0; i < list.size(); i++){
+            list.get(i);
+            Log.i("GameboardList", String.valueOf(list.size()));
+        }
+}
 
     private void showDiceFragment() {
         DiceFragment diceFragment = DiceFragment.newInstance();
@@ -458,14 +399,6 @@ private List<ImageView> findImageViewByID(int count) {
     }
     return imageViews;
 }
-
-    private void displayImageViews(List<ImageView> imageViews) {
-        for (ImageView imageView : imageViews) {
-            // For example, you can set a drawable resource as the image
-            imageView.setImageResource(R.drawable.herb);
-
-        }
-    }
 
 /*
 //necessary in Sprint 2
