@@ -1021,7 +1021,6 @@
             android:layout_column="0"
             android:layout_marginTop="16dp"
             android:gravity="center_horizontal"
-            android:text="15:00"
             android:textColor="#FFFFFF"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
