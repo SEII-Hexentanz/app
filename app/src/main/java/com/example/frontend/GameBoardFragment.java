@@ -141,6 +141,12 @@ public class GameBoardFragment extends Fragment {
     private ArrayList<ImageView> list;
     private ScaleGestureDetector scaleGestureDetector;
 
+    private long startTime = 0L;
+    private Handler timerHandler = new Handler();
+    private long millisecondsTime = 0L;
+    private long timeSwapBuff = 0L;
+    private final long MAX_TIMER_DURATION = 15*60*1000; //1min=60_000 // 15 minutes
+
     public GameBoardFragment() {
         //leerer Konstruktor notwendig
     }
@@ -395,11 +401,6 @@ public class GameBoardFragment extends Fragment {
             }
     }
 
-    private long startTime = 0L;
-    private Handler timerHandler = new Handler();
-    private long millisecondsTime = 0L;
-    private long timeSwapBuff = 0L;
-    private final long MAX_TIMER_DURATION = 15*60*1000; //1min=60_000 // 15 minutes
     private Runnable updateTimeRunnable = new Runnable() {
         public void run() {
             millisecondsTime = SystemClock.uptimeMillis() - startTime;
