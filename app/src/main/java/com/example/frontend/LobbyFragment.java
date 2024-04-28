@@ -102,6 +102,8 @@ public class LobbyFragment extends Fragment implements PropertyChangeListener {
 
     private void onClickStart() {
         startGame.setOnClickListener(view -> {
+            Client.send(new Request(CommandType.START,new EmptyPayload()));
+
             Client.send(new Request(CommandType.REGISTER, new EmptyPayload()));
             showGameBoardFragment();
         });

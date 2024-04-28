@@ -86,23 +86,17 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     }
 
     private void onContinueClick() {
-        continueButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                fragmentContainerView.setVisibility(View.VISIBLE);
-                showGameBoardFragment();
-            }
+        continueButton.setOnClickListener(view -> {
+            fragmentContainerView.setVisibility(View.VISIBLE);
+            showGameBoardFragment();
         });
     }
 
     private void onCheatingClick(){
-        cheatButton.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                isButtonLongPressed = true;
-                checkAndPerformCheat();
-                return true;
-            }
+        cheatButton.setOnLongClickListener(v -> {
+            isButtonLongPressed = true;
+            checkAndPerformCheat();
+            return true;
         });
 
         cheatButton.setOnTouchListener((v, event) -> {

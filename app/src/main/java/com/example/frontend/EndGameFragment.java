@@ -63,7 +63,7 @@ public class EndGameFragment extends Fragment {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.remove(EndGameFragment.this);
         LobbyFragment lobbyFragment = new LobbyFragment();
-        fragmentTransaction.replace(R.id.fragmentContainerView2, lobbyFragment);
+        fragmentTransaction.replace(R.id.main, lobbyFragment);
         fragmentTransaction.commit();
     }
 

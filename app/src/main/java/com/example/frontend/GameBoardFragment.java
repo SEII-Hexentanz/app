@@ -11,6 +11,11 @@ import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+
+import android.os.CountDownTimer;
+
+import android.os.Handler;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,16 +23,22 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Locale;
+
+
 import android.view.ScaleGestureDetector;
 import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
 
+
 public class GameBoardFragment extends Fragment {
     private Button diceBtn;
     private FragmentContainerView fragmentContainerView;
-    private TextView usernameTxt;
+    private TextView usernameTxt, timerText;
+    private CountDownTimer countDownTimer;
+
     private ImageView gameBoard;
     private float mScaleFactor;
 
@@ -147,6 +158,7 @@ public class GameBoardFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //Display Gameboard only in Landscape Mode
+
     }
 
     @Override
@@ -154,6 +166,7 @@ public class GameBoardFragment extends Fragment {
         super.onResume();
         // Set screen orientation to landscape when GameBoardFragment is resumed
         requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        startTimer();
     }
 
     @Override
@@ -161,6 +174,7 @@ public class GameBoardFragment extends Fragment {
         super.onPause();
         // Reset screen orientation to portrait when GameBoardFragment is paused
         requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        pauseTimer();
     }
 
     @Override
@@ -212,6 +226,7 @@ public class GameBoardFragment extends Fragment {
         diceBtn = view.findViewById(R.id.btn_rollDice);
         fragmentContainerView = view.findViewById(R.id.fragmentContainerDice);
         usernameTxt = view.findViewById(R.id.txtViewUsername);
+        timerText = view.findViewById(R.id.timerTextView);
         gameBoard = view.findViewById(R.id.gridLayoutGameBoard);
 
         btnGreenHome1 = view.findViewById(R.id.btnHomeGreen1);
@@ -371,34 +386,82 @@ public class GameBoardFragment extends Fragment {
 
         return listView;
 
-
     }
 
-private void getBoardContent(ArrayList<ImageView> list){
-        for(int i = 0; i < list.size(); i++){
-            list.get(i);
-            Log.i("GameboardList", String.valueOf(list.size()));
+    private void getBoardContent(ArrayList<ImageView> list){
+            for(int i = 0; i < list.size(); i++){
+                list.get(i);
+                Log.i("GameboardList", String.valueOf(list.size()));
+            }
+    }
+
+    private long startTime = 0L;
+    private Handler timerHandler = new Handler();
+    private long millisecondsTime = 0L;
+    private long timeSwapBuff = 0L;
+    private final long MAX_TIMER_DURATION = 15*60*1000; //1min=60_000 // 15 minutes
+    private Runnable updateTimeRunnable = new Runnable() {
+        public void run() {
+            millisecondsTime = SystemClock.uptimeMillis() - startTime;
+            int seconds = (int) (millisecondsTime / 1000);
+            int minutes = seconds / 60;
+            seconds %= 60;
+            timerText.setText(String.format("%02d:%02d", minutes, seconds));
+            if(millisecondsTime >= MAX_TIMER_DURATION){
+                showEndGameFragment();
+            }else {
+                timerHandler.postDelayed(this, 1000);
+            }
         }
-}
+    };
+
+    private void startTimer() {
+        startTime = SystemClock.uptimeMillis();
+        timerHandler.postDelayed(updateTimeRunnable, 0);
+    }
+
+    private void pauseTimer() {
+        timeSwapBuff += millisecondsTime;
+        timerHandler.removeCallbacks(updateTimeRunnable);
+    }
 
     private void showDiceFragment() {
         DiceFragment diceFragment = DiceFragment.newInstance();
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.gridLayoutGameBoard, diceFragment);
+        fragmentTransaction.add(R.id.dice , diceFragment);
         fragmentTransaction.commit();
     }
-private List<ImageView> findImageViewByID(int count) {
-    List<ImageView> imageViews = new ArrayList<>();
-    Resources res = getResources();
-    String packageName = requireContext().getPackageName();
-    for (int i = 1; i <= count; i++) {
-        int id = res.getIdentifier("gameboard" + i, "id", packageName);
-        ImageView imageView = requireView().findViewById(id);
-        imageViews.add(imageView);
+    private List<ImageView> findImageViewByID(int count) {
+        List<ImageView> imageViews = new ArrayList<>();
+        Resources res = getResources();
+        String packageName = requireContext().getPackageName();
+        for (int i = 1; i <= count; i++) {
+            int id = res.getIdentifier("gameboard" + i, "id", packageName);
+            ImageView imageView = requireView().findViewById(id);
+            imageViews.add(imageView);
+        }
+        return imageViews;
     }
-    return imageViews;
-}
+
+    private void showEndGameFragment() {
+        EndGameFragment endGameFragment = new EndGameFragment();
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(android.R.id.content,endGameFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+    }
+
+
 
 /*
 //necessary in Sprint 2
