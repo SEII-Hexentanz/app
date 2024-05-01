@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.SortedSet;
 
 import at.aau.models.Request;
-import at.aau.values.CommandType;
 import at.aau.payloads.EmptyPayload;
 import at.aau.values.CommandType;
 import at.aau.values.GameState;
@@ -103,8 +102,6 @@ public class LobbyFragment extends Fragment implements PropertyChangeListener {
     private void onClickStart() {
         startGame.setOnClickListener(view -> {
             Client.send(new Request(CommandType.START,new EmptyPayload()));
-
-            Client.send(new Request(CommandType.REGISTER, new EmptyPayload()));
             showGameBoardFragment();
         });
 
