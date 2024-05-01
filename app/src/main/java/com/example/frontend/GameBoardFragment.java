@@ -1,9 +1,19 @@
-
 package com.example.frontend;
 
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.SystemClock;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.ScaleGestureDetector;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -11,94 +21,65 @@ import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-
-import android.os.CountDownTimer;
-
-import android.os.Handler;
-import android.os.SystemClock;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
-
-import java.util.Locale;
-
-
-import android.view.ScaleGestureDetector;
-import android.widget.ImageView;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
 
 
-public class GameBoardFragment extends Fragment {
+public class GameBoardFragment extends Fragment implements PropertyChangeListener {
+    private final long MAX_TIMER_DURATION = 15 * 60 * 1000; //1min=60_000 // 15 minutes
     private Button diceBtn;
     private FragmentContainerView fragmentContainerView;
     private TextView usernameTxt, timerText;
     private CountDownTimer countDownTimer;
-
     private ImageView gameBoard;
     private float mScaleFactor;
-
     private ImageView btnGreenHome1;
     private ImageView btnGreenHome2;
     private ImageView btnGreenHome3;
     private ImageView btnGreenHome4;
-
     private ImageView btnRedHome1;
     private ImageView btnRedHome2;
     private ImageView btnRedHome3;
     private ImageView btnRedHome4;
-
     private ImageView btnBlueHome1;
     private ImageView btnBlueHome2;
     private ImageView btnBlueHome3;
     private ImageView btnBlueHome4;
-
-
     private ImageView btnLilaHome1;
     private ImageView btnLilaHome2;
     private ImageView btnLilaHome3;
     private ImageView btnLilaHome4;
-
     private ImageView btnRosaHome1;
     private ImageView btnRosaHome2;
     private ImageView btnRosaHome3;
     private ImageView btnRosaHome4;
-
     private ImageView btnYellowHome1;
     private ImageView btnYellowHome2;
     private ImageView btnYellowHome3;
     private ImageView btnYellowHome4;
-
     private ImageView btnGreenGoal1;
     private ImageView btnGreenGoal2;
     private ImageView btnGreenGoal3;
     private ImageView btnGreenGoal4;
-
     private ImageView btnRedGoal1;
     private ImageView btnRedGoal2;
     private ImageView btnRedGoal3;
     private ImageView btnRedGoal4;
-
     private ImageView btnBlueGoal1;
     private ImageView btnBlueGoal2;
     private ImageView btnBlueGoal3;
     private ImageView btnBlueGoal4;
-
-
     private ImageView btnLilaGoal1;
     private ImageView btnLilaGoal2;
     private ImageView btnLilaGoal3;
     private ImageView btnLilaGoal4;
-
     private ImageView btnRosaGoal1;
     private ImageView btnRosaGoal2;
     private ImageView btnRosaGoal3;
     private ImageView btnRosaGoal4;
-
     private ImageView btnYellowGoal1;
     private ImageView btnYellowGoal2;
     private ImageView btnYellowGoal3;
@@ -140,11 +121,28 @@ public class GameBoardFragment extends Fragment {
     private ImageView boardField34;
     private ArrayList<ImageView> list;
     private ScaleGestureDetector scaleGestureDetector;
+    private long startTime = 0L;
+    private Handler timerHandler = new Handler();
+    private long millisecondsTime = 0L;
+    private long timeSwapBuff = 0L;
+    private Runnable updateTimeRunnable = new Runnable() {
+        public void run() {
+            millisecondsTime = SystemClock.uptimeMillis() - startTime;
+            int seconds = (int) (millisecondsTime / 1000);
+            int minutes = seconds / 60;
+            seconds %= 60;
+            timerText.setText(String.format("%02d:%02d", minutes, seconds));
+            if (millisecondsTime >= MAX_TIMER_DURATION) {
+                showEndGameFragment();
+            } else {
+                timerHandler.postDelayed(this, 1000);
+            }
+        }
+    };
 
     public GameBoardFragment() {
         //leerer Konstruktor notwendig
     }
-
 
     public static GameBoardFragment newInstance(String username) {
         GameBoardFragment fragment = new GameBoardFragment();
@@ -186,25 +184,13 @@ public class GameBoardFragment extends Fragment {
         findViews(view);
         setGameBoardUsername();
         onRollDiceClick();
-     //   initializeGameBoard(view);
+        //   initializeGameBoard(view);
         scaleGestureDetector = new ScaleGestureDetector(requireContext(), new ScaleListener());
         initalizePlayerHomePositions(Game.INSTANCE.players());
-       // getBoardContent(list);
+        // getBoardContent(list);
 
         return view;
     }
-
-    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
-        @Override
-        public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
-            mScaleFactor *= scaleGestureDetector.getScaleFactor();
-            mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 10.0f));
-            gameBoard.setScaleX(mScaleFactor);
-            gameBoard.setScaleY(mScaleFactor);
-            return true;
-        }
-    }
-
 
     private void setGameBoardUsername() {
         Bundle bundle = getArguments();
@@ -213,7 +199,6 @@ public class GameBoardFragment extends Fragment {
             usernameTxt.setText(name);
         }
     }
-
 
     private void onRollDiceClick() {
         diceBtn.setOnClickListener(view -> {
@@ -260,7 +245,6 @@ public class GameBoardFragment extends Fragment {
         btnYellowHome4 = view.findViewById(R.id.btnHomeYellow4);
 
 
-
         btnGreenGoal1 = view.findViewById(R.id.btnGoalGreen1);
         btnGreenGoal2 = view.findViewById(R.id.btnGoalGreen2);
         btnGreenGoal3 = view.findViewById(R.id.btnGoalGreen3);
@@ -291,41 +275,41 @@ public class GameBoardFragment extends Fragment {
         btnYellowGoal3 = view.findViewById(R.id.btnGoalYellow3);
         btnYellowGoal4 = view.findViewById(R.id.btnGoalYellow4);
 
-        boardField0= view.findViewById(R.id.gameboardpos0);
-        boardField1= view.findViewById(R.id.gameboardpos1);
-        boardField2= view.findViewById(R.id.gameboardpos2);
-        boardField3= view.findViewById(R.id.gameboardpos3);
-        boardField4= view.findViewById(R.id.gameboardpos4);
-        boardField5= view.findViewById(R.id.gameboardpos5);
-        boardField6= view.findViewById(R.id.gameboardpos6);
-        boardField7= view.findViewById(R.id.gameboardpos7);
-        boardField8= view.findViewById(R.id.gameboardpos8);
-        boardField9= view.findViewById(R.id.gameboardpos9);
-        boardField10= view.findViewById(R.id.gameboardpos10);
-        boardField11= view.findViewById(R.id.gameboardpos11);
-        boardField12= view.findViewById(R.id.gameboardpos12);
-        boardField13= view.findViewById(R.id.gameboardpos13);
-        boardField14= view.findViewById(R.id.gameboardpos14);
-        boardField15= view.findViewById(R.id.gameboardpos15);
-        boardField16= view.findViewById(R.id.gameboardpos16);
-        boardField17= view.findViewById(R.id.gameboardpos17);
-        boardField18= view.findViewById(R.id.gameboardpos18);
-        boardField19= view.findViewById(R.id.gameboardpos19);
-        boardField20= view.findViewById(R.id.gameboardpos20);
-        boardField21= view.findViewById(R.id.gameboardpos21);
-        boardField22= view.findViewById(R.id.gameboardpos22);
-        boardField23= view.findViewById(R.id.gameboardpos23);
-        boardField24= view.findViewById(R.id.gameboardpos24);
-        boardField25= view.findViewById(R.id.gameboardpos25);
-        boardField26= view.findViewById(R.id.gameboardpos26);
-        boardField27= view.findViewById(R.id.gameboardpos27);
-        boardField28= view.findViewById(R.id.gameboardpos28);
-        boardField29= view.findViewById(R.id.gameboardpos29);
-        boardField30= view.findViewById(R.id.gameboardpos30);
-        boardField31= view.findViewById(R.id.gameboardpos31);
-        boardField32= view.findViewById(R.id.gameboardpos32);
-        boardField33= view.findViewById(R.id.gameboardpos33);
-        boardField34= view.findViewById(R.id.gameboardpos34);
+        boardField0 = view.findViewById(R.id.gameboardpos0);
+        boardField1 = view.findViewById(R.id.gameboardpos1);
+        boardField2 = view.findViewById(R.id.gameboardpos2);
+        boardField3 = view.findViewById(R.id.gameboardpos3);
+        boardField4 = view.findViewById(R.id.gameboardpos4);
+        boardField5 = view.findViewById(R.id.gameboardpos5);
+        boardField6 = view.findViewById(R.id.gameboardpos6);
+        boardField7 = view.findViewById(R.id.gameboardpos7);
+        boardField8 = view.findViewById(R.id.gameboardpos8);
+        boardField9 = view.findViewById(R.id.gameboardpos9);
+        boardField10 = view.findViewById(R.id.gameboardpos10);
+        boardField11 = view.findViewById(R.id.gameboardpos11);
+        boardField12 = view.findViewById(R.id.gameboardpos12);
+        boardField13 = view.findViewById(R.id.gameboardpos13);
+        boardField14 = view.findViewById(R.id.gameboardpos14);
+        boardField15 = view.findViewById(R.id.gameboardpos15);
+        boardField16 = view.findViewById(R.id.gameboardpos16);
+        boardField17 = view.findViewById(R.id.gameboardpos17);
+        boardField18 = view.findViewById(R.id.gameboardpos18);
+        boardField19 = view.findViewById(R.id.gameboardpos19);
+        boardField20 = view.findViewById(R.id.gameboardpos20);
+        boardField21 = view.findViewById(R.id.gameboardpos21);
+        boardField22 = view.findViewById(R.id.gameboardpos22);
+        boardField23 = view.findViewById(R.id.gameboardpos23);
+        boardField24 = view.findViewById(R.id.gameboardpos24);
+        boardField25 = view.findViewById(R.id.gameboardpos25);
+        boardField26 = view.findViewById(R.id.gameboardpos26);
+        boardField27 = view.findViewById(R.id.gameboardpos27);
+        boardField28 = view.findViewById(R.id.gameboardpos28);
+        boardField29 = view.findViewById(R.id.gameboardpos29);
+        boardField30 = view.findViewById(R.id.gameboardpos30);
+        boardField31 = view.findViewById(R.id.gameboardpos31);
+        boardField32 = view.findViewById(R.id.gameboardpos32);
+        boardField33 = view.findViewById(R.id.gameboardpos33);
+        boardField34 = view.findViewById(R.id.gameboardpos34);
     }
 
     private void initalizePlayerHomePositions(SortedSet<at.aau.models.Player> players) {
@@ -374,7 +358,8 @@ public class GameBoardFragment extends Fragment {
             }
         }
     }
-    private ArrayList<ImageView> initializeGameBoard(View view){
+
+    private ArrayList<ImageView> initializeGameBoard(View view) {
         ArrayList<ImageView> listView = new ArrayList<ImageView>();
         int numFields = 35; // Assuming you have 35 board fields
 
@@ -388,32 +373,12 @@ public class GameBoardFragment extends Fragment {
 
     }
 
-    private void getBoardContent(ArrayList<ImageView> list){
-            for(int i = 0; i < list.size(); i++){
-                list.get(i);
-                Log.i("GameboardList", String.valueOf(list.size()));
-            }
-    }
-
-    private long startTime = 0L;
-    private Handler timerHandler = new Handler();
-    private long millisecondsTime = 0L;
-    private long timeSwapBuff = 0L;
-    private final long MAX_TIMER_DURATION = 15*60*1000; //1min=60_000 // 15 minutes
-    private Runnable updateTimeRunnable = new Runnable() {
-        public void run() {
-            millisecondsTime = SystemClock.uptimeMillis() - startTime;
-            int seconds = (int) (millisecondsTime / 1000);
-            int minutes = seconds / 60;
-            seconds %= 60;
-            timerText.setText(String.format("%02d:%02d", minutes, seconds));
-            if(millisecondsTime >= MAX_TIMER_DURATION){
-                showEndGameFragment();
-            }else {
-                timerHandler.postDelayed(this, 1000);
-            }
+    private void getBoardContent(ArrayList<ImageView> list) {
+        for (int i = 0; i < list.size(); i++) {
+            list.get(i);
+            Log.i("GameboardList", String.valueOf(list.size()));
         }
-    };
+    }
 
     private void startTimer() {
         startTime = SystemClock.uptimeMillis();
@@ -429,9 +394,10 @@ public class GameBoardFragment extends Fragment {
         DiceFragment diceFragment = DiceFragment.newInstance();
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.dice , diceFragment);
+        fragmentTransaction.add(R.id.dice, diceFragment);
         fragmentTransaction.commit();
     }
+
     private List<ImageView> findImageViewByID(int count) {
         List<ImageView> imageViews = new ArrayList<>();
         Resources res = getResources();
@@ -448,7 +414,7 @@ public class GameBoardFragment extends Fragment {
         EndGameFragment endGameFragment = new EndGameFragment();
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(android.R.id.content,endGameFragment);
+        fragmentTransaction.replace(android.R.id.content, endGameFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
@@ -458,6 +424,14 @@ public class GameBoardFragment extends Fragment {
         super.onDestroy();
         if (countDownTimer != null) {
             countDownTimer.cancel();
+        }
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
+        Log.i("App", "PropertyChangeEvent received: " + propertyChangeEvent.getPropertyName());
+        if (propertyChangeEvent.getPropertyName().equals(Game.Property.WINNER.name())) {
+//            TODO: End Screen #17
         }
     }
 
@@ -476,5 +450,15 @@ public class GameBoardFragment extends Fragment {
     }
 */
 
-
+    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        @Override
+        public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
+            mScaleFactor *= scaleGestureDetector.getScaleFactor();
+            mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 10.0f));
+            gameBoard.setScaleX(mScaleFactor);
+            gameBoard.setScaleY(mScaleFactor);
+            return true;
+        }
     }
+
+}

@@ -14,6 +14,7 @@ public enum Game {
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     private SortedSet<Player> players = new TreeSet<>();
     private GameState gameState = GameState.LOBBY;
+    private Player winner;
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
@@ -43,7 +44,16 @@ public enum Game {
         support.firePropertyChange(Property.GAME_STATE.name(), oldGameState, gameState);
     }
 
+    public Player winner() {
+        return winner;
+    }
+
+    public void setWinner(Player winner) {
+        this.winner = winner;
+        support.firePropertyChange(Property.WINNER.name(), null, winner);
+    }
+
     enum Property {
-        PLAYERS, GAME_STATE
+        PLAYERS, GAME_STATE, WINNER
     }
 }
