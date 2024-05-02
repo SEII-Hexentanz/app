@@ -44,6 +44,8 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     private float lastX, lastY, lastZ;
     private boolean diceThrown = false;
 
+    private GameBoardFragment gamefrag;
+
     public DiceFragment() {
         //typical factory method constructor
     }
@@ -145,6 +147,8 @@ public class DiceFragment extends Fragment implements SensorEventListener {
                 updateDiceImage(diceImage, dice.getDice());
                 diceThrown = true;
                 Client.send(new Request(CommandType.DICE_ROLL, new EmptyPayload()));
+                gamefrag.movePlayer(dice.getDice());
+
             }
 
             lastX = x;

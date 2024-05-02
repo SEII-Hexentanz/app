@@ -2,6 +2,9 @@ package com.example.frontend;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -14,6 +17,8 @@ public enum Game {
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     private SortedSet<Player> players = new TreeSet<>();
     private GameState gameState = GameState.LOBBY;
+    private Map<Player, Integer> playerPositions = new HashMap<>();
+    private Player currentPlayer;
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
@@ -41,6 +46,33 @@ public enum Game {
         GameState oldGameState = this.gameState;
         this.gameState = gameState;
         support.firePropertyChange(Property.GAME_STATE.name(), oldGameState, gameState);
+    }
+
+    public void setCurrentPlayer(Player player) {
+        this.currentPlayer = player;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setPlayerPosition(Player player, int position) {
+        Integer oldPosition = playerPositions.get(player);
+        playerPositions.put(player, position);
+        support.firePropertyChange("playerPosition", Optional.ofNullable(oldPosition), position);
+    }
+
+    public int getPlayerPosition(Player player) {
+        return playerPositions.getOrDefault(player, -1); // Return -1 if no position set
+    }
+
+    public int getCurrentPosition() {
+        return getPlayerPosition(getCurrentPlayer());
+    }
+    public void setCurrentPosition(int newPosition) {
+        if (getCurrentPlayer() != null) {
+            setPlayerPosition(getCurrentPlayer(), newPosition);
+        }
     }
 
     enum Property {

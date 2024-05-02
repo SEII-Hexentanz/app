@@ -34,6 +34,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
 
+import at.aau.models.Request;
+import at.aau.payloads.EmptyPayload;
+import at.aau.payloads.PlayerMovePayload;
+import at.aau.values.CommandType;
+
 
 public class GameBoardFragment extends Fragment {
     private Button diceBtn;
@@ -394,6 +399,7 @@ public class GameBoardFragment extends Fragment {
             } else {
                 timerHandler.postDelayed(this, 1000);
             }
+            Client.send(new Request(CommandType.TIMER, new EmptyPayload()));
         }
     };
 
@@ -435,6 +441,36 @@ public class GameBoardFragment extends Fragment {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
+    public void movePlayer(int diceResult) {
+        int currentPosition = Game.INSTANCE.getCurrentPosition(); // Assume this method gets the current player's position
+        int newPosition = currentPosition + diceResult;
+        updatePlayerPositionOnUI(newPosition);
+        Game.INSTANCE.setCurrentPosition(newPosition); // Update the game state
+        Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(newPosition))); // Send new position to server
+    }
+    private ImageView findGameBoardPositionById(int position) {
+        Resources res = getResources();
+        String packageName = requireContext().getPackageName();
+        String idName = "gameboardpos" + position; // Ensure the IDs in your layout files follow this naming convention
+        int resId = res.getIdentifier(idName, "id", packageName);
+        if (resId != 0) {
+            return requireView().findViewById(resId);
+        } else {
+            Log.e("GameBoardFragment", "No ImageView found for position: " + position);
+            return null; // Always handle null to avoid NullPointerException
+        }
+    }
+    private void updatePlayerPositionOnUI(int newPosition) {
+        // Logic to update playeer's token on UI
+        ImageView playerToken = findGameBoardPositionById(newPosition);
+        if (playerToken != null) {
+            playerToken.setImageResource(R.drawable.playericon); // Ensure player_token drawable exists
+        } else {
+            Log.e("GameBoardFragment", "ImageView not found for position: " + newPosition);
+        }
+    }
+
 
     @Override
     public void onDestroy() {
