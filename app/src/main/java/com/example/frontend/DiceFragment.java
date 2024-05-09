@@ -76,6 +76,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         findViews(view);
         onContinueClick();
         onCheatingClick();
+        initializeGameBoardFragment();
         return view;
     }
 
@@ -94,7 +95,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         });
     }
 
-    private void onCheatingClick(){
+    private void onCheatingClick() {
         cheatButton.setOnLongClickListener(v -> {
             isButtonLongPressed = true;
             checkAndPerformCheat();
@@ -207,8 +208,15 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         GameBoardFragment gameBoardFragment = new GameBoardFragment();
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(android.R.id.content,gameBoardFragment);
+        fragmentTransaction.replace(android.R.id.content, gameBoardFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+    private void initializeGameBoardFragment() {
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        // Attempt to retrieve the fragment if it's already added
+        gamefrag = (GameBoardFragment) fragmentManager.findFragmentByTag("GAMEBOARD_FRAGMENT_TAG");
+
     }
 }

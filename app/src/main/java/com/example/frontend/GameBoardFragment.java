@@ -41,6 +41,7 @@ import at.aau.values.CommandType;
 
 
 public class GameBoardFragment extends Fragment {
+    public static final String TAG = "GAMEBOARD_FRAGMENT_TAG"; //helps to find it
     private Button diceBtn;
     private FragmentContainerView fragmentContainerView;
     private TextView usernameTxt, timerText;
