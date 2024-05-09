@@ -13,8 +13,8 @@ public class Dice {
         ran = new SecureRandom();
     }
 
-    public void useDice() {
-        diceNumber = ran.nextInt(6) + 1;
+    public int useDice() {
+       return diceNumber = ran.nextInt(6) + 1;
     }
 
     //is also sum of dice
