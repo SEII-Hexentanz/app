@@ -26,6 +26,7 @@ import at.aau.payloads.EmptyPayload;
 import at.aau.values.CommandType;
 
 public class DiceFragment extends Fragment implements SensorEventListener {
+    public static final String TAG = "DICE_FRAGMENT_TAG";
     private SensorManager sensorManager;
     private Sensor lightSensor;
     private Sensor accelerometer;
@@ -76,9 +77,20 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         findViews(view);
         onContinueClick();
         onCheatingClick();
-        initializeGameBoardFragment();
+
         return view;
     }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        gamefrag = (GameBoardFragment) fragmentManager.findFragmentByTag(GameBoardFragment.TAG);
+
+    }
+
+
 
     private void findViews(View view) {
         diceImage = view.findViewById(R.id.diceImage);
@@ -99,6 +111,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         cheatButton.setOnLongClickListener(v -> {
             isButtonLongPressed = true;
             checkAndPerformCheat();
+            Log.e(TAG,"CHEATING CLICK");
             return true;
         });
 
@@ -115,7 +128,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
             dice.setDice(6);
             updateDiceImage(diceImage, 6);
             diceThrown = false;
-            Log.i("cheat", "Set dice to 6 with sensor covered and button long pressed");
+            Log.e(TAG, "Set dice to 6 with sensor covered and button long pressed");
             Client.send(new Request(CommandType.CHEAT, new EmptyPayload()));
         }
     }
@@ -148,7 +161,9 @@ public class DiceFragment extends Fragment implements SensorEventListener {
                 updateDiceImage(diceImage, dice.getDice());
                 diceThrown = true;
                 Client.send(new Request(CommandType.DICE_ROLL, new EmptyPayload()));
+
                 gamefrag.movePlayerUI(dice.getDice());
+                Log.e(TAG,"PLAYERMOVEMENT");
 
             }
 
@@ -211,12 +226,5 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         fragmentTransaction.replace(android.R.id.content, gameBoardFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
-    }
-
-    private void initializeGameBoardFragment() {
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        // Attempt to retrieve the fragment if it's already added
-        gamefrag = (GameBoardFragment) fragmentManager.findFragmentByTag("GAMEBOARD_FRAGMENT_TAG");
-
     }
 }

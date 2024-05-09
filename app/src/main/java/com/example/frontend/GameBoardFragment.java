@@ -169,9 +169,9 @@ public class GameBoardFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_game_board, container, false);
 
         findViews(view);
+        initializeGameBoard(view);
         setGameBoardUsername();
         onRollDiceClick();
-        initializeGameBoard(view);
 
         scaleGestureDetector = new ScaleGestureDetector(requireContext(), new ScaleListener());
         initalizePlayerHomePositions(Game.INSTANCE.players());
@@ -385,7 +385,7 @@ public class GameBoardFragment extends Fragment {
     }
 
     private void getBoardContent(ArrayList<ImageView> list) {
-        Log.i("GameboardList", String.valueOf(list.size()));
+        Log.e(TAG, String.valueOf(list.size()));
     }
 
     private Runnable updateTimeRunnable = new Runnable() {
@@ -401,6 +401,7 @@ public class GameBoardFragment extends Fragment {
                 timerHandler.postDelayed(this, 1000);
             }
             Client.send(new Request(CommandType.TIMER, new EmptyPayload()));
+            Log.e(TAG,"TIMER RUN");
         }
     };
 
@@ -447,6 +448,7 @@ public class GameBoardFragment extends Fragment {
         Game.INSTANCE.movePlayer(diceResult); // Call the moved logic in Game.java
         int newPosition = Game.INSTANCE.getCurrentPosition();
         updatePlayerPositionOnUI(newPosition);
+        Log.e(TAG,"MOVE PLAYER UI");
         }
     private ImageView findGameBoardPositionById(int position) {
         Resources res = getResources();
@@ -456,7 +458,7 @@ public class GameBoardFragment extends Fragment {
         if (resId != 0) {
             return requireView().findViewById(resId);
         } else {
-            Log.e("GameBoardFragment", "No ImageView found for position: " + position);
+            Log.e(TAG, "No ImageView found for position: " + position);
             return null; // Always handle null to avoid NullPointerException
         }
     }
@@ -466,7 +468,7 @@ public class GameBoardFragment extends Fragment {
         if (playerToken != null) {
             playerToken.setImageResource(R.drawable.playericon); // Ensure player_token drawable exists
         } else {
-            Log.e("GameBoardFragment", "ImageView not found for position: " + newPosition);
+            Log.e(TAG, "ImageView not found for position: " + newPosition);
         }
     }
 
