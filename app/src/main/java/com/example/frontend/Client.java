@@ -20,6 +20,7 @@ public class Client extends Thread {
     private static Socket socket;
     private static ObjectOutputStream out;
     private static ObjectInputStream in;
+    private static final Object mutex = new Object();
 
     public synchronized static void setSocket(Socket socket) {
         Client.socket = socket;
@@ -49,27 +50,29 @@ public class Client extends Thread {
 
     @Override
     public void run() {
-        try {
-            setSocket(new Socket(SERVER_ADDRESS, SERVER_PORT));
-            setOut(new ObjectOutputStream(socket.getOutputStream()));
-            setIn(new ObjectInputStream(socket.getInputStream()));
+        synchronized (mutex) {
+            try {
+                setSocket(new Socket(SERVER_ADDRESS, SERVER_PORT));
+                setOut(new ObjectOutputStream(socket.getOutputStream()));
+                setIn(new ObjectInputStream(socket.getInputStream()));
 
-            Log.i(TAG, "Client started");
-            while (true) {
-                Response response;
-                try {
-                    response = (Response) in.readObject();
-                } catch (ClassNotFoundException e) {
-                    Log.e(TAG, "Error while reading object from server", e);
-                    continue;
+                Log.i(TAG, "Client started");
+                while (true) {
+                    Response response;
+                    try {
+                        response = (Response) in.readObject();
+                    } catch (ClassNotFoundException e) {
+                        Log.e(TAG, "Error while reading object from server", e);
+                        continue;
+                    }
+                    Log.i(TAG, "Received response from server: " + response);
+                    ResponseHandler.execute(response.responseType(), response.payload(), Game.INSTANCE);
                 }
-                Log.i(TAG, "Received response from server: " + response);
-                ResponseHandler.execute(response.responseType(), response.payload(), Game.INSTANCE);
+            } catch (UnknownHostException e) {
+                throw new IllegalArgumentException("Unknown host", e); // we can't work without a server
+            } catch (IOException e) {
+                Log.e(TAG, "Error while connecting to server", e);
             }
-        } catch (UnknownHostException e) {
-            throw new IllegalArgumentException("Unknown host", e); // we can't work without a server
-        } catch (IOException e) {
-            Log.e(TAG, "Error while connecting to server", e);
         }
     }
 }
