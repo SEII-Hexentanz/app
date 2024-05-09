@@ -9,6 +9,9 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import at.aau.models.Player;
+import at.aau.models.Request;
+import at.aau.payloads.PlayerMovePayload;
+import at.aau.values.CommandType;
 import at.aau.values.GameState;
 
 public enum Game {
@@ -74,6 +77,14 @@ public enum Game {
             setPlayerPosition(getCurrentPlayer(), newPosition);
         }
     }
+
+    public void movePlayer(int diceResult) {
+        int currentPosition = getCurrentPosition(); // Get current position of the player
+        int newPosition = currentPosition + diceResult;
+        setCurrentPosition(newPosition); // Update the game state with the new position
+        Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(newPosition))); // Send the new position to the server
+    }
+
 
     enum Property {
         PLAYERS, GAME_STATE

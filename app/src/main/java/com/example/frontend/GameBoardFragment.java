@@ -442,13 +442,11 @@ public class GameBoardFragment extends Fragment {
         fragmentTransaction.commit();
     }
 
-    public void movePlayer(int diceResult) {
-        int currentPosition = Game.INSTANCE.getCurrentPosition(); // Assume this method gets the current player's position
-        int newPosition = currentPosition + diceResult;
+    public void movePlayerUI(int diceResult) {
+        Game.INSTANCE.movePlayer(diceResult); // Call the moved logic in Game.java
+        int newPosition = Game.INSTANCE.getCurrentPosition();
         updatePlayerPositionOnUI(newPosition);
-        Game.INSTANCE.setCurrentPosition(newPosition); // Update the game state
-        Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(newPosition))); // Send new position to server
-    }
+        }
     private ImageView findGameBoardPositionById(int position) {
         Resources res = getResources();
         String packageName = requireContext().getPackageName();
