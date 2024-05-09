@@ -85,7 +85,8 @@ public class MainActivity extends AppCompatActivity {
         Log.i("ResponseAge", responesAge);
 
     }
-    private TextWatcher createUserNameTextWatcher(){
+
+    private TextWatcher createUserNameTextWatcher() {
         return new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
@@ -107,7 +108,8 @@ public class MainActivity extends AppCompatActivity {
             }
         };
     }
-    private TextWatcher createAgeTextWatcher(){
+
+    private TextWatcher createAgeTextWatcher() {
         return new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
@@ -129,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
     }
+
     private boolean isValidAge(String ageTxt) {
         if (ageTxt.isEmpty()) {
             return false;
@@ -149,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
     private void hideKeyboard(View view) {
 
         InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
