@@ -72,22 +72,9 @@ public class LobbyFragment extends Fragment implements PropertyChangeListener {
         return view;
     }
 
-    private void updatePlayerData(SortedSet<at.aau.models.Player> players) {
+    private void updatePlayerData(SortedSet<Player> players) {
         userList.clear();
-        for (at.aau.models.Player player : players) {
-            Player newPlayer = new Player();
-            newPlayer.setUsername(player.name());
-            newPlayer.setAge(player.age());
-            switch (player.color()) {
-                case YELLOW -> newPlayer.setImageResource(R.drawable.yellowhat);
-                case PINK -> newPlayer.setImageResource(R.drawable.pinkhat);
-                case RED -> newPlayer.setImageResource(R.drawable.redhat);
-                case GREEN -> newPlayer.setImageResource(R.drawable.greenhat);
-                case LIGHT_BLUE -> newPlayer.setImageResource(R.drawable.lightbluehat);
-                case DARK_BLUE -> newPlayer.setImageResource(R.drawable.bluehat);
-            }
-            userList.add(newPlayer);
-        }
+        userList.addAll(players);
         if (adapter != null) requireActivity().runOnUiThread(adapter::notifyDataSetChanged);
     }
 
@@ -101,8 +88,7 @@ public class LobbyFragment extends Fragment implements PropertyChangeListener {
 
     private void onClickStart() {
         startGame.setOnClickListener(view -> {
-            Client.send(new Request(CommandType.START,new EmptyPayload()));
-            showGameBoardFragment();
+            Client.send(new Request(CommandType.START, new EmptyPayload()));
         });
 
         rulesBtn.setOnClickListener(v -> showRulesFragment());
@@ -140,10 +126,10 @@ public class LobbyFragment extends Fragment implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
         Log.i("App", "PropertyChangeEvent received: " + propertyChangeEvent.getPropertyName());
         if (propertyChangeEvent.getPropertyName().equals(Game.Property.PLAYERS.name())) {
-            updatePlayerData((SortedSet<at.aau.models.Player>) propertyChangeEvent.getNewValue());
+            updatePlayerData((SortedSet<Player>) propertyChangeEvent.getNewValue());
         } else if (propertyChangeEvent.getPropertyName().equals(Game.Property.GAME_STATE.name()) &&
                 propertyChangeEvent.getNewValue() == GameState.RUNNING) {
-            showGameBoardFragment();
+            requireActivity().runOnUiThread(this::showGameBoardFragment);
         }
     }
 }

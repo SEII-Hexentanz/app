@@ -1,7 +1,15 @@
 package com.example.frontend;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import at.aau.models.Character;
+import at.aau.values.CharacterState;
+import at.aau.values.Color;
 
 public class PlayerTest {
 
@@ -13,15 +21,15 @@ public class PlayerTest {
         String username = "Alice";
         int age = 25;
         int imageResource = 123;
-        Character[] characters= new Character[4];
-        for(int i = 0; i < characters.length; i++){
-            characters[i] = new Character();
+        List<Character> characters = new ArrayList<>(4);
+        for (int i = 0; i < characters.size(); i++) {
+            characters.add(new Character(0, CharacterState.HOME));
         }
-        Player player = new Player(username, age,characters, imageResource);
+        Player player = new Player(username, age, characters, Color.RED);
 
         assertEquals(username, player.getUsername());
         assertEquals(age, player.getAge());
-        assertEquals(imageResource, player.getImageResource());
+        assertEquals(R.drawable.redhat, player.getImageResource());
     }
     @Test
     public void testSetAndGetUsername() {
@@ -33,7 +41,7 @@ public class PlayerTest {
 
     @Test
     public void testSetAndGetAge() {
-        Player player = new Player("Rolf", 20,null, R.drawable.greenhat);
+        Player player = new Player("Rolf", 20, null, Color.GREEN);
         int newAge = 20;
         assertEquals(newAge, player.getAge());
     }

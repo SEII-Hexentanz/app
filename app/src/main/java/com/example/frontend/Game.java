@@ -5,14 +5,13 @@ import java.beans.PropertyChangeSupport;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import at.aau.models.Player;
 import at.aau.values.GameState;
 
 public enum Game {
     INSTANCE;
 
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
-    private SortedSet<Player> players = new TreeSet<>();
+    private SortedSet<com.example.frontend.Player> players = new TreeSet<>();
     private GameState gameState = GameState.LOBBY;
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -23,11 +22,11 @@ public enum Game {
         support.removePropertyChangeListener(listener);
     }
 
-    public SortedSet<Player> players() {
+    public SortedSet<com.example.frontend.Player> players() {
         return players;
     }
 
-    public void setPlayers(SortedSet<Player> players) {
+    public void setPlayers(SortedSet<com.example.frontend.Player> players) {
         SortedSet<Player> oldPlayers = this.players;
         this.players = players;
         support.firePropertyChange(Property.PLAYERS.name(), oldPlayers, players);
