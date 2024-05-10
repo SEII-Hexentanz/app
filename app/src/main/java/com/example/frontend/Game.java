@@ -96,7 +96,7 @@ public enum Game {
         support.firePropertyChange("playerPosition", currentPosition, newPosition);
         nextPlayer(); // Move to the next player
         Log.i("GAME", "Player: " +getCurrentPlayer() +" has moved " +newPosition );
-
+        eventListener.onPlayerPositionChanged(currentPlayer, currentPosition, newPosition);
     }
 
     public void addPlayer(Player player) {

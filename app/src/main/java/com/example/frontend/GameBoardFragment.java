@@ -37,6 +37,7 @@ import java.util.SortedSet;
 
 import at.aau.models.Player;
 import at.aau.models.Request;
+import at.aau.models.GameEventListener;
 import at.aau.payloads.EmptyPayload;
 import at.aau.payloads.PlayerMovePayload;
 import at.aau.values.CommandType;
@@ -446,6 +447,7 @@ public class GameBoardFragment extends Fragment {
         fragmentTransaction.commit();
     }
 
+    @Override
     public void onPlayerPositionChanged(Player player, int oldPosition, int newPosition) {
         ImageView oldImageView = gameboardPositions.get(oldPosition);
         ImageView newImageView = gameboardPositions.get(newPosition);
