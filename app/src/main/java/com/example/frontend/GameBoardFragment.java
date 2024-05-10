@@ -32,8 +32,10 @@ import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.SortedSet;
 
+import at.aau.models.Player;
 import at.aau.models.Request;
 import at.aau.payloads.EmptyPayload;
 import at.aau.payloads.PlayerMovePayload;
@@ -444,33 +446,6 @@ public class GameBoardFragment extends Fragment {
         fragmentTransaction.commit();
     }
 
-    public void movePlayerUI(int diceResult) {
-        Game.INSTANCE.movePlayer(diceResult); // Call the moved logic in Game.java
-        int newPosition = Game.INSTANCE.getCurrentPosition();
-        updatePlayerPositionOnUI(newPosition);
-        Log.e(TAG,"MOVE PLAYER UI");
-        }
-    private ImageView findGameBoardPositionById(int position) {
-        Resources res = getResources();
-        String packageName = requireContext().getPackageName();
-        String idName = "gameboardpos" + position; // Ensure the IDs in your layout files follow this naming convention
-        int resId = res.getIdentifier(idName, "id", packageName);
-        if (resId != 0) {
-            return requireView().findViewById(resId);
-        } else {
-            Log.e(TAG, "No ImageView found for position: " + position);
-            return null; // Always handle null to avoid NullPointerException
-        }
-    }
-    private void updatePlayerPositionOnUI(int newPosition) {
-        // Logic to update playeer's token on UI
-        ImageView playerToken = findGameBoardPositionById(newPosition);
-        if (playerToken != null) {
-            playerToken.setImageResource(R.drawable.playericon); // Ensure player_token drawable exists
-        } else {
-            Log.e(TAG, "ImageView not found for position: " + newPosition);
-        }
-    }
 
 
     @Override

@@ -37,6 +37,13 @@
             android:textSize="10sp"
             android:alpha="0.3" />
 
+        <TextView
+            android:id="@+id/currentPlayer"
+            android:layout_width="149dp"
+            android:layout_height="45dp"
+            android:text="@string/currPlayer"
+            android:textSize="50sp" />
+
     </LinearLayout>
 
     <TextView
@@ -44,6 +51,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="24sp" />
+
+
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView2"

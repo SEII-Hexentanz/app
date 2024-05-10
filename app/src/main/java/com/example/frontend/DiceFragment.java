@@ -21,6 +21,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 
+import at.aau.models.Player;
 import at.aau.models.Request;
 import at.aau.payloads.EmptyPayload;
 import at.aau.values.CommandType;
@@ -33,7 +34,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     private Dice dice;
     private ImageView diceImage;
     private Button continueButton, cheatButton;
-    private TextView diceResult;
+    private TextView diceResult, currentPlayerName;
     private FragmentContainerView fragmentContainerView;
 
     private boolean isButtonLongPressed = false;
@@ -44,8 +45,6 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     private long lastUpdate = 0;
     private float lastX, lastY, lastZ;
     private boolean diceThrown = false;
-
-    private GameBoardFragment gamefrag;
 
     public DiceFragment() {
         //typical factory method constructor
@@ -75,18 +74,25 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         View view = inflater.inflate(R.layout.fragment_dice, container, false);
 
         findViews(view);
+        displayCurrentPlayer();
         onContinueClick();
         onCheatingClick();
 
         return view;
     }
 
+    private void displayCurrentPlayer() {
+        Player currentPlayer = Game.INSTANCE.getCurrentPlayer();
+        if (currentPlayer != null) {
+            currentPlayerName.setText(currentPlayer.name());
+        } else {
+            currentPlayerName.setText("No player found");
+        }
+    }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        gamefrag = (GameBoardFragment) fragmentManager.findFragmentByTag(GameBoardFragment.TAG);
 
     }
 
@@ -98,6 +104,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         cheatButton = view.findViewById(R.id.cheatButton);
         diceResult = view.findViewById(R.id.diceResult);
         fragmentContainerView = view.findViewById(R.id.fragmentContainerView2);
+        currentPlayerName=view.findViewById(R.id.currentPlayer);
     }
 
     private void onContinueClick() {
@@ -160,9 +167,8 @@ public class DiceFragment extends Fragment implements SensorEventListener {
                 dice.useDice();
                 updateDiceImage(diceImage, dice.getDice());
                 diceThrown = true;
+                Game.INSTANCE.movePlayer(dice.getDice());
                 Client.send(new Request(CommandType.DICE_ROLL, new EmptyPayload()));
-
-                gamefrag.movePlayerUI(dice.getDice());
                 Log.e(TAG,"PLAYERMOVEMENT");
 
             }
@@ -220,7 +226,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     }
 
     private void showGameBoardFragment() {
-        GameBoardFragment gameBoardFragment = new GameBoardFragment();
+        GameBoardFragment gameBoardFragment = GameBoardFragment.newInstance(String.valueOf(Game.INSTANCE.getCurrentPlayer()));
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(android.R.id.content, gameBoardFragment);

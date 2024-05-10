@@ -1,5 +1,7 @@
 package com.example.frontend;
 
+import android.util.Log;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.HashMap;
@@ -22,6 +24,7 @@ public enum Game {
     private GameState gameState = GameState.LOBBY;
     private Map<Player, Integer> playerPositions = new HashMap<>();
     private Player currentPlayer;
+    private int currentPlayerIndex = 0;
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
@@ -78,13 +81,28 @@ public enum Game {
         }
     }
 
-    public void movePlayer(int diceResult) {
-        int currentPosition = getCurrentPosition(); // Get current position of the player
-        int newPosition = currentPosition + diceResult;
-        setCurrentPosition(newPosition); // Update the game state with the new position
-        Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(newPosition))); // Send the new position to the server
+    public void nextPlayer() {
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+        support.firePropertyChange("currentPlayer", null, getCurrentPlayer());
     }
 
+
+    public void movePlayer(int diceResult) {
+        Player currentPlayer = getCurrentPlayer();
+        int currentPosition = getPlayerPosition(currentPlayer);
+        int newPosition = currentPosition + diceResult;
+        playerPositions.put(currentPlayer, newPosition);
+        // Notify the system about the move
+        support.firePropertyChange("playerPosition", currentPosition, newPosition);
+        //nextPlayer(); // Move to the next player
+        Log.i("GAME", "Player: " +getCurrentPlayer() +" has moved" +newPosition );
+    }
+
+    public void addPlayer(Player player) {
+        players.add(player);
+        playerPositions.put(player, 0); // Start position for every player
+    }
+    
 
     enum Property {
         PLAYERS, GAME_STATE
