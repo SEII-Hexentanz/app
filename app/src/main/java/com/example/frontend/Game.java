@@ -94,8 +94,9 @@ public enum Game {
         playerPositions.put(currentPlayer, newPosition);
         // Notify the system about the move
         support.firePropertyChange("playerPosition", currentPosition, newPosition);
-        //nextPlayer(); // Move to the next player
-        Log.i("GAME", "Player: " +getCurrentPlayer() +" has moved" +newPosition );
+        nextPlayer(); // Move to the next player
+        Log.i("GAME", "Player: " +getCurrentPlayer() +" has moved " +newPosition );
+
     }
 
     public void addPlayer(Player player) {

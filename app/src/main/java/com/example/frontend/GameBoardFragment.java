@@ -446,6 +446,42 @@ public class GameBoardFragment extends Fragment {
         fragmentTransaction.commit();
     }
 
+    public void onPlayerPositionChanged(Player player, int oldPosition, int newPosition) {
+        ImageView oldImageView = gameboardPositions.get(oldPosition);
+        ImageView newImageView = gameboardPositions.get(newPosition);
+        updateImageViews(oldImageView, newImageView, player);
+    }
+
+    private void updateImageViews(ImageView oldImageView, ImageView newImageView, Player player) {
+        // Assuming you have a method to get the drawable based on the player
+        int playerIcon = getPlayerIcon(player);
+        if (oldImageView != null) {
+            oldImageView.setImageDrawable(null); // clear old position
+        }
+        if (newImageView != null) {
+            newImageView.setImageResource(playerIcon); // set new position
+        }
+    }
+
+    private int getPlayerIcon(Player player) {
+        // Return the drawable resource id based on player details
+        switch (player.color()) {
+            case YELLOW:
+                return R.drawable.yellowhat;
+            case PINK:
+                return R.drawable.pinkhat;
+            case RED:
+                return R.drawable.redhat;
+            case GREEN:
+                return R.drawable.greenhat;
+            case LIGHT_BLUE:
+                return R.drawable.lightbluehat;
+            case DARK_BLUE:
+                return R.drawable.bluehat;
+            // add other cases as necessary
+        }
+        return -1; // default or error case
+    }
 
 
     @Override
