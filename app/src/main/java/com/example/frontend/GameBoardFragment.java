@@ -24,7 +24,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.HashMap;
-import java.util.Locale;
 
 
 import android.view.ScaleGestureDetector;
@@ -32,18 +31,15 @@ import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.SortedSet;
 
 import at.aau.models.Player;
 import at.aau.models.Request;
-import at.aau.models.GameEventListener;
 import at.aau.payloads.EmptyPayload;
-import at.aau.payloads.PlayerMovePayload;
 import at.aau.values.CommandType;
 
 
-public class GameBoardFragment extends Fragment {
+public class GameBoardFragment extends Fragment implements GameEventListener {
     public static final String TAG = "GAMEBOARD_FRAGMENT_TAG"; //helps to find it
     private Button diceBtn;
     private FragmentContainerView fragmentContainerView;
@@ -404,7 +400,7 @@ public class GameBoardFragment extends Fragment {
                 timerHandler.postDelayed(this, 1000);
             }
             Client.send(new Request(CommandType.TIMER, new EmptyPayload()));
-            Log.e(TAG,"TIMER RUN");
+            Log.i(TAG,"TIMER RUN");
         }
     };
 
@@ -446,7 +442,6 @@ public class GameBoardFragment extends Fragment {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
-
     @Override
     public void onPlayerPositionChanged(Player player, int oldPosition, int newPosition) {
         ImageView oldImageView = gameboardPositions.get(oldPosition);
@@ -455,7 +450,6 @@ public class GameBoardFragment extends Fragment {
     }
 
     private void updateImageViews(ImageView oldImageView, ImageView newImageView, Player player) {
-        // Assuming you have a method to get the drawable based on the player
         int playerIcon = getPlayerIcon(player);
         if (oldImageView != null) {
             oldImageView.setImageDrawable(null); // clear old position

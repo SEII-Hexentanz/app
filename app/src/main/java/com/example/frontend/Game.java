@@ -11,9 +11,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import at.aau.models.Player;
-import at.aau.models.Request;
-import at.aau.payloads.PlayerMovePayload;
-import at.aau.values.CommandType;
 import at.aau.values.GameState;
 
 public enum Game {
@@ -86,7 +83,10 @@ public enum Game {
         support.firePropertyChange("currentPlayer", null, getCurrentPlayer());
     }
 
-
+    private GameEventListener eventListener;
+    public void setGameEventListener (GameEventListener listener){
+        this.eventListener = listener;
+    }
     public void movePlayer(int diceResult) {
         Player currentPlayer = getCurrentPlayer();
         int currentPosition = getPlayerPosition(currentPlayer);
@@ -94,7 +94,7 @@ public enum Game {
         playerPositions.put(currentPlayer, newPosition);
         // Notify the system about the move
         support.firePropertyChange("playerPosition", currentPosition, newPosition);
-        nextPlayer(); // Move to the next player
+        //nextPlayer(); // Move to the next player
         Log.i("GAME", "Player: " +getCurrentPlayer() +" has moved " +newPosition );
         eventListener.onPlayerPositionChanged(currentPlayer, currentPosition, newPosition);
     }
