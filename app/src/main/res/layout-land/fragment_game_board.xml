@@ -12,19 +12,7 @@
     android:focusable="true"
     android:background="@color/black">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentContainerDice"
-        android:name="com.example.frontend.DiceFragment"
-        android:layout_width="250dp"
-        android:layout_height="391dp"
-        android:layout_marginStart="4dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
 
-        />
 
 
     <ScrollView
@@ -42,6 +30,8 @@
         android:layout_height="wrap_content">
 
 
+        <!-- StartButton GreenWitch-->
+
         <ImageView
             android:id="@+id/gridLayoutGameBoard"
             android:layout_width="1492dp"
@@ -58,17 +48,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0" />
-
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="42dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="200dp"
-            android:layout_marginTop="200dp"
-            android:layout_marginLeft="200dp"
-            android:text="Button" />
-
-        <!-- StartButton GreenWitch-->
 
         <ImageView
             android:id="@+id/btnHomeGreen1"
@@ -1003,17 +982,17 @@
     </ScrollView>
 
     <TextView
-            android:id="@+id/txtViewUsername"
-            android:layout_width="129dp"
-            android:layout_height="45dp"
-            android:layout_marginStart="32dp"
-            android:layout_weight="1"
-            android:text="@string/username"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/btn_rollDice"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.312" />
+        android:id="@+id/txtViewUsername"
+        android:layout_width="129dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="32dp"
+        android:layout_weight="1"
+        android:text="@string/username"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/btn_rollDice"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.312" />
 
         <TextView
             android:id="@+id/timerTextView"
@@ -1038,7 +1017,6 @@
         android:layout_marginBottom="52dp"
         android:text="@string/roll_dice"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/txtViewUsername"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent" />
 

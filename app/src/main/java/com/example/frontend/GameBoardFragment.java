@@ -1,6 +1,10 @@
 
 package com.example.frontend;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -42,7 +46,6 @@ import at.aau.values.CommandType;
 public class GameBoardFragment extends Fragment implements GameEventListener {
     public static final String TAG = "GAMEBOARD_FRAGMENT_TAG"; //helps to find it
     private Button diceBtn;
-    private FragmentContainerView fragmentContainerView;
     private TextView usernameTxt, timerText;
     private CountDownTimer countDownTimer;
 
@@ -151,6 +154,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
         // Set screen orientation to landscape when GameBoardFragment is resumed
         requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         startTimer();
+        //Game.INSTANCE.setGameEventListener(this);
     }
 
     @Override
@@ -167,6 +171,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_game_board, container, false);
 
+        //Game.INSTANCE.setGameEventListener(this);
         findViews(view);
         initializeGameBoard(view);
         setGameBoardUsername();
@@ -190,26 +195,38 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
         }
     }
 
+    public String getUsernameFromPreferences() {
+        if (getContext() == null) {
+            return "defaultUsername"; // Return default or handle the error as appropriate
+        }
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("username", "defaultUsername");
+    }
+
+
 
     private void setGameBoardUsername() {
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            String name = bundle.getString("username");
+        if (usernameTxt != null) { // Add null check for safety
+            //Bundle bundle = getArguments();
+
+            String name = getUsernameFromPreferences();//bundle.getString("username");
             usernameTxt.setText(name);
+            Log.i(TAG, "USERNAME: "+ name);
+        }
+        else {
+            Log.e(TAG, "usernameTxt is not initialized");
         }
     }
 
 
     private void onRollDiceClick() {
         diceBtn.setOnClickListener(view -> {
-            fragmentContainerView.setVisibility(View.VISIBLE);
             showDiceFragment();
         });
     }
 
     private void findViews(View view) {
         diceBtn = view.findViewById(R.id.btn_rollDice);
-        fragmentContainerView = view.findViewById(R.id.fragmentContainerDice);
         usernameTxt = view.findViewById(R.id.txtViewUsername);
         timerText = view.findViewById(R.id.timerTextView);
         gameBoard = view.findViewById(R.id.gridLayoutGameBoard);
@@ -384,7 +401,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
     }
 
     private void getBoardContent(ArrayList<ImageView> list) {
-        Log.e(TAG, String.valueOf(list.size()));
+        Log.i(TAG, "Board Content: " + String.valueOf(list.size()));
     }
 
     private Runnable updateTimeRunnable = new Runnable() {
@@ -415,10 +432,10 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
     }
 
     private void showDiceFragment() {
-        DiceFragment diceFragment = DiceFragment.newInstance();
+        DiceFragment diceFragment = new DiceFragment();
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.dice, diceFragment);
+        fragmentTransaction.add(R.id.gameBoardID, diceFragment);
         fragmentTransaction.commit();
     }
 

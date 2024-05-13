@@ -83,21 +83,6 @@ public enum Game {
         support.firePropertyChange("currentPlayer", null, getCurrentPlayer());
     }
 
-    private GameEventListener eventListener;
-    public void setGameEventListener (GameEventListener listener){
-        this.eventListener = listener;
-    }
-    public void movePlayer(int diceResult) {
-        Player currentPlayer = getCurrentPlayer();
-        int currentPosition = getPlayerPosition(currentPlayer);
-        int newPosition = currentPosition + diceResult;
-        playerPositions.put(currentPlayer, newPosition);
-        // Notify the system about the move
-        support.firePropertyChange("playerPosition", currentPosition, newPosition);
-        //nextPlayer(); // Move to the next player
-        Log.i("GAME", "Player: " +getCurrentPlayer() +" has moved " +newPosition );
-        eventListener.onPlayerPositionChanged(currentPlayer, currentPosition, newPosition);
-    }
 
     public void addPlayer(Player player) {
         players.add(player);
