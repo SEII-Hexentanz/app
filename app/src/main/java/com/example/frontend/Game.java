@@ -1,5 +1,7 @@
 package com.example.frontend;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.beans.PropertyChangeListener;
@@ -11,6 +13,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import at.aau.models.Player;
+import at.aau.values.Color;
 import at.aau.values.GameState;
 
 public enum Game {
@@ -22,6 +25,8 @@ public enum Game {
     private Map<Player, Integer> playerPositions = new HashMap<>();
     private Player currentPlayer;
     private int currentPlayerIndex = 0;
+    public static final String TAG = "GAME_TAG";
+    private Map<Player, Boolean> canMove = new HashMap<>();
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
@@ -83,12 +88,57 @@ public enum Game {
         support.firePropertyChange("currentPlayer", null, getCurrentPlayer());
     }
 
+    private GameEventListener eventListener;
+    public void setGameEventListener (GameEventListener listener){
+        this.eventListener = listener;
+    }
+
+
+    public void movePlayer(int diceResult) {
+        Player currentPlayer = getCurrentPlayer();
+        if (!canMove.getOrDefault(currentPlayer, false) && diceResult != 6) {
+            canMove.put(currentPlayer, true); //to remove when movement successfull
+            Log.i(TAG, "Player must roll a 6 to start moving!");
+            return; // Player must roll a 6 to start
+        }
+
+        if (diceResult == 6 && !canMove.get(currentPlayer)) {
+            canMove.put(currentPlayer, true);
+            Log.i(TAG, "Player rolled a 6 and can now move!");
+            return; // Allow the player to start moving from the next turn
+        }
+
+        int currentPosition = getPlayerPosition(currentPlayer);
+        int newPosition = currentPosition + diceResult;
+        playerPositions.put(currentPlayer, newPosition);
+        Log.i(TAG, "Player " + getCurrentPlayer() + " moved to position " + newPosition);
+        support.firePropertyChange("playerPosition", currentPosition, newPosition);
+        eventListener.onPlayerPositionChanged(currentPlayer, currentPosition, newPosition);
+    }
+
+
 
     public void addPlayer(Player player) {
-        players.add(player);
-        playerPositions.put(player, 0); // Start position for every player
+        if (!players.contains(player)) {
+            Color color = Color.values()[players.size() % Color.values().length]; // Cycle through colors
+            Player coloredPlayer = new Player(player.name(), player.age(), color, player.characters());
+            players.add(coloredPlayer);
+            playerPositions.put(coloredPlayer, 0); // Start position for every player
+            canMove.put(coloredPlayer, false); // Initially, players can't move
+        }
     }
-    
+
+    public void updatePlayer(Player oldPlayer, Player newPlayer) {
+        if (players.contains(oldPlayer)) {
+            players.remove(oldPlayer);
+            players.add(newPlayer);
+            playerPositions.put(newPlayer, playerPositions.get(oldPlayer)); // Alte Position beibehalten
+            canMove.put(newPlayer, canMove.getOrDefault(oldPlayer, false)); // Bewegungsstatus beibehalten
+            support.firePropertyChange("players", oldPlayer, newPlayer); // Benachrichtigen der Listener
+        }
+    }
+
+
 
     enum Property {
         PLAYERS, GAME_STATE

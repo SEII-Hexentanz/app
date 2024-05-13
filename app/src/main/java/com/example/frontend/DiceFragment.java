@@ -158,9 +158,9 @@ public class DiceFragment extends Fragment implements SensorEventListener {
                 dice.useDice();
                 updateDiceImage(diceImage, dice.getDice());
                 diceThrown = true;
-                //Game.INSTANCE.movePlayer(dice.getDice());
+                Game.INSTANCE.movePlayer(dice.getDice());
                 Client.send(new Request(CommandType.DICE_ROLL, new EmptyPayload()));
-                Log.i(TAG,"PLAYERMOVEMENT");
+                Log.i(TAG,"PLAYERMOVEMENT: " + dice.getDice());
 
             }
 
@@ -171,9 +171,9 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     }
 
     private void displayCurrentPlayer() {
-        Player currentPlayer = Game.INSTANCE.getCurrentPlayer();
-        if (currentPlayer != null) {
-            currentPlayerName.setText(String.valueOf(currentPlayer.name()));
+        String name = getUsernameFromPreferences();
+        if (name != null) {
+            currentPlayerName.setText(name);
         } else {
             currentPlayerName.setText("No player found");
         }

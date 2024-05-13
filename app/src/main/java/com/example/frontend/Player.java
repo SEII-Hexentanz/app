@@ -1,5 +1,10 @@
 package com.example.frontend;
 
+import java.util.List;
+
+import at.aau.models.Character;
+import at.aau.values.Color;
+
 public class Player {
     private String username;
     private int age;
@@ -16,6 +21,8 @@ public class Player {
         this.imageResource = imageResource;
         this.characters = new Character[4];
     }
+
+
 
 
     public String getUsername() {

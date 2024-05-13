@@ -22,6 +22,7 @@ import java.util.SortedSet;
 
 import at.aau.models.Request;
 import at.aau.payloads.EmptyPayload;
+import at.aau.values.Color;
 import at.aau.values.CommandType;
 import at.aau.values.GameState;
 
@@ -101,6 +102,7 @@ public class LobbyFragment extends Fragment implements PropertyChangeListener {
 
     private void onClickStart() {
         startGame.setOnClickListener(view -> {
+            assignColorsToPlayers(Game.INSTANCE.players()); // Farben zuweisen
             Client.send(new Request(CommandType.START,new EmptyPayload()));
             showGameBoardFragment();
         });
@@ -134,6 +136,17 @@ public class LobbyFragment extends Fragment implements PropertyChangeListener {
         fragmentTransaction.replace(android.R.id.content, rulesfragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+    private void assignColorsToPlayers(SortedSet<at.aau.models.Player> players) {
+        int colorIndex = 0;
+        Color[] colors = Color.values();
+        for (at.aau.models.Player player : players) {
+            Color color = colors[colorIndex % colors.length]; // Zyklen durch verfügbare Farben
+            at.aau.models.Player coloredPlayer =  new at.aau.models.Player(player.name(),player.age(),color,player.characters());
+            Game.INSTANCE.updatePlayer(player, coloredPlayer); // Aktualisieren des Spielers in der Spielinstanz
+            colorIndex++;
+        }
     }
 
     @Override

@@ -125,6 +125,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
     private long millisecondsTime = 0L;
     private long timeSwapBuff = 0L;
     private final long MAX_TIMER_DURATION = 15*60*1000; //1min=60_000 // 15 minutes
+    private long remainingTime = MAX_TIMER_DURATION;
     private ArrayList<ImageView> gameboardPositions;
 
 
@@ -149,29 +150,12 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        // Set screen orientation to landscape when GameBoardFragment is resumed
-        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        startTimer();
-        //Game.INSTANCE.setGameEventListener(this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        // Reset screen orientation to portrait when GameBoardFragment is paused
-        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        pauseTimer();
-    }
-
-    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_game_board, container, false);
 
-        //Game.INSTANCE.setGameEventListener(this);
+        Game.INSTANCE.setGameEventListener(this);
         findViews(view);
         initializeGameBoard(view);
         setGameBoardUsername();
@@ -207,9 +191,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
 
     private void setGameBoardUsername() {
         if (usernameTxt != null) { // Add null check for safety
-            //Bundle bundle = getArguments();
-
-            String name = getUsernameFromPreferences();//bundle.getString("username");
+            String name = getUsernameFromPreferences();
             usernameTxt.setText(name);
             Log.i(TAG, "USERNAME: "+ name);
         }
@@ -406,18 +388,21 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
 
     private Runnable updateTimeRunnable = new Runnable() {
         public void run() {
-            millisecondsTime = SystemClock.uptimeMillis() - startTime;
-            int seconds = (int) (millisecondsTime / 1000);
-            int minutes = seconds / 60;
-            seconds %= 60;
-            timerText.setText(String.format("%02d:%02d", minutes, seconds));
-            if (millisecondsTime >= MAX_TIMER_DURATION) {
-                showEndGameFragment();
-            } else {
+            long elapsedRealtime = SystemClock.elapsedRealtime();
+            remainingTime -= elapsedRealtime - startTime;
+            startTime = elapsedRealtime;
+            if (remainingTime > 0) {
+                int seconds = (int) (remainingTime / 1000);
+                int minutes = seconds / 60;
+                seconds %= 60;
+                timerText.setText(String.format("%02d:%02d", minutes, seconds));
                 timerHandler.postDelayed(this, 1000);
+                Client.send(new Request(CommandType.TIMER, new EmptyPayload()));
+                Log.i(TAG,"TIMER RUN");
+            } else {
+                timerHandler.removeCallbacks(this);
+                showEndGameFragment();
             }
-            Client.send(new Request(CommandType.TIMER, new EmptyPayload()));
-            Log.i(TAG,"TIMER RUN");
         }
     };
 
@@ -427,8 +412,23 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
     }
 
     private void pauseTimer() {
-        timeSwapBuff += millisecondsTime;
         timerHandler.removeCallbacks(updateTimeRunnable);
+        long elapsedRealtime = SystemClock.elapsedRealtime();
+        remainingTime -= elapsedRealtime - startTime;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong("remainingTime", remainingTime);
+    }
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            remainingTime = savedInstanceState.getLong("remainingTime", MAX_TIMER_DURATION);
+        }
     }
 
     private void showDiceFragment() {
@@ -461,21 +461,14 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
     }
     @Override
     public void onPlayerPositionChanged(Player player, int oldPosition, int newPosition) {
-        ImageView oldImageView = gameboardPositions.get(oldPosition);
-        ImageView newImageView = gameboardPositions.get(newPosition);
-        updateImageViews(oldImageView, newImageView, player);
+        if (oldPosition >= 0 && oldPosition < gameboardPositions.size() && newPosition >= 0 && newPosition < gameboardPositions.size()) {
+            ImageView oldImageView = gameboardPositions.get(oldPosition);
+            ImageView newImageView = gameboardPositions.get(newPosition);
+            updateImageViews(oldImageView, newImageView, player);
+        } else {
+            Log.e(TAG, "Invalid position(s): oldPosition=" + oldPosition + ", newPosition=" + newPosition);
+        };
     }
-
-    private void updateImageViews(ImageView oldImageView, ImageView newImageView, Player player) {
-        int playerIcon = getPlayerIcon(player);
-        if (oldImageView != null) {
-            oldImageView.setImageDrawable(null); // clear old position
-        }
-        if (newImageView != null) {
-            newImageView.setImageResource(playerIcon); // set new position
-        }
-    }
-
     private int getPlayerIcon(Player player) {
         // Return the drawable resource id based on player details
         switch (player.color()) {
@@ -496,6 +489,16 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
         return -1; // default or error case
     }
 
+    private void updateImageViews(ImageView oldImageView, ImageView newImageView, Player player) {
+        int playerIcon = getPlayerIcon(player);
+        if (oldImageView != null) {
+            oldImageView.setImageDrawable(null); // clear old position
+        }
+        if (newImageView != null) {
+            newImageView.setImageResource(playerIcon); // set new position
+        }
+    }
+
 
     @Override
     public void onDestroy() {
@@ -503,6 +506,25 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
         if (countDownTimer != null) {
             countDownTimer.cancel();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Set screen orientation to landscape when GameBoardFragment is resumed
+        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        if (remainingTime > 0) {
+            startTimer();
+        }
+        Game.INSTANCE.setGameEventListener(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Reset screen orientation to portrait when GameBoardFragment is paused
+        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        pauseTimer();
     }
 
 }
