@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -32,12 +31,11 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     private Dice dice;
     private ImageView diceImage;
     private Button continueButton, cheatButton;
-    private TextView diceResult;
     private FragmentContainerView fragmentContainerView;
 
     private boolean isButtonLongPressed = false;
     private boolean isSensorCovered = false;
-    private final static float LIGHT_SENSOR_THRESHOLD = 10.0f; // Schwellenwert für den Lichtsensor
+    private final static float LIGHT_SENSOR_THRESHOLD = 10.0f; // Schwellenwert für den light sensor
 
     private final static float SHAKE_THRESHOLD = 10;
     private long lastUpdate = 0;
@@ -60,7 +58,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         super.onCreate(savedInstanceState);
         sensorManager = (SensorManager) requireActivity().getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT); // Lichtsensor hinzufügen
+        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT); // light sensor added
         sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
         sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
         dice = new Dice();
@@ -81,7 +79,6 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         diceImage = view.findViewById(R.id.diceImage);
         continueButton = view.findViewById(R.id.continueButtonDiceFragment);
         cheatButton = view.findViewById(R.id.cheatButton);
-        diceResult = view.findViewById(R.id.diceResult);
         fragmentContainerView = view.findViewById(R.id.fragmentContainerView2);
     }
 
@@ -145,7 +142,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
                 dice.useDice();
                 updateDiceImage(diceImage, dice.getDice());
                 diceThrown = true;
-              //  Client.send(new Request(CommandType.DICE_ROLL, new EmptyPayload()));
+                Client.send(new Request(CommandType.DICE_ROLL, new EmptyPayload()));
             }
 
             lastX = x;

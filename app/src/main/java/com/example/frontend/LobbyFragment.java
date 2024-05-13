@@ -64,7 +64,7 @@ public class LobbyFragment extends Fragment implements PropertyChangeListener {
 
         int allPlayer = adapter.getItemCount();
 
-        playerCount.setText(allPlayer + "");
+        playerCount.setText(allPlayer);
 
         onClickStart();
         onReturnBtnClick();
@@ -94,7 +94,7 @@ public class LobbyFragment extends Fragment implements PropertyChangeListener {
     private void onReturnBtnClick() {
         retCreateLobby.setOnClickListener(view -> {
             // Inside your Fragment class where you want to close and return
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
             fragmentManager.popBackStack();
         });
     }

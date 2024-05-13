@@ -9,14 +9,13 @@ public class Player {
     public Player(){
         //Empty constructor
     }
-    //is currently empty
-    public Player(String username, int age, Character[] characters,int imageResource) {
+
+    public Player(String username, int age, int imageResource) {
         this.username = username;
         this.age = age;
         this.imageResource = imageResource;
         this.characters = new Character[4];
     }
-
 
     public String getUsername() {
         return username;
@@ -26,7 +25,6 @@ public class Player {
         this.username = username;
     }
 
-
     public int getAge() {
         return age;
     }
@@ -34,20 +32,11 @@ public class Player {
     public void setAge(int age) {
         this.age = age;
     }
-
-    public Character[] getCharacter(){
-        return characters;
-    }
-
-    public void setCharacter(){
-        this.characters = characters;
-    }
-
     public int getImageResource() {
         return imageResource;
     }
-    public void setImageResource(int imageResource) {
-        imageResource = imageResource;
-    }
 
+    public void setImageResource(int imageResource) {
+        this.imageResource = imageResource;
+    }
 }

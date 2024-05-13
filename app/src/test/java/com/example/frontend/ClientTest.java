@@ -48,7 +48,7 @@ public class ClientTest {
 
     @Test
     public void testSocketInitialization() throws IOException {
-        client.run();
+        client.start();
 
         verify(mockSocket).getOutputStream();
         verify(mockSocket).getInputStream();
@@ -58,7 +58,7 @@ public class ClientTest {
     public void testRunReceivesResponseAndHandlesIOException() throws IOException, ClassNotFoundException {
         when(mockIn.readObject()).thenThrow(new IOException("Forced IOException for testing"));
 
-        client.run();
+        client.start();
 
         verify(mockOut, never()).writeObject(any()); // Should not write after error
         verify(mockIn, atLeastOnce()).readObject();
@@ -68,7 +68,7 @@ public class ClientTest {
     public void testRunReceivesResponseAndHandlesClassNotFoundException() throws IOException, ClassNotFoundException {
         when(mockIn.readObject()).thenThrow(new ClassNotFoundException("Forced ClassNotFoundException for testing"));
 
-        client.run();
+        client.start();
 
         verify(mockIn, atLeastOnce()).readObject();
     }
@@ -78,7 +78,7 @@ public class ClientTest {
         Client.setSocket(null);
 
         try {
-            client.run();
+            client.start();
         } catch (IllegalArgumentException e) {
             assert e.getCause() instanceof UnknownHostException;
         }

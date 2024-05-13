@@ -2,9 +2,6 @@ package com.example.frontend;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

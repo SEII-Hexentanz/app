@@ -1,6 +1,9 @@
 package com.example.frontend;
 
+import androidx.annotation.NonNull;
+
 import java.security.SecureRandom;
+import java.util.Locale;
 
 public class Dice {
     private int diceNumber;
@@ -29,9 +32,12 @@ public class Dice {
         this.ran = ran;
     }
 
+    @NonNull
     @Override
     public String toString() {
-        return String.format("dice=%d", diceNumber);
+
+        String format = "dice=%d";
+        return String.format(Locale.getDefault(),format, diceNumber);
     }
 
 }

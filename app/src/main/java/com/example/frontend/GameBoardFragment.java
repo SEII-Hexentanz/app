@@ -24,7 +24,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.HashMap;
-import java.util.Locale;
 
 
 import android.view.ScaleGestureDetector;
@@ -158,13 +157,14 @@ public class GameBoardFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_game_board, container, false);
 
         findViews(view);
-        setGameBoardUsername();
+       // setGameBoardUsername();
         onRollDiceClick();
         initializeGameBoard(view);
 
         scaleGestureDetector = new ScaleGestureDetector(requireContext(), new ScaleListener());
         initalizePlayerHomePositions(Game.INSTANCE.players());
         getBoardContent(gameboardPositions);
+        swapPlayerIcon();
 
         return view;
     }
@@ -180,7 +180,7 @@ public class GameBoardFragment extends Fragment {
         }
     }
 
-
+/*
     private void setGameBoardUsername() {
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -188,7 +188,7 @@ public class GameBoardFragment extends Fragment {
             usernameTxt.setText(name);
         }
     }
-
+*/
 
     private void onRollDiceClick() {
         diceBtn.setOnClickListener(view -> {
@@ -311,6 +311,16 @@ public class GameBoardFragment extends Fragment {
             }
         }
     }
+private void swapPlayerIcon(){
+        for(ImageView imageView: gameboardPositions){
+            imageView.setOnClickListener(view -> {
+                if(imageView.getDrawable().getConstantState().equals(getResources().getDrawable(R.drawable.playericon).getConstantState())){
+                    imageView.setImageResource(R.drawable.crystal);
+                }
+            });
+        }
+}
+
 
     private int getPlayerIcon(at.aau.values.Color playerColor){
         switch(playerColor){
@@ -388,7 +398,7 @@ public class GameBoardFragment extends Fragment {
         gameboardPositions.add(view.findViewById(R.id.gameboardpos33));
         gameboardPositions.add(view.findViewById(R.id.gameboardpos34));
         gameboardPositions.add(view.findViewById(R.id.gameboardpos35));
-
+        swapPlayerIcon();
     }
 
     private void getBoardContent(ArrayList<ImageView> list) {
