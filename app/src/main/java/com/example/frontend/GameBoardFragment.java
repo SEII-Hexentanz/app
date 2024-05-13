@@ -131,6 +131,7 @@ public class GameBoardFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //Display Gameboard only in Landscape Mode
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
     }
 
@@ -311,6 +312,24 @@ public class GameBoardFragment extends Fragment {
         }
     }
 
+    private int getPlayerIcon(at.aau.values.Color playerColor){
+        switch(playerColor){
+            case RED:
+                return R.drawable.redhat;
+            case PINK:
+                return R.drawable.pinkhat;
+            case DARK_BLUE:
+                return R.drawable.bluehat;
+            case LIGHT_BLUE:
+                return R.drawable.lightbluehat;
+            case GREEN:
+                return R.drawable.greenhat;
+            case YELLOW:
+                return R.drawable.yellowhat;
+            default:
+                return R.drawable.playericon;
+        }
+    }
     void mapStartPostions() {
         mapStartingPoint = new HashMap<>();
         mapStartingPoint.put(at.aau.values.Color.YELLOW, 26);
