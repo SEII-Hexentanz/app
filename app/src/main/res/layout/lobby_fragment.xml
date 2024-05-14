@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/lobbyFragmentID"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true"
+    tools:context=".LobbyFragment">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:ignore="UselessParent"
+        >
+
+        <ImageButton
+            android:id="@+id/imgBtnRetCL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/btnReturnLobby"
+            android:src="@android:drawable/btn_dialog"
+            tools:ignore="ContentDescription,HardcodedText" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txtlistPlayerCount"
+                android:layout_width="69dp"
+                android:layout_height="48dp"
+                android:autofillHints=""
+                android:ems="10"
+                android:hint="@string/txt_string"
+                tools:ignore="LabelFor" />
+
+            <TextView
+                android:id="@+id/totalPlayerCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autofillHints=""
+                android:ems="10"
+                android:minHeight="48dp"
+                android:text="@string/_8_players"
+                tools:ignore="LabelFor" />
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="20dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="@string/rules"
+                android:textSize="16sp"
+                tools:ignore="VisualLintBounds" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/textview" >
+
+        </TextView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/lobbyPlayerRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            tools:ignore="TextSizeCheck" />
+
+        <Button
+            android:id="@+id/btn_StartGame"
+            android:layout_width="wrap_content"
+            android:layout_height="63dp"
+            android:layout_marginStart="120dp"
+            android:text="@string/start_game"
+            android:textSize="16sp" />
+    </LinearLayout>
+</LinearLayout>
