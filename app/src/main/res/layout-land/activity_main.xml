@@ -67,7 +67,7 @@
             android:layout_width="337dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="200dp"
-            android:layout_marginBottom="35dp"
+            android:layout_marginBottom="5dp"
             android:autofillHints="age"
             android:ems="10"
             android:hint="@string/ageTextView"
@@ -78,9 +78,10 @@
 
         <Button
             android:id="@+id/buttonStart"
-            android:layout_width="148dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="300dp"
+            android:layout_width="158dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="200dp"
+            android:layout_marginBottom="500dp"
             android:text="@string/buttonSend"
             android:textAlignment="center" />
     </LinearLayout>

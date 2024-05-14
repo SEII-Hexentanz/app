@@ -21,6 +21,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 
 import at.aau.models.Request;
+import at.aau.payloads.DicePayload;
 import at.aau.payloads.EmptyPayload;
 import at.aau.values.CommandType;
 
@@ -30,7 +31,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     private Sensor accelerometer;
     private Dice dice;
     private ImageView diceImage;
-    private Button continueButton, cheatButton;
+    private Button continueButton, cheatButton, rollBtn;
     private FragmentContainerView fragmentContainerView;
 
     private boolean isButtonLongPressed = false;
@@ -72,6 +73,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         findViews(view);
         onContinueClick();
         onCheatingClick();
+        onRollClick();
         return view;
     }
 
@@ -79,13 +81,23 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         diceImage = view.findViewById(R.id.diceImage);
         continueButton = view.findViewById(R.id.continueButtonDiceFragment);
         cheatButton = view.findViewById(R.id.cheatButton);
+        rollBtn = view.findViewById(R.id.rollDiceBtn);
         fragmentContainerView = view.findViewById(R.id.fragmentContainerView2);
     }
 
     private void onContinueClick() {
         continueButton.setOnClickListener(view -> {
             fragmentContainerView.setVisibility(View.VISIBLE);
+
             showGameBoardFragment();
+        });
+    }
+
+    private void onRollClick(){
+        rollBtn.setOnClickListener(view -> {
+
+            Client.send(new Request(CommandType.REQUEST_DICE_ROLL, new EmptyPayload()));
+            Log.i("Roll_Dice", "Client sends dice_roll");
         });
     }
 

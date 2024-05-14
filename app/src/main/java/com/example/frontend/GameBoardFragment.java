@@ -36,6 +36,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.SortedSet;
 
+import at.aau.models.Request;
+import at.aau.payloads.EmptyPayload;
+import at.aau.values.CommandType;
+
 
 public class GameBoardFragment extends Fragment {
     private Button diceBtn;
@@ -194,14 +198,17 @@ public class GameBoardFragment extends Fragment {
 
     private void onRollDiceClick() {
         diceBtn.setOnClickListener(view -> {
+            Client.send(new Request(CommandType.DICE_ROLL, new EmptyPayload()));
+
             fragmentContainerView.setVisibility(View.VISIBLE);
+
             showDiceFragment();
         });
     }
 
     private void findViews(View view) {
         diceBtn = view.findViewById(R.id.btn_rollDice);
-        fragmentContainerView = view.findViewById(R.id.fragmentContainerDice);
+        fragmentContainerView = view.findViewById(R.id.fragmentDiceContainer);
         usernameTxt = view.findViewById(R.id.txtViewUsername);
         timerText = view.findViewById(R.id.timerTextView);
         gameBoard = view.findViewById(R.id.gridLayoutGameBoard);
