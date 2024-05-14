@@ -55,7 +55,7 @@ public class CreateLobbyFragment extends Fragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             String name = bundle.getString("name");
-            nameBox.setText(name + " !");
+            nameBox.setText(name);
         }
     }
 

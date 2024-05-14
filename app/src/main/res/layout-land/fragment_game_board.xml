@@ -13,7 +13,7 @@
     android:background="@color/black">
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentContainerDice"
+        android:id="@+id/fragmentDiceContainer"
         android:name="com.example.frontend.DiceFragment"
         android:layout_width="250dp"
         android:layout_height="391dp"

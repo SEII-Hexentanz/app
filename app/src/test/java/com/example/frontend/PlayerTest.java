@@ -11,6 +11,8 @@ import at.aau.models.Character;
 import at.aau.values.CharacterState;
 import at.aau.values.Color;
 
+import java.util.Arrays;
+
 public class PlayerTest {
 
 

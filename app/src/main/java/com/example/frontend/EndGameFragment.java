@@ -49,11 +49,7 @@ public class EndGameFragment extends Fragment {
 
         winnerNameTextView.setText(getString(R.string.winnerText, sieger));
 
-        restartGameButton.setOnClickListener(v -> {
-            showLobbyFragment();
-
-
-        });
+        restartGameButton.setOnClickListener(v -> showLobbyFragment());
 
         return view;
     }

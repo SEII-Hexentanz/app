@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -15,9 +14,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
-import android.os.Handler;
-import android.os.Looper;
 
 import at.aau.models.Request;
 import at.aau.payloads.RegisterPayload;
@@ -30,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView inputAge;
     private View createLobbyFragment;
     View rootView;
-    private final Handler handler = new Handler(Looper.getMainLooper());
 
 
     @Override
@@ -53,25 +48,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setListeners() {
-        rootView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                hideKeyboard(v);
-                return false;
-            }
+        rootView.setOnTouchListener((v, event) -> {
+            hideKeyboard(v);
+            return false;
         });
-        btnStart.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                onClickStartButton();
-            }
-        });
+        btnStart.setOnClickListener(v -> onClickStartButton());
         inputUsername.addTextChangedListener(createUserNameTextWatcher());
         inputAge.addTextChangedListener(createAgeTextWatcher());
     }
 
     private void onClickStartButton() {
         String responseUser = inputUsername.getText().toString();
-        String responesAge = inputAge.getText().toString();
+        String responseAge = inputAge.getText().toString();
 
         Log.i("Change Fragement", "Fragment change event started");
         if (createLobbyFragment.getVisibility() == View.INVISIBLE) {
@@ -81,8 +69,8 @@ public class MainActivity extends AppCompatActivity {
             showCreateLobbyFragment();
 
         }
-        Client.send(new Request(CommandType.REGISTER, new RegisterPayload(responseUser, Integer.parseInt(responesAge))));
-        Log.i("ResponseAge", responesAge);
+        Client.send(new Request(CommandType.REGISTER, new RegisterPayload(responseUser, Integer.parseInt(responseAge))));
+        Log.i("ResponseAge", responseAge);
 
     }
 
@@ -90,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         return new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
-                // Nichts zu tun hier
+                //Nothing to do here
             }
 
             @Override
@@ -104,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                // Nichts zu tun hier
+                // Nothing to do here
             }
         };
     }
@@ -113,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         return new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
-                // Nichts zu tun hier
+                //Nothing to do here
             }
 
             @Override
@@ -127,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                // Nichts zu tun hier
+                // Nothing to do here
             }
         };
     }

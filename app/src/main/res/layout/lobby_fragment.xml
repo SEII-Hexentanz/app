@@ -65,7 +65,9 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/textview" />
+            android:text="@string/textview" >
+
+        </TextView>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/lobbyPlayerRecyclerView"
@@ -81,5 +83,4 @@
             android:text="@string/start_game"
             android:textSize="16sp" />
     </LinearLayout>
-
 </LinearLayout>

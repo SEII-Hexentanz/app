@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 public class RulesFragment extends Fragment {
 
-    private Button returnButton; // Button zum Zurückkehren
-    private TextView rulesText; // TextView für die Spielregeln
+    private Button returnButton; // returnBtn
+    private TextView rulesText; // TextView for rules
 
     public RulesFragment() {
         // Required empty public constructor
@@ -37,13 +37,14 @@ public class RulesFragment extends Fragment {
 
     private void onReturnButtonClick(){
         returnButton.setOnClickListener(view -> {
-
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
             fragmentManager.popBackStack();
         });
     }
 
     private void setRulesText() {
-        rulesText.setText("\"Hexentanz\" ist ein Brettspiel, bei dem die Spieler versuchen, ihre Hexenfiguren einmal um das Spielfeld zu bewegen und sicher in ihr Zuhause zu bringen. Zu Beginn des Spiels werden alle Hexen verdeckt, sodass ihre wahre Identität nur dem jeweiligen Spieler bekannt ist. Spieler bewegen ihre Figuren basierend auf Würfelwürfen, und es gibt spezielle Felder, die Figuren blockieren oder zurückwerfen können. Eine zentrale Herausforderung des Spiels ist es, sich zu merken, welche verdeckte Figur zu welchem Spieler gehört, da Figuren im Verlauf des Spiels oft verwechselt werden. Ziel ist es, als Erster alle eigenen Hexen ins Ziel zu bringen, wobei geschickte Täuschung und gutes Gedächtnis entscheidend sind.");
+        rulesText.setText(R.string.hexentanz_rules);
+
+
     }
 }

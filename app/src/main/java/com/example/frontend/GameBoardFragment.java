@@ -3,6 +3,7 @@ package com.example.frontend;
 
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -13,6 +14,12 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+
+import java.util.HashMap;
+
+
+import android.view.ScaleGestureDetector;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,10 +28,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.SortedSet;
 
 
@@ -124,6 +133,7 @@ public class GameBoardFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //Display Gameboard only in Landscape Mode
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
     }
 
@@ -304,6 +314,40 @@ public class GameBoardFragment extends Fragment {
         }
     }
 
+    private void swapPlayerIcon() {
+        for (ImageView imageView : gameboardPositions) {
+            if (imageView != null) {
+                final ImageView finalImageView = imageView; // Declare a final copy
+
+                imageView.setOnClickListener(view -> {
+                    // Do something when ImageView is clicked
+                   finalImageView.setImageResource(R.drawable.crystal);
+
+            Log.i("swapPlayerClick", "Swap");
+
+                });
+            }
+        }
+    }
+
+    private int getPlayerIcon(at.aau.values.Color playerColor){
+        switch(playerColor){
+            case RED:
+                return R.drawable.redhat;
+            case PINK:
+                return R.drawable.pinkhat;
+            case DARK_BLUE:
+                return R.drawable.bluehat;
+            case LIGHT_BLUE:
+                return R.drawable.lightbluehat;
+            case GREEN:
+                return R.drawable.greenhat;
+            case YELLOW:
+                return R.drawable.yellowhat;
+            default:
+                return R.drawable.playericon;
+        }
+    }
     void mapStartPostions() {
         mapStartingPoint = new HashMap<>();
         mapStartingPoint.put(at.aau.values.Color.YELLOW, 26);
@@ -363,6 +407,8 @@ public class GameBoardFragment extends Fragment {
         gameboardPositions.add(view.findViewById(R.id.gameboardpos34));
         gameboardPositions.add(view.findViewById(R.id.gameboardpos35));
 
+        swapPlayerIcon();
+
     }
 
     private void getBoardContent(ArrayList<ImageView> list) {
@@ -380,7 +426,7 @@ public class GameBoardFragment extends Fragment {
             int seconds = (int) (millisecondsTime / 1000);
             int minutes = seconds / 60;
             seconds %= 60;
-            timerText.setText(String.format("%02d:%02d", minutes, seconds));
+            timerText.setText(String.format(Locale.GERMANY,"%02d:%02d", minutes, seconds));
             if (millisecondsTime >= MAX_TIMER_DURATION) {
                 showEndGameFragment();
             } else {
@@ -407,17 +453,6 @@ public class GameBoardFragment extends Fragment {
         fragmentTransaction.commit();
     }
 
-    private List<ImageView> findImageViewByID(int count) {
-        List<ImageView> imageViews = new ArrayList<>();
-        Resources res = getResources();
-        String packageName = requireContext().getPackageName();
-        for (int i = 1; i <= count; i++) {
-            int id = res.getIdentifier("gameboard" + i, "id", packageName);
-            ImageView imageView = requireView().findViewById(id);
-            imageViews.add(imageView);
-        }
-        return imageViews;
-    }
 
     private void showEndGameFragment() {
         EndGameFragment endGameFragment = new EndGameFragment();
