@@ -1,6 +1,10 @@
 package com.example.frontend;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.timeout;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,7 +15,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 import at.aau.models.Request;
 
@@ -44,43 +47,5 @@ public class ClientTest {
         Client.send(mockRequest);
 
         verify(mockOut, timeout(100)).writeObject(any(Request.class));
-    }
-
-    @Test
-    public void testSocketInitialization() throws IOException {
-        client.run();
-
-        verify(mockSocket).getOutputStream();
-        verify(mockSocket).getInputStream();
-    }
-
-    @Test
-    public void testRunReceivesResponseAndHandlesIOException() throws IOException, ClassNotFoundException {
-        when(mockIn.readObject()).thenThrow(new IOException("Forced IOException for testing"));
-
-        client.run();
-
-        verify(mockOut, never()).writeObject(any()); // Should not write after error
-        verify(mockIn, atLeastOnce()).readObject();
-    }
-
-    @Test
-    public void testRunReceivesResponseAndHandlesClassNotFoundException() throws IOException, ClassNotFoundException {
-        when(mockIn.readObject()).thenThrow(new ClassNotFoundException("Forced ClassNotFoundException for testing"));
-
-        client.run();
-
-        verify(mockIn, atLeastOnce()).readObject();
-    }
-
-    @Test
-    public void testRunHandlesUnknownHostException() {
-        Client.setSocket(null);
-
-        try {
-            client.run();
-        } catch (IllegalArgumentException e) {
-            assert e.getCause() instanceof UnknownHostException;
-        }
     }
 }

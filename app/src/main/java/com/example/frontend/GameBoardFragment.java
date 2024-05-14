@@ -4,6 +4,17 @@ package com.example.frontend;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.SystemClock;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.ScaleGestureDetector;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -11,26 +22,8 @@ import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-
-import android.os.CountDownTimer;
-
-import android.os.Handler;
-import android.os.SystemClock;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
-
-import java.util.HashMap;
-import java.util.Locale;
-
-
-import android.view.ScaleGestureDetector;
-import android.widget.ImageView;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.SortedSet;
 
@@ -265,8 +258,8 @@ public class GameBoardFragment extends Fragment {
         btnYellowGoal4 = view.findViewById(R.id.btnGoalYellow4);
     }
 
-    private void initalizePlayerHomePositions(SortedSet<at.aau.models.Player> players) {
-        for (at.aau.models.Player player : players) {
+    private void initalizePlayerHomePositions(SortedSet<Player> players) {
+        for (Player player : players) {
             switch (player.color()) {
                 case YELLOW -> {
                     btnYellowHome1.setImageResource(R.drawable.playericon);
