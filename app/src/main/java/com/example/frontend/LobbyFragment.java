@@ -51,7 +51,7 @@ public class LobbyFragment extends Fragment implements PropertyChangeListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_lobby_, container, false);
+        View view = inflater.inflate(R.layout.lobby_fragment, container, false);
         findViews(view);
         onClickStart();
         updatePlayerData(Game.INSTANCE.players());
@@ -64,7 +64,7 @@ public class LobbyFragment extends Fragment implements PropertyChangeListener {
 
         int allPlayer = adapter.getItemCount();
 
-        playerCount.setText(allPlayer);
+        playerCount.setText(allPlayer + " ");
 
         onClickStart();
         onReturnBtnClick();

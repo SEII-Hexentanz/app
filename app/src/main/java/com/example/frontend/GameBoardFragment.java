@@ -3,6 +3,7 @@ package com.example.frontend;
 
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -28,9 +29,11 @@ import java.util.HashMap;
 
 import android.view.ScaleGestureDetector;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.SortedSet;
 
 
@@ -157,14 +160,13 @@ public class GameBoardFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_game_board, container, false);
 
         findViews(view);
-       // setGameBoardUsername();
+        setGameBoardUsername();
         onRollDiceClick();
         initializeGameBoard(view);
 
         scaleGestureDetector = new ScaleGestureDetector(requireContext(), new ScaleListener());
         initalizePlayerHomePositions(Game.INSTANCE.players());
         getBoardContent(gameboardPositions);
-        swapPlayerIcon();
 
         return view;
     }
@@ -180,7 +182,7 @@ public class GameBoardFragment extends Fragment {
         }
     }
 
-/*
+
     private void setGameBoardUsername() {
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -188,7 +190,7 @@ public class GameBoardFragment extends Fragment {
             usernameTxt.setText(name);
         }
     }
-*/
+
 
     private void onRollDiceClick() {
         diceBtn.setOnClickListener(view -> {
@@ -199,7 +201,7 @@ public class GameBoardFragment extends Fragment {
 
     private void findViews(View view) {
         diceBtn = view.findViewById(R.id.btn_rollDice);
-        fragmentContainerView = view.findViewById(R.id.fragmentContainerDice);
+        fragmentContainerView = view.findViewById(R.id.fragmentDiceContainer);
         usernameTxt = view.findViewById(R.id.txtViewUsername);
         timerText = view.findViewById(R.id.timerTextView);
         gameBoard = view.findViewById(R.id.gridLayoutGameBoard);
@@ -311,16 +313,22 @@ public class GameBoardFragment extends Fragment {
             }
         }
     }
-private void swapPlayerIcon(){
-        for(ImageView imageView: gameboardPositions){
-            imageView.setOnClickListener(view -> {
-                if(imageView.getDrawable().getConstantState().equals(getResources().getDrawable(R.drawable.playericon).getConstantState())){
-                    imageView.setImageResource(R.drawable.crystal);
-                }
-            });
-        }
-}
 
+    private void swapPlayerIcon() {
+        for (ImageView imageView : gameboardPositions) {
+            if (imageView != null) {
+                final ImageView finalImageView = imageView; // Declare a final copy
+
+                imageView.setOnClickListener(view -> {
+                    // Do something when ImageView is clicked
+                   finalImageView.setImageResource(R.drawable.crystal);
+
+            Log.i("swapPlayerClick", "Swap");
+
+                });
+            }
+        }
+    }
 
     private int getPlayerIcon(at.aau.values.Color playerColor){
         switch(playerColor){
@@ -398,7 +406,9 @@ private void swapPlayerIcon(){
         gameboardPositions.add(view.findViewById(R.id.gameboardpos33));
         gameboardPositions.add(view.findViewById(R.id.gameboardpos34));
         gameboardPositions.add(view.findViewById(R.id.gameboardpos35));
+
         swapPlayerIcon();
+
     }
 
     private void getBoardContent(ArrayList<ImageView> list) {
@@ -416,7 +426,7 @@ private void swapPlayerIcon(){
             int seconds = (int) (millisecondsTime / 1000);
             int minutes = seconds / 60;
             seconds %= 60;
-            timerText.setText(String.format("%02d:%02d", minutes, seconds));
+            timerText.setText(String.format(Locale.GERMANY,"%02d:%02d", minutes, seconds));
             if (millisecondsTime >= MAX_TIMER_DURATION) {
                 showEndGameFragment();
             } else {
@@ -443,17 +453,6 @@ private void swapPlayerIcon(){
         fragmentTransaction.commit();
     }
 
-    private List<ImageView> findImageViewByID(int count) {
-        List<ImageView> imageViews = new ArrayList<>();
-        Resources res = getResources();
-        String packageName = requireContext().getPackageName();
-        for (int i = 1; i <= count; i++) {
-            int id = res.getIdentifier("gameboard" + i, "id", packageName);
-            ImageView imageView = requireView().findViewById(id);
-            imageViews.add(imageView);
-        }
-        return imageViews;
-    }
 
     private void showEndGameFragment() {
         EndGameFragment endGameFragment = new EndGameFragment();

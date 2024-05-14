@@ -37,7 +37,6 @@ public class RulesFragment extends Fragment {
 
     private void onReturnButtonClick(){
         returnButton.setOnClickListener(view -> {
-
             FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
             fragmentManager.popBackStack();
         });
