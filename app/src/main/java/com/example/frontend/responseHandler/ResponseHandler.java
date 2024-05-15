@@ -24,7 +24,6 @@ public class ResponseHandler {
         put(ResponseType.PONG, new PongAction());
         put(ResponseType.UPDATE_STATE, new UpdateStateAction());
         put(ResponseType.DICE_THROWN, new DiceThrownAction());
-        put(ResponseType.MOVE_SUCCESSFUL, );
         put(ResponseType.TIMER_RUNNING, new TimerRunningAction());
         put(ResponseType.BAD_REQUEST, new BadRequestAction());
 
