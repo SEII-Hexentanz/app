@@ -102,7 +102,7 @@ public enum Game {
         boolean canStartMoving = canMove.getOrDefault(currentPlayer, false);
 
        if (!canStartMoving && !hasRolledSix) {
-            canMove.put(currentPlayer, true); // can move nonetheless
+            updateCharacterState(currentPlayer, currentPlayerIndex, CharacterState.HOME);
             Log.i(TAG, currentPlayer.name() + " must roll a 6 to start moving!");
             return; // Spieler muss eine 6 würfeln, um zu beginnen
         }
@@ -111,9 +111,10 @@ public enum Game {
 
         if (hasRolledSix && !canStartMoving) {
             canMove.put(currentPlayer, true);
-            updateCharacterState(currentPlayer, 0, CharacterState.FIELD);
+            updateCharacterState(currentPlayer, currentPlayerIndex, CharacterState.FIELD);
             Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(currentPosition,newPosition,currentPlayer.name())));
             Log.i(TAG, currentPlayer.name() + " rolled a 6 and can now move!");
+            nextPlayer();
             return; // Erlaubt dem Spieler, ab dem nächsten Zug zu starten
         }
 
