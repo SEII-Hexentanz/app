@@ -1,8 +1,11 @@
 package com.example.frontend.responseHandler;
 
 import com.example.frontend.Game;
+import com.example.frontend.actions.BadRequestAction;
 import com.example.frontend.actions.DefaultAction;
+import com.example.frontend.actions.DiceThrownAction;
 import com.example.frontend.actions.PongAction;
+import com.example.frontend.actions.TimerRunningAction;
 import com.example.frontend.actions.UpdateStateAction;
 
 import java.util.HashMap;
@@ -20,6 +23,10 @@ public class ResponseHandler {
     private static final Map<ResponseType, Action> actions = new HashMap<>() {{
         put(ResponseType.PONG, new PongAction());
         put(ResponseType.UPDATE_STATE, new UpdateStateAction());
+        put(ResponseType.DICE_THROWN, new DiceThrownAction());
+        put(ResponseType.MOVE_SUCCESSFUL, );
+        put(ResponseType.TIMER_RUNNING, new TimerRunningAction());
+        put(ResponseType.BAD_REQUEST, new BadRequestAction());
 
 
     }};
