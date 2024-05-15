@@ -21,7 +21,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 
 import at.aau.models.Request;
-import at.aau.payloads.DicePayload;
 import at.aau.payloads.EmptyPayload;
 import at.aau.values.CommandType;
 
@@ -161,9 +160,6 @@ public class DiceFragment extends Fragment implements SensorEventListener {
             lastY = y;
             lastZ = z;
         }
-    }
-    private void sendDiceRollResultToServer(int diceValue){
-          Client.send(new Request(CommandType.DICE_ROLL, new EmptyPayload()));
     }
 
     @Override
