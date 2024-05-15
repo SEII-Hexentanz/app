@@ -2,6 +2,8 @@ package com.example.frontend;
 
 import android.util.Log;
 
+import com.example.frontend.responseHandler.ResponseHandler;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.HashMap;
@@ -133,9 +135,16 @@ public enum Game {
     private void broadcastMove(com.example.frontend.Player player, int oldPosition, int newPosition) {
         Response response = new Response(ResponseType.UPDATE_STATE, new PlayerMovePayload(oldPosition, newPosition, player.getUsername()));
         for (Player p : players) {
-            p.send(response);
+            ResponseHandler.execute(response.responseType(),response.payload(),Game.INSTANCE);
         }
     }
+
+    /**
+     *
+     *mit all diesen Dateien, zeige mir Code dafür, wie ich
+     * a) zu Spielbeginn Server und Clientseitig die Startposition abfragen kann
+     * b) wenn der aktuelle Spieler eine 6 würfelt, soll eine Spielfigur auf das Spielbrett gebracht und angezeigt werden, und die Spieländerung an den Server geschickt werden
+     */
 
     private void updateCharacterState(com.example.frontend.Player player, int characterIndex, CharacterState newState) {
         com.example.frontend.Player updatedPlayer = player.updateCharacterState(characterIndex, newState);

@@ -24,7 +24,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import at.aau.models.Player;
 import at.aau.models.Request;
-import at.aau.payloads.DicePayload;
 import at.aau.payloads.EmptyPayload;
 import at.aau.payloads.PlayerMovePayload;
 import at.aau.payloads.RegisterPayload;
@@ -162,7 +161,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
                 updateDiceImage(diceImage, dice.getDice());
                 diceThrown = true;
                 Game.INSTANCE.movePlayer(dice.getDice());
-                Client.send(new Request(CommandType.DICE_ROLL, new DicePayload(dice.getDice())));
+                Client.send(new Request(CommandType.DICE_ROLL, new EmptyPayload()));
                 Log.i(TAG,"PLAYERMOVEMENT: " + dice.getDice());
 
             }

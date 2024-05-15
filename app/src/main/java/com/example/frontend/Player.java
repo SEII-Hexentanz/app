@@ -81,4 +81,6 @@ public class Player implements Comparable<Player> {
         updatedCharacters.set(characterIndex, updatedCharacter);
         return new Player(username, age, updatedCharacters, color);
     }
+
+
 }

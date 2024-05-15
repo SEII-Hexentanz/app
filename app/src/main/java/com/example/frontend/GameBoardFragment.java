@@ -398,7 +398,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
         Log.i(TAG, "Board Content: " + String.valueOf(list.size()));
     }
 
-    private Runnable updateTimeRunnable = new Runnable() {
+    /*private Runnable updateTimeRunnable = new Runnable() {
         public void run() {
             long elapsedRealtime = SystemClock.elapsedRealtime();
             remainingTime -= elapsedRealtime - startTime;
@@ -409,7 +409,6 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
                 seconds %= 60;
                 timerText.setText(String.format("%02d:%02d", minutes, seconds));
                 timerHandler.postDelayed(this, 1000);
-                Client.send(new Request(CommandType.TIMER, new EmptyPayload()));
                 Log.i(TAG,"TIMER RUN");
             } else {
                 timerHandler.removeCallbacks(this);
@@ -427,7 +426,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
         timerHandler.removeCallbacks(updateTimeRunnable);
         long elapsedRealtime = SystemClock.elapsedRealtime();
         remainingTime -= elapsedRealtime - startTime;
-    }
+    }*/
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -526,7 +525,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
         // Set screen orientation to landscape when GameBoardFragment is resumed
         requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         if (remainingTime > 0) {
-            startTimer();
+            //startTimer();
         }
         Game.INSTANCE.setGameEventListener(this);
     }
@@ -536,7 +535,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
         super.onPause();
         // Reset screen orientation to portrait when GameBoardFragment is paused
         requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        pauseTimer();
+        //pauseTimer();
     }
 
 }
