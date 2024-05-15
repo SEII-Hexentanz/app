@@ -472,7 +472,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
         fragmentTransaction.commit();
     }
     @Override
-    public void onPlayerPositionChanged(Player player, int oldPosition, int newPosition) {
+    public void onPlayerPositionChanged(com.example.frontend.Player player, int oldPosition, int newPosition) {
         if (oldPosition >= 0 && oldPosition < gameboardPositions.size() && newPosition >= 0 && newPosition < gameboardPositions.size()) {
             ImageView oldImageView = gameboardPositions.get(oldPosition);
             ImageView newImageView = gameboardPositions.get(newPosition);
@@ -481,7 +481,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
             Log.e(TAG, "Invalid position(s): oldPosition=" + oldPosition + ", newPosition=" + newPosition);
         };
     }
-    private int getPlayerIcon(Player player) {
+    private int getPlayerIcon(com.example.frontend.Player player) {
         // Return the drawable resource id based on player details
         switch (player.color()) {
             case YELLOW:
@@ -501,7 +501,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
         return -1; // default or error case
     }
 
-    private void updateImageViews(ImageView oldImageView, ImageView newImageView, Player player) {
+    private void updateImageViews(ImageView oldImageView, ImageView newImageView, com.example.frontend.Player player) {
         int playerIcon = getPlayerIcon(player);
         if (oldImageView != null) {
             oldImageView.setImageDrawable(null); // clear old position

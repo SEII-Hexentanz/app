@@ -87,7 +87,7 @@ public class LobbyFragment extends Fragment implements PropertyChangeListener {
 
     private void onClickStart() {
         startGame.setOnClickListener(view -> {
-            assignColorsToPlayers(Game.INSTANCE.players());
+            assignColorsToPlayers(Game.INSTANCE.FrontPlayer());
             Client.send(new Request(CommandType.START, new EmptyPayload()));
             showGameBoardFragment();
         });
@@ -121,16 +121,16 @@ public class LobbyFragment extends Fragment implements PropertyChangeListener {
         fragmentTransaction.commit();
     }
 
-    private void assignColorsToPlayers(SortedSet<at.aau.models.Player> players) {
-        List<at.aau.models.Player> playersList = new ArrayList<>(players);
+    private void assignColorsToPlayers(SortedSet<com.example.frontend.Player> players) {
+        List<com.example.frontend.Player> playersList = new ArrayList<>(players);
         int colorIndex = 0;
         Color[] colors = Color.values();
-        for (at.aau.models.Player player : playersList) {
+        for (com.example.frontend.Player player : playersList) {
             Color color = colors[colorIndex % colors.length];
-            at.aau.models.Player coloredPlayer = new at.aau.models.Player(player.name(), player.age(), color, player.characters());
+            com.example.frontend.Player coloredPlayer = new com.example.frontend.Player(player.getUsername(), player.getAge(), player.getCharacters(),player.color());
             Game.INSTANCE.updatePlayer(player, coloredPlayer);
             Game.INSTANCE.addPlayers(playersList);
-            Log.i("LOBBY_FRAGMENT", player.name() + " got color " + color.toString());
+            Log.i("LOBBY_FRAGMENT", player.getUsername()+ " got color " + color.toString());
             colorIndex++;
         }
     }

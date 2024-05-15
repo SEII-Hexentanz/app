@@ -31,10 +31,10 @@ public enum Game {
     private SortedSet<at.aau.models.Player> players = new TreeSet<>();
     private SortedSet<com.example.frontend.Player> frontPlayer = new TreeSet<>();
     private GameState gameState = GameState.LOBBY;
-    private Map<Player, Integer> playerPositions = new HashMap<>();
+    private Map<com.example.frontend.Player, Integer> playerPositions = new HashMap<>();
     private int currentPlayerIndex = 0;
     public static final String TAG = "GAME_TAG";
-    private Map<Player, Boolean> canMove = new HashMap<>();
+    private Map<com.example.frontend.Player, Boolean> canMove = new HashMap<>();
     private GameEventListener eventListener;
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -69,26 +69,26 @@ public enum Game {
         support.firePropertyChange(Property.GAME_STATE.name(), oldGameState, gameState);
     }
 
-    public Player getCurrentPlayer() {
-        if (players.isEmpty()) {
+    public com.example.frontend.Player getCurrentPlayer() {
+        if (frontPlayer.isEmpty()) {
             Log.e(TAG, "No players available.");
             return null;
         }
-        return players.stream().skip(currentPlayerIndex).findFirst().orElse(null);
+        return frontPlayer.stream().skip(currentPlayerIndex).findFirst().orElse(null);
     }
 
-    public void setPlayerPosition(Player player, int position) {
+    public void setPlayerPosition(com.example.frontend.Player player, int position) {
         Integer oldPosition = playerPositions.get(player);
         playerPositions.put(player, position);
         support.firePropertyChange("playerPosition", Optional.ofNullable(oldPosition), position);
     }
 
-    public int getPlayerPosition(Player player) {
+    public int getPlayerPosition(com.example.frontend.Player player) {
         return playerPositions.getOrDefault(player, -1); // Return -1 if no position set
     }
 
     public void nextPlayer() {
-        currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+        currentPlayerIndex = (currentPlayerIndex + 1) % frontPlayer.size();
         support.firePropertyChange("currentPlayer", null, getCurrentPlayer());
     }
 
@@ -97,7 +97,7 @@ public enum Game {
     }
 
     public void movePlayer(int diceResult) {
-        Player currentPlayer = getCurrentPlayer();
+        com.example.frontend.Player currentPlayer = getCurrentPlayer();
         if (currentPlayer == null) {
             Log.e(TAG, "No current player found. Cannot move.");
             return;
@@ -108,7 +108,7 @@ public enum Game {
 
         if (!canStartMoving && !hasRolledSix) {
             updateCharacterState(currentPlayer, currentPlayerIndex, CharacterState.HOME);
-            Log.i(TAG, currentPlayer.name() + " must roll a 6 to start moving!");
+            Log.i(TAG, currentPlayer.getUsername() + " must roll a 6 to start moving!");
             return; // Spieler muss eine 6 würfeln, um zu beginnen
         }
         int currentPosition = getPlayerPosition(currentPlayer);
@@ -117,51 +117,51 @@ public enum Game {
         if (hasRolledSix && !canStartMoving) {
             canMove.put(currentPlayer, true);
             updateCharacterState(currentPlayer, currentPlayerIndex, CharacterState.FIELD);
-            Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(currentPosition,newPosition,currentPlayer.name())));
-            Log.i(TAG, currentPlayer.name() + " rolled a 6 and can now move!");
+            Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(currentPosition,newPosition,currentPlayer.getUsername())));
+            Log.i(TAG, currentPlayer.getUsername() + " rolled a 6 and can now move!");
             nextPlayer();
             return; // Erlaubt dem Spieler, ab dem nächsten Zug zu starten
         }
 
         setPlayerPosition(currentPlayer, newPosition);
-        Log.i(TAG, "Player " + currentPlayer.name() + " moved to position " + newPosition + " from " + currentPosition);
+        Log.i(TAG, "Player " + currentPlayer.getUsername() + " moved to position " + newPosition + " from " + currentPosition);
         support.firePropertyChange("playerPosition", currentPosition, newPosition);
         eventListener.onPlayerPositionChanged(currentPlayer, currentPosition, newPosition);
         broadcastMove(currentPlayer, currentPosition, newPosition);
     }
 
-    private void broadcastMove(Player player, int oldPosition, int newPosition) {
-        Response response = new Response(ResponseType.UPDATE_STATE, new PlayerMovePayload(oldPosition, newPosition, player.name()));
+    private void broadcastMove(com.example.frontend.Player player, int oldPosition, int newPosition) {
+        Response response = new Response(ResponseType.UPDATE_STATE, new PlayerMovePayload(oldPosition, newPosition, player.getUsername()));
         for (Player p : players) {
             p.send(response);
         }
     }
 
-    private void updateCharacterState(Player player, int characterIndex, CharacterState newState) {
-        Player updatedPlayer = player.updateCharacterState(characterIndex, newState);
-        players.remove(player);
-        players.add(updatedPlayer);
+    private void updateCharacterState(com.example.frontend.Player player, int characterIndex, CharacterState newState) {
+        com.example.frontend.Player updatedPlayer = player.updateCharacterState(characterIndex, newState);
+        frontPlayer.remove(player);
+        frontPlayer.add(updatedPlayer);
         broadcastMove(updatedPlayer, playerPositions.get(player), playerPositions.get(updatedPlayer));
     }
 
-    public void addPlayers(List<at.aau.models.Player> playersList) {
-        for (at.aau.models.Player player : playersList) {
-            if (!players.contains(player)) {
-                Color color = Color.values()[players.size() % Color.values().length];
-                Player coloredPlayer = new Player(player.name(), player.age(), color, player.characters());
-                players.add(coloredPlayer);
+    public void addPlayers(List<com.example.frontend.Player> playersList) {
+        for (com.example.frontend.Player player : playersList) {
+            if (!frontPlayer.contains(player)) {
+                Color color = Color.values()[frontPlayer.size() % Color.values().length];
+                com.example.frontend.Player coloredPlayer = new com.example.frontend.Player(player.getUsername(), player.getAge(), player.getCharacters(),player.color());
+                frontPlayer.add(coloredPlayer);
                 playerPositions.put(coloredPlayer, 0);
                 canMove.put(coloredPlayer, false);
-                Log.i(TAG, "Added player: " + coloredPlayer.name());
+                Log.i(TAG, "Added player: " + coloredPlayer.getUsername());
             }
         }
     }
 
-    public void updatePlayer(Player oldPlayer, Player newPlayer) {
-        if (players.contains(oldPlayer)) {
-            Log.i(TAG, newPlayer.name() + " updatePlayerMethod");
-            players.remove(oldPlayer);
-            players.add(newPlayer);
+    public void updatePlayer(com.example.frontend.Player oldPlayer, com.example.frontend.Player newPlayer) {
+        if (frontPlayer.contains(oldPlayer)) {
+            Log.i(TAG, newPlayer.getUsername() + " updatePlayerMethod");
+            frontPlayer.remove(oldPlayer);
+            frontPlayer.add(newPlayer);
             playerPositions.put(newPlayer, playerPositions.get(oldPlayer)); // Alte Position beibehalten
             canMove.put(newPlayer, canMove.getOrDefault(oldPlayer, false)); // Bewegungsstatus beibehalten
             support.firePropertyChange("players", oldPlayer, newPlayer); // Benachrichtigen der Listener
