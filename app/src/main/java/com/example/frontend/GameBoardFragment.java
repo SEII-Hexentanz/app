@@ -8,6 +8,17 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.SystemClock;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.ScaleGestureDetector;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -34,6 +45,7 @@ import android.view.ScaleGestureDetector;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.SortedSet;
 
@@ -162,7 +174,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
         onRollDiceClick();
 
         scaleGestureDetector = new ScaleGestureDetector(requireContext(), new ScaleListener());
-        initalizePlayerHomePositions(Game.INSTANCE.players());
+        initalizePlayerHomePositions(Game.INSTANCE.FrontPlayer());
         getBoardContent(gameboardPositions);
 
         return view;
@@ -275,8 +287,8 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
         btnYellowGoal4 = view.findViewById(R.id.btnGoalYellow4);
     }
 
-    private void initalizePlayerHomePositions(SortedSet<at.aau.models.Player> players) {
-        for (at.aau.models.Player player : players) {
+    private void initalizePlayerHomePositions(SortedSet<com.example.frontend.Player> players) {
+        for (com.example.frontend.Player player : players) {
             switch (player.color()) {
                 case YELLOW -> {
                     btnYellowHome1.setImageResource(R.drawable.playericon);

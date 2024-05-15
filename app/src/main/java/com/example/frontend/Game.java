@@ -28,7 +28,8 @@ public enum Game {
     INSTANCE;
 
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
-    private SortedSet<Player> players = new TreeSet<>();
+    private SortedSet<at.aau.models.Player> players = new TreeSet<>();
+    private SortedSet<com.example.frontend.Player> frontPlayer = new TreeSet<>();
     private GameState gameState = GameState.LOBBY;
     private Map<Player, Integer> playerPositions = new HashMap<>();
     private int currentPlayerIndex = 0;
@@ -44,13 +45,17 @@ public enum Game {
         support.removePropertyChangeListener(listener);
     }
 
-    public SortedSet<Player> players() {
+    public SortedSet<com.example.frontend.Player> FrontPlayer() {
+        return frontPlayer;
+    }
+
+    public SortedSet<at.aau.models.Player> players(){
         return players;
     }
 
-    public void setPlayers(SortedSet<Player> players) {
-        SortedSet<Player> oldPlayers = this.players;
-        this.players = players;
+    public void setPlayers(SortedSet<com.example.frontend.Player> players) {
+        SortedSet<com.example.frontend.Player> oldPlayers = this.frontPlayer;
+        this.frontPlayer = players;
         support.firePropertyChange(Property.PLAYERS.name(), oldPlayers, players);
     }
 
@@ -101,7 +106,7 @@ public enum Game {
         boolean hasRolledSix = diceResult == 6;
         boolean canStartMoving = canMove.getOrDefault(currentPlayer, false);
 
-       if (!canStartMoving && !hasRolledSix) {
+        if (!canStartMoving && !hasRolledSix) {
             updateCharacterState(currentPlayer, currentPlayerIndex, CharacterState.HOME);
             Log.i(TAG, currentPlayer.name() + " must roll a 6 to start moving!");
             return; // Spieler muss eine 6 würfeln, um zu beginnen

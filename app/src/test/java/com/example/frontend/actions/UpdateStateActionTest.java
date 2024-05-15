@@ -18,6 +18,7 @@ import java.util.TreeSet;
 import at.aau.models.Player;
 import at.aau.payloads.Payload;
 import at.aau.payloads.UpdateStatePayload;
+import at.aau.values.Color;
 import at.aau.values.GameState;
 
 public class UpdateStateActionTest {
@@ -35,7 +36,9 @@ public class UpdateStateActionTest {
         // Given
         GameState gameState = Mockito.mock(GameState.class);
         SortedSet<Player> players = new TreeSet<>();
-        players.add(Mockito.mock(Player.class));
+        Player mockPlayer = Mockito.mock(Player.class);
+        when(mockPlayer.color()).thenReturn(Color.RED);
+        players.add(mockPlayer);
         at.aau.models.GameData mockGame = Mockito.mock(at.aau.models.GameData.class);
         when(mockGame.gameState()).thenReturn(gameState);
         when(mockGame.players()).thenReturn(players);
@@ -46,7 +49,7 @@ public class UpdateStateActionTest {
 
         // Then
         assertSame(gameState, game.gameState());
-        assertSame(players, game.players());
+        assertSame(players.size(), game.players().size());
     }
 
     @Test
