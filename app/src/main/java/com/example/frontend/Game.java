@@ -16,6 +16,9 @@ import at.aau.models.Request;
 import at.aau.models.Response;
 import at.aau.payloads.EmptyPayload;
 import at.aau.payloads.PlayerMovePayload;
+import at.aau.payloads.RegisterPayload;
+import at.aau.payloads.UpdateStatePayload;
+import at.aau.values.CharacterState;
 import at.aau.values.Color;
 import at.aau.values.CommandType;
 import at.aau.values.GameState;
@@ -98,23 +101,23 @@ public enum Game {
         boolean hasRolledSix = diceResult == 6;
         boolean canStartMoving = canMove.getOrDefault(currentPlayer, false);
 
-       /* if (!canStartMoving && !hasRolledSix) {
+       if (!canStartMoving && !hasRolledSix) {
             canMove.put(currentPlayer, true); // can move nonetheless
             Log.i(TAG, currentPlayer.name() + " must roll a 6 to start moving!");
             return; // Spieler muss eine 6 würfeln, um zu beginnen
         }
+        int currentPosition = getPlayerPosition(currentPlayer);
+        int newPosition = currentPosition + diceResult;
 
         if (hasRolledSix && !canStartMoving) {
             canMove.put(currentPlayer, true);
-            Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(newPosition)));
+            updateCharacterState(currentPlayer, 0, CharacterState.FIELD);
+            Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(currentPosition,newPosition,currentPlayer.name())));
             Log.i(TAG, currentPlayer.name() + " rolled a 6 and can now move!");
             return; // Erlaubt dem Spieler, ab dem nächsten Zug zu starten
-        }*/
-        int currentPosition = getPlayerPosition(currentPlayer);
-        int newPosition = currentPosition + diceResult;
-        setPlayerPosition(currentPlayer, newPosition);
+        }
 
-        Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(currentPosition,newPosition,currentPlayer.name())));
+        setPlayerPosition(currentPlayer, newPosition);
         Log.i(TAG, "Player " + currentPlayer.name() + " moved to position " + newPosition + " from " + currentPosition);
         support.firePropertyChange("playerPosition", currentPosition, newPosition);
         eventListener.onPlayerPositionChanged(currentPlayer, currentPosition, newPosition);
@@ -126,6 +129,13 @@ public enum Game {
         for (Player p : players) {
             p.send(response);
         }
+    }
+
+    private void updateCharacterState(Player player, int characterIndex, CharacterState newState) {
+        Player updatedPlayer = player.updateCharacterState(characterIndex, newState);
+        players.remove(player);
+        players.add(updatedPlayer);
+        broadcastMove(updatedPlayer, playerPositions.get(player), playerPositions.get(updatedPlayer));
     }
 
     public void addPlayers(List<at.aau.models.Player> playersList) {
