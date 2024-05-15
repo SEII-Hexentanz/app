@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.SortedSet;
 
 import at.aau.models.Request;
@@ -25,7 +26,6 @@ import at.aau.payloads.EmptyPayload;
 import at.aau.values.Color;
 import at.aau.values.CommandType;
 import at.aau.values.GameState;
-
 
 public class LobbyFragment extends Fragment implements PropertyChangeListener {
 
@@ -45,7 +45,6 @@ public class LobbyFragment extends Fragment implements PropertyChangeListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -56,7 +55,6 @@ public class LobbyFragment extends Fragment implements PropertyChangeListener {
         findViews(view);
         onClickStart();
         updatePlayerData(Game.INSTANCE.players());
-
 
         adapter = new PlayerAdapter(userList);
 
@@ -102,8 +100,8 @@ public class LobbyFragment extends Fragment implements PropertyChangeListener {
 
     private void onClickStart() {
         startGame.setOnClickListener(view -> {
-            assignColorsToPlayers(Game.INSTANCE.players()); // Farben zuweisen
-            Client.send(new Request(CommandType.START,new EmptyPayload()));
+            assignColorsToPlayers(Game.INSTANCE.players());
+            Client.send(new Request(CommandType.START, new EmptyPayload()));
             showGameBoardFragment();
         });
 
@@ -119,7 +117,6 @@ public class LobbyFragment extends Fragment implements PropertyChangeListener {
     }
 
     private void showGameBoardFragment() {
-
         GameBoardFragment gameBoardFragment = new GameBoardFragment();
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -129,7 +126,6 @@ public class LobbyFragment extends Fragment implements PropertyChangeListener {
     }
 
     private void showRulesFragment() {
-
         RulesFragment rulesfragment = new RulesFragment();
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -139,12 +135,15 @@ public class LobbyFragment extends Fragment implements PropertyChangeListener {
     }
 
     private void assignColorsToPlayers(SortedSet<at.aau.models.Player> players) {
+        List<at.aau.models.Player> playersList = new ArrayList<>(players);
         int colorIndex = 0;
         Color[] colors = Color.values();
-        for (at.aau.models.Player player : players) {
-            Color color = colors[colorIndex % colors.length]; // Zyklen durch verfügbare Farben
-            at.aau.models.Player coloredPlayer =  new at.aau.models.Player(player.name(),player.age(),color,player.characters());
-            Game.INSTANCE.updatePlayer(player, coloredPlayer); // Aktualisieren des Spielers in der Spielinstanz
+        for (at.aau.models.Player player : playersList) {
+            Color color = colors[colorIndex % colors.length];
+            at.aau.models.Player coloredPlayer = new at.aau.models.Player(player.name(), player.age(), color, player.characters());
+            Game.INSTANCE.updatePlayer(player, coloredPlayer);
+            Game.INSTANCE.addPlayers(playersList);
+            Log.i("LOBBY_FRAGMENT", player.name() + " got color " + color.toString());
             colorIndex++;
         }
     }

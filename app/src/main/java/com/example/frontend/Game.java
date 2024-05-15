@@ -1,20 +1,24 @@
 package com.example.frontend;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import at.aau.models.Player;
+import at.aau.models.Request;
+import at.aau.payloads.EmptyPayload;
+import at.aau.payloads.PlayerMovePayload;
 import at.aau.values.Color;
+import at.aau.values.CommandType;
 import at.aau.values.GameState;
+import at.aau.values.ResponseType;
 
 public enum Game {
     INSTANCE;
@@ -23,10 +27,10 @@ public enum Game {
     private SortedSet<Player> players = new TreeSet<>();
     private GameState gameState = GameState.LOBBY;
     private Map<Player, Integer> playerPositions = new HashMap<>();
-    private Player currentPlayer;
     private int currentPlayerIndex = 0;
     public static final String TAG = "GAME_TAG";
     private Map<Player, Boolean> canMove = new HashMap<>();
+    private GameEventListener eventListener;
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
@@ -56,12 +60,12 @@ public enum Game {
         support.firePropertyChange(Property.GAME_STATE.name(), oldGameState, gameState);
     }
 
-    public void setCurrentPlayer(Player player) {
-        this.currentPlayer = player;
-    }
-
     public Player getCurrentPlayer() {
-        return currentPlayer;
+        if (players.isEmpty()) {
+            Log.e(TAG, "No players available.");
+            return null;
+        }
+        return players.stream().skip(currentPlayerIndex).findFirst().orElse(null);
     }
 
     public void setPlayerPosition(Player player, int position) {
@@ -74,62 +78,63 @@ public enum Game {
         return playerPositions.getOrDefault(player, -1); // Return -1 if no position set
     }
 
-    public int getCurrentPosition() {
-        return getPlayerPosition(getCurrentPlayer());
-    }
-    public void setCurrentPosition(int newPosition) {
-        if (getCurrentPlayer() != null) {
-            setPlayerPosition(getCurrentPlayer(), newPosition);
-        }
-    }
-
     public void nextPlayer() {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
         support.firePropertyChange("currentPlayer", null, getCurrentPlayer());
     }
 
-    private GameEventListener eventListener;
-    public void setGameEventListener (GameEventListener listener){
+    public void setGameEventListener(GameEventListener listener) {
         this.eventListener = listener;
     }
 
-
     public void movePlayer(int diceResult) {
         Player currentPlayer = getCurrentPlayer();
-        if (!canMove.getOrDefault(currentPlayer, false) && diceResult != 6) {
-            canMove.put(currentPlayer, true); //to remove when movement successfull
-            Log.i(TAG, "Player must roll a 6 to start moving!");
-            return; // Player must roll a 6 to start
+        if (currentPlayer == null) {
+            Log.e(TAG, "No current player found. Cannot move.");
+            return;
         }
 
-        if (diceResult == 6 && !canMove.get(currentPlayer)) {
+        boolean hasRolledSix = diceResult == 6;
+        boolean canStartMoving = canMove.getOrDefault(currentPlayer, false);
+
+       /* if (!canStartMoving && !hasRolledSix) {
+            canMove.put(currentPlayer, true); // can move nonetheless
+            Log.i(TAG, currentPlayer.name() + " must roll a 6 to start moving!");
+            return; // Spieler muss eine 6 würfeln, um zu beginnen
+        }
+
+        if (hasRolledSix && !canStartMoving) {
             canMove.put(currentPlayer, true);
-            Log.i(TAG, "Player rolled a 6 and can now move!");
-            return; // Allow the player to start moving from the next turn
-        }
-
+            Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(newPosition)));
+            Log.i(TAG, currentPlayer.name() + " rolled a 6 and can now move!");
+            return; // Erlaubt dem Spieler, ab dem nächsten Zug zu starten
+        }*/
         int currentPosition = getPlayerPosition(currentPlayer);
         int newPosition = currentPosition + diceResult;
-        playerPositions.put(currentPlayer, newPosition);
-        Log.i(TAG, "Player " + getCurrentPlayer() + " moved to position " + newPosition);
+        setPlayerPosition(currentPlayer, newPosition);
+
+        Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(newPosition)));
+        Log.i(TAG, "Player " + currentPlayer.name() + " moved to position " + newPosition);
         support.firePropertyChange("playerPosition", currentPosition, newPosition);
         eventListener.onPlayerPositionChanged(currentPlayer, currentPosition, newPosition);
     }
 
-
-
-    public void addPlayer(Player player) {
-        if (!players.contains(player)) {
-            Color color = Color.values()[players.size() % Color.values().length]; // Cycle through colors
-            Player coloredPlayer = new Player(player.name(), player.age(), color, player.characters());
-            players.add(coloredPlayer);
-            playerPositions.put(coloredPlayer, 0); // Start position for every player
-            canMove.put(coloredPlayer, false); // Initially, players can't move
+    public void addPlayers(List<at.aau.models.Player> playersList) {
+        for (at.aau.models.Player player : playersList) {
+            if (!players.contains(player)) {
+                Color color = Color.values()[players.size() % Color.values().length];
+                Player coloredPlayer = new Player(player.name(), player.age(), color, player.characters());
+                players.add(coloredPlayer);
+                playerPositions.put(coloredPlayer, 0);
+                canMove.put(coloredPlayer, false);
+                Log.i(TAG, "Added player: " + coloredPlayer.name());
+            }
         }
     }
 
     public void updatePlayer(Player oldPlayer, Player newPlayer) {
         if (players.contains(oldPlayer)) {
+            Log.i(TAG, newPlayer.name() + " updatePlayerMethod");
             players.remove(oldPlayer);
             players.add(newPlayer);
             playerPositions.put(newPlayer, playerPositions.get(oldPlayer)); // Alte Position beibehalten
@@ -137,8 +142,6 @@ public enum Game {
             support.firePropertyChange("players", oldPlayer, newPlayer); // Benachrichtigen der Listener
         }
     }
-
-
 
     enum Property {
         PLAYERS, GAME_STATE
