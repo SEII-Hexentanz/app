@@ -139,13 +139,6 @@ public enum Game {
         }
     }
 
-    /**
-     *
-     *mit all diesen Dateien, zeige mir Code dafür, wie ich
-     * a) zu Spielbeginn Server und Clientseitig die Startposition abfragen kann
-     * b) wenn der aktuelle Spieler eine 6 würfelt, soll eine Spielfigur auf das Spielbrett gebracht und angezeigt werden, und die Spieländerung an den Server geschickt werden
-     */
-
     private void updateCharacterState(com.example.frontend.Player player, int characterIndex, CharacterState newState) {
         com.example.frontend.Player updatedPlayer = player.updateCharacterState(characterIndex, newState);
         frontPlayer.remove(player);
