@@ -13,6 +13,7 @@ import java.util.TreeSet;
 
 import at.aau.models.Player;
 import at.aau.models.Request;
+import at.aau.models.Response;
 import at.aau.payloads.EmptyPayload;
 import at.aau.payloads.PlayerMovePayload;
 import at.aau.values.Color;
@@ -113,10 +114,18 @@ public enum Game {
         int newPosition = currentPosition + diceResult;
         setPlayerPosition(currentPlayer, newPosition);
 
-        Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(newPosition)));
-        Log.i(TAG, "Player " + currentPlayer.name() + " moved to position " + newPosition);
+        Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(currentPosition,newPosition,currentPlayer.name())));
+        Log.i(TAG, "Player " + currentPlayer.name() + " moved to position " + newPosition + " from " + currentPosition);
         support.firePropertyChange("playerPosition", currentPosition, newPosition);
         eventListener.onPlayerPositionChanged(currentPlayer, currentPosition, newPosition);
+        broadcastMove(currentPlayer, currentPosition, newPosition);
+    }
+
+    private void broadcastMove(Player player, int oldPosition, int newPosition) {
+        Response response = new Response(ResponseType.UPDATE_STATE, new PlayerMovePayload(oldPosition, newPosition, player.name()));
+        for (Player p : players) {
+            p.send(response);
+        }
     }
 
     public void addPlayers(List<at.aau.models.Player> playersList) {
