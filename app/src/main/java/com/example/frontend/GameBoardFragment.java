@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 
 
@@ -39,9 +41,10 @@ import java.util.SortedSet;
 import at.aau.models.Request;
 import at.aau.payloads.EmptyPayload;
 import at.aau.values.CommandType;
+import at.aau.values.GameState;
 
 
-public class GameBoardFragment extends Fragment {
+public class GameBoardFragment extends Fragment implements PropertyChangeListener {
     private Button diceBtn;
     private FragmentContainerView fragmentContainerView;
     private TextView usernameTxt, timerText;
@@ -172,7 +175,29 @@ public class GameBoardFragment extends Fragment {
         initalizePlayerHomePositions(Game.INSTANCE.players());
         getBoardContent(gameboardPositions);
 
+        if(Game.INSTANCE.isMyTurn()){
+            myTurn();
+        }
+
         return view;
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
+        Log.i("App", "PropertyChangeEvent received: " + propertyChangeEvent.getPropertyName());
+        if (propertyChangeEvent.getPropertyName().equals(Game.Property.MY_TURN.name())) {
+            myTurn();
+        }
+    }
+
+    public void myTurn(){
+        requireActivity().runOnUiThread(new Runnable() {
+            public void run() {
+                //set dice button enabled
+                diceBtn.setEnabled(true);
+                Toast.makeText(requireContext(), "It is your turn!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
@@ -203,6 +228,9 @@ public class GameBoardFragment extends Fragment {
             fragmentContainerView.setVisibility(View.VISIBLE);
 
             showDiceFragment();
+
+            Game.INSTANCE.endMyTurn();
+            diceBtn.setEnabled(false);
         });
     }
 

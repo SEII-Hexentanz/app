@@ -14,6 +14,8 @@ public enum Game {
     private SortedSet<com.example.frontend.Player> players = new TreeSet<>();
     private GameState gameState = GameState.LOBBY;
 
+    private boolean myTurn;
+
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
     }
@@ -42,7 +44,21 @@ public enum Game {
         support.firePropertyChange(Property.GAME_STATE.name(), oldGameState, gameState);
     }
 
+    public void setMyTurn(){
+        boolean oldMyTurn = myTurn;
+        myTurn = true;
+        support.firePropertyChange(Property.MY_TURN.name(), oldMyTurn, myTurn);
+    }
+
+    public boolean isMyTurn(){
+        return myTurn;
+    }
+
+    public void endMyTurn() {
+        myTurn = false;
+    }
+
     enum Property {
-        PLAYERS, GAME_STATE
+        PLAYERS, GAME_STATE, MY_TURN
     }
 }

@@ -2,6 +2,7 @@ package com.example.frontend.responseHandler;
 
 import com.example.frontend.Game;
 import com.example.frontend.actions.DefaultAction;
+import com.example.frontend.actions.DiceRolledAction;
 import com.example.frontend.actions.PongAction;
 import com.example.frontend.actions.UpdateStateAction;
 
@@ -20,6 +21,7 @@ public class ResponseHandler {
     private static final Map<ResponseType, Action> actions = new HashMap<>() {{
         put(ResponseType.PONG, new PongAction());
         put(ResponseType.UPDATE_STATE, new UpdateStateAction());
+        put(ResponseType.DICE_ROLLED, new DiceRolledAction());
 
 
     }};

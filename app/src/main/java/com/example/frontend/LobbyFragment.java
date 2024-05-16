@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -88,7 +89,7 @@ public class LobbyFragment extends Fragment implements PropertyChangeListener {
 
     private void onClickStart() {
         startGame.setOnClickListener(view -> {
-            Client.send(new Request(CommandType.START, new EmptyPayload()));
+            Client.send(new Request(CommandType.  START, new EmptyPayload()));
         });
 
         rulesBtn.setOnClickListener(v -> showRulesFragment());
