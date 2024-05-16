@@ -168,8 +168,10 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
         View view = inflater.inflate(R.layout.fragment_game_board, container, false);
 
         Game.INSTANCE.setGameEventListener(this);
+        Game.INSTANCE.initializePlayerPositions();
         findViews(view);
         initializeGameBoard(view);
+        mapStartPositions();
         setGameBoardUsername();
         onRollDiceClick();
 
@@ -333,7 +335,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
         }
     }
 
-    void mapStartPostions() {
+    void mapStartPositions() {
         mapStartingPoint = new HashMap<>();
         mapStartingPoint.put(at.aau.values.Color.YELLOW, 26);
         mapStartingPoint.put(at.aau.values.Color.PINK, 32);
@@ -343,7 +345,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
         mapStartingPoint.put(at.aau.values.Color.DARK_BLUE, 3);
     }
 
-    void mapGoalPositons() {
+    void mapGoalPositions() {
         mapGoalPoint = new HashMap<>();
         mapGoalPoint.put(at.aau.values.Color.YELLOW, 26);
         mapGoalPoint.put(at.aau.values.Color.PINK, 32);

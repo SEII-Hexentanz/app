@@ -79,6 +79,12 @@ public enum Game {
         return frontPlayer.stream().skip(currentPlayerIndex).findFirst().orElse(null);
     }
 
+    public void initializePlayerPositions() {
+        for (com.example.frontend.Player player : frontPlayer) {
+            playerPositions.put(player, 0);
+        }
+    }
+
     public void setPlayerPosition(com.example.frontend.Player player, int position) {
         Integer oldPosition = playerPositions.get(player);
         playerPositions.put(player, position);
@@ -86,7 +92,7 @@ public enum Game {
     }
 
     public int getPlayerPosition(com.example.frontend.Player player) {
-        return playerPositions.getOrDefault(player, -1); // Return -1 if no position set
+        return playerPositions.getOrDefault(player, 0); // Return -1 if no position set
     }
 
     public void nextPlayer() {
@@ -98,53 +104,80 @@ public enum Game {
         this.eventListener = listener;
     }
 
+    private void updateCharacterState(com.example.frontend.Player player, int characterIndex, CharacterState newState) {
+        if (player == null) {
+            Log.e(TAG, "Player object is null in updateCharacterState");
+            return;
+        }
+
+        if (newState == null) {
+            Log.e(TAG, "CharacterState is null in updateCharacterState");
+            return;
+        }
+
+        com.example.frontend.Player updatedPlayer = player.updateCharacterState(characterIndex, newState);
+        if (updatedPlayer == null) {
+            Log.e(TAG, "Updated player is null after calling updateCharacterState");
+            return;
+        }
+        frontPlayer.remove(player);
+        frontPlayer.add(updatedPlayer);
+        broadcastMove(updatedPlayer, playerPositions.get(player), playerPositions.get(updatedPlayer));
+    }
+
+    private void broadcastMove(com.example.frontend.Player player, int oldPosition, int newPosition) {
+        if (player == null) {
+            Log.e(TAG, "Player object is null in broadcastMove");
+            return;
+        }
+        Response response = new Response(ResponseType.UPDATE_STATE, new PlayerMovePayload(oldPosition, newPosition, player.getUsername()));
+        ResponseHandler.execute(response.responseType(),response.payload(),Game.INSTANCE);
+
+    }
+
     public void movePlayer(int diceResult) {
         com.example.frontend.Player currentPlayer = getCurrentPlayer();
         if (currentPlayer == null) {
             Log.e(TAG, "No current player found. Cannot move.");
             return;
         }
-
-        boolean hasRolledSix = diceResult == 6;
-        boolean canStartMoving = canMove.getOrDefault(currentPlayer, false);
-
-        if (!canStartMoving && !hasRolledSix) {
-            updateCharacterState(currentPlayer, currentPlayerIndex, CharacterState.HOME);
-            Log.i(TAG, currentPlayer.getUsername() + " must roll a 6 to start moving!");
-            return; // Spieler muss eine 6 würfeln, um zu beginnen
-        }
+        boolean hasAnotherTurn = false;
         int currentPosition = getPlayerPosition(currentPlayer);
-        int newPosition = currentPosition + diceResult;
-
-        if (hasRolledSix && !canStartMoving) {
-            canMove.put(currentPlayer, true);
-            updateCharacterState(currentPlayer, currentPlayerIndex, CharacterState.FIELD);
-            Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(currentPosition,newPosition,currentPlayer.getUsername())));
-            Log.i(TAG, currentPlayer.getUsername() + " rolled a 6 and can now move!");
-            nextPlayer();
-            return; // Erlaubt dem Spieler, ab dem nächsten Zug zu starten
+        Log.i(TAG,"CurrentPosition:" + currentPosition);
+        // Check if the player is at "Home" and the dice result allows moving out
+        if (currentPosition == 0) {
+            if (diceResult == 6) { // Assuming 6 is required to start
+                currentPosition = getStartingPosition(currentPlayer); // Get actual starting position for this player
+                setPlayerPosition(currentPlayer, currentPosition);
+                Log.i(TAG, "Player " + currentPlayer.getUsername() + " moves from Home to position " + currentPosition);
+                eventListener.onPlayerPositionChanged(currentPlayer, 0, currentPosition);
+                broadcastMove(currentPlayer, 0, currentPosition);
+                hasAnotherTurn = true; // Player gets another turn
+            } else {
+                Log.i(TAG, "Player " + currentPlayer.getUsername() + " needs a 6 to leave Home.");
+                return; // Player cannot move out of Home without rolling a 6
+            }
+        } else {
+            int newPosition = currentPosition + diceResult;
+            setPlayerPosition(currentPlayer, newPosition);
+            Log.i(TAG, "Player " + currentPlayer.getUsername() + " moved to position " + newPosition);
+            eventListener.onPlayerPositionChanged(currentPlayer, currentPosition, newPosition);
+            broadcastMove(currentPlayer, currentPosition, newPosition);
+            if (diceResult == 6) {
+                hasAnotherTurn = true; // Player gets another turn
+            }
         }
 
-        setPlayerPosition(currentPlayer, newPosition);
-        Log.i(TAG, "Player " + currentPlayer.getUsername() + " moved to position " + newPosition + " from " + currentPosition);
-        support.firePropertyChange("playerPosition", currentPosition, newPosition);
-        eventListener.onPlayerPositionChanged(currentPlayer, currentPosition, newPosition);
-        broadcastMove(currentPlayer, currentPosition, newPosition);
-    }
-
-    private void broadcastMove(com.example.frontend.Player player, int oldPosition, int newPosition) {
-        Response response = new Response(ResponseType.UPDATE_STATE, new PlayerMovePayload(oldPosition, newPosition, player.getUsername()));
-        for (Player p : players) {
-            ResponseHandler.execute(response.responseType(),response.payload(),Game.INSTANCE);
+        if (!hasAnotherTurn) {
+            nextPlayer(); // Move to the next player only if the current player does not get another turn
         }
     }
 
-    private void updateCharacterState(com.example.frontend.Player player, int characterIndex, CharacterState newState) {
-        com.example.frontend.Player updatedPlayer = player.updateCharacterState(characterIndex, newState);
-        frontPlayer.remove(player);
-        frontPlayer.add(updatedPlayer);
-        broadcastMove(updatedPlayer, playerPositions.get(player), playerPositions.get(updatedPlayer));
+    private int getStartingPosition(com.example.frontend.Player currentPlayer) {
+        return 1;
     }
+
+
 
     public void addPlayers(List<com.example.frontend.Player> playersList) {
         for (com.example.frontend.Player player : playersList) {
