@@ -260,7 +260,6 @@
         tools:layout_editor_absoluteY="245dp" />
 
     <ImageView
-        android:id="@+id/btnHomeRed4"
         android:layout_width="23dp"
         android:layout_height="22dp"
 
