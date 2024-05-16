@@ -474,13 +474,25 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
     }
     @Override
     public void onPlayerPositionChanged(com.example.frontend.Player player, int oldPosition, int newPosition) {
-        if (oldPosition >= 0 && oldPosition < gameboardPositions.size() && newPosition >= 0 && newPosition < gameboardPositions.size()) {
-            ImageView oldImageView = gameboardPositions.get(oldPosition);
-            ImageView newImageView = gameboardPositions.get(newPosition);
-            updateImageViews(oldImageView, newImageView, player);
-        } else {
-            Log.e(TAG, "Invalid position(s): oldPosition=" + oldPosition + ", newPosition=" + newPosition);
-        };
+        requireActivity().runOnUiThread(() -> {
+            if (oldPosition >= 0 && oldPosition < gameboardPositions.size() && newPosition >= 0 && newPosition < gameboardPositions.size()) {
+                ImageView oldImageView = gameboardPositions.get(oldPosition);
+                ImageView newImageView = gameboardPositions.get(newPosition);
+                updateImageViews(oldImageView, newImageView, player);
+            } else {
+                Log.e(TAG, "Invalid position(s): oldPosition=" + oldPosition + ", newPosition=" + newPosition);
+            }
+        });
+    }
+
+    private void updateImageViews(ImageView oldImageView, ImageView newImageView, com.example.frontend.Player player) {
+        int playerIcon = getPlayerIcon(player);
+        if (oldImageView != null) {
+            oldImageView.setImageDrawable(null); // clear old position
+        }
+        if (newImageView != null) {
+            newImageView.setImageResource(playerIcon); // set new position
+        }
     }
     private int getPlayerIcon(com.example.frontend.Player player) {
         // Return the drawable resource id based on player details
@@ -502,15 +514,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
         return -1; // default or error case
     }
 
-    private void updateImageViews(ImageView oldImageView, ImageView newImageView, com.example.frontend.Player player) {
-        int playerIcon = getPlayerIcon(player);
-        if (oldImageView != null) {
-            oldImageView.setImageDrawable(null); // clear old position
-        }
-        if (newImageView != null) {
-            newImageView.setImageResource(playerIcon); // set new position
-        }
-    }
+
 
 
     @Override

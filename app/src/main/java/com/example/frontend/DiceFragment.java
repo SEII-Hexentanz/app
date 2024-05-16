@@ -162,7 +162,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
                 diceThrown = true;
                 Game.INSTANCE.movePlayer(dice.getDice());
                 Client.send(new Request(CommandType.DICE_ROLL, new EmptyPayload()));
-                Log.i(TAG,"PLAYERMOVEMENT: " + dice.getDice());
+                Log.i(TAG,"DICE VALUE: " + dice.getDice());
 
             }
 
