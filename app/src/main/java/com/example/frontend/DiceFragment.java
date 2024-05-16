@@ -146,7 +146,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
                 updateDiceImage(diceImage, diceValue);
                 diceThrown = true;
                 // Send the dice roll result to the server
-                sendDiceRollResultToServer(diceValue);
+                sendDiceRollResultToServer();
             }
 
             lastX = x;
@@ -154,7 +154,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
             lastZ = z;
         }
     }
-    private void sendDiceRollResultToServer(int diceValue){
+    private void sendDiceRollResultToServer(){
           Client.send(new Request(CommandType.DICE_ROLL, new EmptyPayload()));
     }
 

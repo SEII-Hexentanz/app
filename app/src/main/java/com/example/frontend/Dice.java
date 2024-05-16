@@ -14,7 +14,8 @@ public class Dice {
     }
 
     public int useDice() {
-       return diceNumber = ran.nextInt(6) + 1;
+        diceNumber = ran.nextInt(6) + 1;
+        return diceNumber;
     }
 
     //is also sum of dice
@@ -23,7 +24,9 @@ public class Dice {
     }
 
 
-    public void setDice(int diceNumber){this.diceNumber=diceNumber;}
+    public void setDice(int diceNumber) {
+        this.diceNumber = diceNumber;
+    }
 
     public void setRan(SecureRandom ran) {
         this.ran = ran;
