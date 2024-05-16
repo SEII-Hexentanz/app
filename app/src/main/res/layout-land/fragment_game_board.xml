@@ -1036,7 +1036,7 @@
         android:layout_height="48dp"
         android:layout_marginStart="40dp"
         android:layout_marginBottom="52dp"
-todo        android:enabled="false"
+        android:enabled="false"
         android:text="@string/roll_dice"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/txtViewUsername"
