@@ -8,12 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.aau.models.Character;
-import at.aau.values.CharacterState;
 import at.aau.values.Color;
 
 public class PlayerTest {
-
-
 
     @Test
     public void testConstructor() {
@@ -45,6 +42,7 @@ public class PlayerTest {
         int newAge = 20;
         assertEquals(newAge, player.getAge());
     }
+
 
 
 }
