@@ -141,16 +141,21 @@ public class DiceFragment extends Fragment implements SensorEventListener {
             float speed = Math.abs(x + y + z - lastX - lastY - lastZ) / diffTime * 10000;
 
             if (speed > shakeThreshold) {
-                dice.useDice();
-                updateDiceImage(diceImage, dice.getDice());
+                //getDiceRollResult
+                int diceValue = dice.useDice();
+                updateDiceImage(diceImage, diceValue);
                 diceThrown = true;
-              //  Client.send(new Request(CommandType.DICE_ROLL, new EmptyPayload()));
+                // Send the dice roll result to the server
+                sendDiceRollResultToServer();
             }
 
             lastX = x;
             lastY = y;
             lastZ = z;
         }
+    }
+    private void sendDiceRollResultToServer(){
+          Client.send(new Request(CommandType.DICE_ROLL, new EmptyPayload()));
     }
 
     @Override
