@@ -23,7 +23,7 @@ public class PlayerTest {
         int imageResource = 123;
         List<Character> characters = new ArrayList<>(4);
         for (int i = 0; i < characters.size(); i++) {
-            characters.add(new Character(0, CharacterState.HOME));
+         //   characters.add(new Character(0, CharacterState.HOME));
         }
         Player player = new Player(username, age, characters, Color.RED);
 
