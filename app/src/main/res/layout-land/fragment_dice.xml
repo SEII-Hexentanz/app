@@ -34,13 +34,7 @@
             android:textSize="18sp"
             android:gravity="center" />
 
-        <Button
-            android:id="@+id/continueButtonDiceFragment"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="@string/continueButtonDiceFragment"
-            android:textSize="12sp" />
+
     </LinearLayout>
 
     <!-- Dice ImageView and Result Display -->
@@ -51,20 +45,26 @@
         android:layout_weight="2"
         android:padding="8dp">
 
+        <TextView
+            android:id="@+id/closeButton"
+            android:layout_width="63dp"
+            android:layout_height="76dp"
+            android:layout_gravity="end|top"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="X"
+            android:textColor="#FF0000"
+            android:textSize="18sp"
+            android:visibility="visible" />
+
         <ImageView
             android:id="@+id/diceImage"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:src="@drawable/inital_dice" />
 
-        <TextView
-            android:id="@+id/diceResult"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:textSize="24sp"
-            android:gravity="center" />
     </LinearLayout>
 
     <!-- Optional Fragment Container or Additional UI -->

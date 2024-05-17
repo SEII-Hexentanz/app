@@ -37,7 +37,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     private Dice dice;
     private ImageView diceImage;
     private Button continueButton, cheatButton;
-    private TextView diceResult, currentPlayerName;
+    private TextView diceResult, currentPlayerName, closeButton;
     private FragmentContainerView fragmentContainerView;
 
     private boolean isButtonLongPressed = false;
@@ -78,8 +78,8 @@ public class DiceFragment extends Fragment implements SensorEventListener {
 
         findViews(view);
         displayCurrentPlayer();
-        onContinueClick();
         onCheatingClick();
+        onCloseButtonClick();
 
         return view;
     }
@@ -99,11 +99,13 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         diceResult = view.findViewById(R.id.diceResult);
         fragmentContainerView = view.findViewById(R.id.fragmentContainerView2);
         currentPlayerName=view.findViewById(R.id.currentPlayer);
+        closeButton=view.findViewById(R.id.closeButton);
     }
 
-    private void onContinueClick() {
-        continueButton.setOnClickListener(view -> {
-            showGameBoardFragment();
+    private void onCloseButtonClick() {
+        closeButton.setOnClickListener(v -> {
+            diceImage.setVisibility(View.GONE);
+            closeButton.setVisibility(View.GONE);
         });
     }
 
@@ -157,19 +159,24 @@ public class DiceFragment extends Fragment implements SensorEventListener {
             float speed = Math.abs(x + y + z - lastX - lastY - lastZ) / diffTime * 10000;
 
             if (speed > shakeThreshold) {
-                dice.useDice();
-                updateDiceImage(diceImage, dice.getDice());
+                //getDiceRollResult
+                int diceValue = dice.useDice();
+                updateDiceImage(diceImage, diceValue);
                 diceThrown = true;
                 Game.INSTANCE.movePlayer(dice.getDice());
-                Client.send(new Request(CommandType.DICE_ROLL, new EmptyPayload()));
                 Log.i(TAG,"DICE VALUE: " + dice.getDice());
 
+                // Send the dice roll result to the server
+                sendDiceRollResultToServer();
             }
 
             lastX = x;
             lastY = y;
             lastZ = z;
         }
+    }
+    private void sendDiceRollResultToServer(){
+          Client.send(new Request(CommandType.DICE_ROLL, new EmptyPayload()));
     }
 
     private void displayCurrentPlayer() {
