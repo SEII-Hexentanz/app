@@ -38,6 +38,7 @@ public enum Game {
     public static final String TAG = "GAME_TAG";
     private Map<com.example.frontend.Player, Boolean> canMove = new HashMap<>();
     private GameEventListener eventListener;
+    private DiceFragment diceFragment;
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
@@ -153,6 +154,7 @@ public enum Game {
                 eventListener.onPlayerPositionChanged(currentPlayer, 0, currentPosition);
                 broadcastMove(currentPlayer, 0, currentPosition);
                 hasAnotherTurn = true; // Player gets another turn
+                //diceFragment.setDiceToDefault();
             } else {
                 Log.i(TAG, "Player " + currentPlayer.getUsername() + " needs a 6 to leave Home.");
                 return; // Player cannot move out of Home without rolling a 6

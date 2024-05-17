@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
@@ -140,7 +141,6 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
     private long remainingTime = MAX_TIMER_DURATION;
     private ArrayList<ImageView> gameboardPositions;
 
-
     public GameBoardFragment() {
         //leerer Konstruktor notwendig
     }
@@ -157,6 +157,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Game.INSTANCE.setGameEventListener(this);
         //Display Gameboard only in Landscape Mode
 
     }
@@ -287,6 +288,8 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
         btnYellowGoal2 = view.findViewById(R.id.btnGoalYellow2);
         btnYellowGoal3 = view.findViewById(R.id.btnGoalYellow3);
         btnYellowGoal4 = view.findViewById(R.id.btnGoalYellow4);
+
+
     }
 
     private void initalizePlayerHomePositions(SortedSet<com.example.frontend.Player> players) {
@@ -485,7 +488,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
         });
     }
 
-    private void updateImageViews(ImageView oldImageView, ImageView newImageView, com.example.frontend.Player player) {
+    public void updateImageViews(ImageView oldImageView, ImageView newImageView, com.example.frontend.Player player) {
         int playerIcon = getPlayerIcon(player);
         if (oldImageView != null) {
             oldImageView.setImageDrawable(null); // clear old position
@@ -513,8 +516,6 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
         }
         return -1; // default or error case
     }
-
-
 
 
     @Override

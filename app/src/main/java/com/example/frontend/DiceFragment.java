@@ -161,13 +161,13 @@ public class DiceFragment extends Fragment implements SensorEventListener {
             if (speed > shakeThreshold) {
                 //getDiceRollResult
                 int diceValue = dice.useDice();
-                updateDiceImage(diceImage, diceValue);
-                diceThrown = true;
                 Game.INSTANCE.movePlayer(dice.getDice());
+                updateDiceImage(diceImage, diceValue);
                 Log.i(TAG,"DICE VALUE: " + dice.getDice());
 
                 // Send the dice roll result to the server
                 sendDiceRollResultToServer();
+                diceThrown = true;
             }
 
             lastX = x;
@@ -231,8 +231,11 @@ public class DiceFragment extends Fragment implements SensorEventListener {
             default:
                 diceImage.setImageResource(R.drawable.inital_dice);
         }
-
     }
+    public void setDiceToDefault(){
+        diceImage.setImageResource(R.drawable.inital_dice);
+    }
+
 
     public String getUsernameFromPreferences() {
         if (getContext() == null) {
