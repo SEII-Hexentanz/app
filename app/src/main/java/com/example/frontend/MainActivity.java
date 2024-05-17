@@ -2,6 +2,7 @@ package com.example.frontend;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -30,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView inputAge;
     private View createLobbyFragment;
     View rootView;
-    private final Handler handler = new Handler(Looper.getMainLooper());
 
 
     @Override
@@ -53,18 +53,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setListeners() {
-        rootView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                hideKeyboard(v);
-                return false;
-            }
+        rootView.setOnTouchListener((v, event) -> {
+            hideKeyboard(v);
+            return false;
         });
-        btnStart.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                onClickStartButton();
-            }
-        });
+        btnStart.setOnClickListener(v -> onClickStartButton());
         inputUsername.addTextChangedListener(createUserNameTextWatcher());
         inputAge.addTextChangedListener(createAgeTextWatcher());
     }
