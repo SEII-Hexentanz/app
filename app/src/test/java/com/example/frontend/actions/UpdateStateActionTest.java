@@ -56,10 +56,10 @@ public class UpdateStateActionTest {
     public void execute_throwsException_whenPayloadIsNotUpdateStatePayload() {
         // Given
         Payload payload = Mockito.mock(Payload.class);
-        Game game = Mockito.mock(Game.class);
+        Game mockedGame = Mockito.mock(Game.class);
         // When
-        updateStateAction.execute(game, payload);
-        verify(game, never()).setGameState(any());
-        verify(game, never()).setPlayers(any());
+        updateStateAction.execute(mockedGame, payload);
+        verify(mockedGame, never()).setGameState(any());
+        verify(mockedGame, never()).setPlayers(any());
     }
 }

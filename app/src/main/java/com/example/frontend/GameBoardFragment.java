@@ -2,7 +2,6 @@
 package com.example.frontend;
 
 import android.content.pm.ActivityInfo;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -24,7 +23,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.SortedSet;
 
 
@@ -103,9 +101,12 @@ public class GameBoardFragment extends Fragment {
 
     private HashMap<at.aau.values.Color, Integer> mapGoalPoint;
 
-    private ScaleGestureDetector scaleGestureDetector;
 
     private ArrayList<ImageView> gameboardPositions;
+
+    private ArrayList<ImageView> playerHomePositions;
+
+    private ArrayList<ImageView> playerGoalPositions;
 
     public GameBoardFragment() {
         //leerer Konstruktor notwendig
@@ -153,9 +154,10 @@ public class GameBoardFragment extends Fragment {
         setGameBoardUsername();
         onRollDiceClick();
         initializeGameBoard(view);
+        initalizePlayerGoalPositons(view);
+        initalizePlayerHomePositions(view);
 
-        scaleGestureDetector = new ScaleGestureDetector(requireContext(), new ScaleListener());
-        initalizePlayerHomePositions(Game.INSTANCE.players());
+        setPlayerHomePositions(Game.INSTANCE.players());
         getBoardContent(gameboardPositions);
 
         return view;
@@ -258,7 +260,7 @@ public class GameBoardFragment extends Fragment {
         btnYellowGoal4 = view.findViewById(R.id.btnGoalYellow4);
     }
 
-    private void initalizePlayerHomePositions(SortedSet<Player> players) {
+    private void setPlayerHomePositions(SortedSet<Player> players) {
         for (Player player : players) {
             switch (player.color()) {
                 case YELLOW -> {
@@ -275,10 +277,10 @@ public class GameBoardFragment extends Fragment {
                     btnRosaHome4.setImageResource(R.drawable.playericon);
                 }
                 case RED -> {
-                    btnRosaHome1.setImageResource(R.drawable.playericon);
-                    btnRosaHome2.setImageResource(R.drawable.playericon);
-                    btnRosaHome3.setImageResource(R.drawable.playericon);
-                    btnRosaHome4.setImageResource(R.drawable.playericon);
+                    btnRedHome1.setImageResource(R.drawable.playericon);
+                    btnRedHome2.setImageResource(R.drawable.playericon);
+                    btnRedHome3.setImageResource(R.drawable.playericon);
+                    btnRedHome4.setImageResource(R.drawable.playericon);
                 }
 
                 case GREEN -> {
@@ -303,6 +305,51 @@ public class GameBoardFragment extends Fragment {
             }
         }
     }
+    private void setGoalPositions(SortedSet<Player> players) {
+        for (Player player : players) {
+            switch (player.color()) {
+                case YELLOW -> {
+                    btnYellowGoal1.setImageResource(R.drawable.playericon);
+                    btnYellowGoal2.setImageResource(R.drawable.playericon);
+                    btnYellowGoal3.setImageResource(R.drawable.playericon);
+                    btnYellowGoal4.setImageResource(R.drawable.playericon);
+                }
+
+                case PINK -> {
+                    btnRosaGoal1.setImageResource(R.drawable.playericon);
+                    btnRosaGoal2.setImageResource(R.drawable.playericon);
+                    btnRosaGoal3.setImageResource(R.drawable.playericon);
+                    btnRosaGoal4.setImageResource(R.drawable.playericon);
+                }
+                case RED -> {
+                    btnRedGoal1.setImageResource(R.drawable.playericon);
+                    btnRedGoal2.setImageResource(R.drawable.playericon);
+                    btnRedGoal3.setImageResource(R.drawable.playericon);
+                    btnRedGoal4.setImageResource(R.drawable.playericon);
+                }
+
+                case GREEN -> {
+                    btnGreenGoal1.setImageResource(R.drawable.playericon);
+                    btnGreenGoal2.setImageResource(R.drawable.playericon);
+                    btnGreenGoal3.setImageResource(R.drawable.playericon);
+                    btnGreenGoal4.setImageResource(R.drawable.playericon);
+                }
+                case LIGHT_BLUE -> {
+                    btnBlueGoal1.setImageResource(R.drawable.playericon);
+                    btnBlueGoal2.setImageResource(R.drawable.playericon);
+                    btnBlueGoal3.setImageResource(R.drawable.playericon);
+                    btnBlueGoal4.setImageResource(R.drawable.playericon);
+                }
+
+                case DARK_BLUE -> {
+                    btnLilaGoal1.setImageResource(R.drawable.playericon);
+                    btnLilaGoal2.setImageResource(R.drawable.playericon);
+                    btnLilaGoal3.setImageResource(R.drawable.playericon);
+                    btnLilaGoal4.setImageResource(R.drawable.playericon);
+                }
+            }
+        }
+    }
 
     void mapStartPostions() {
         mapStartingPoint = new HashMap<>();
@@ -322,6 +369,74 @@ public class GameBoardFragment extends Fragment {
         mapGoalPoint.put(at.aau.values.Color.GREEN, 20);
         mapGoalPoint.put(at.aau.values.Color.LIGHT_BLUE, 0);
         mapGoalPoint.put(at.aau.values.Color.DARK_BLUE, 29);
+    }
+
+    private void initalizePlayerHomePositions(View view) {
+        playerHomePositions = new ArrayList<>();
+        playerHomePositions.add(view.findViewById(R.id.btnHomeRosa1));
+        playerHomePositions.add(view.findViewById(R.id.btnHomeRosa2));
+        playerHomePositions.add(view.findViewById(R.id.btnHomeRosa3));
+        playerHomePositions.add(view.findViewById(R.id.btnHomeRosa4));
+
+        playerHomePositions.add(view.findViewById(R.id.btnHomeLila1));
+        playerHomePositions.add(view.findViewById(R.id.btnHomeLila2));
+        playerHomePositions.add(view.findViewById(R.id.btnHomeLila3));
+        playerHomePositions.add(view.findViewById(R.id.btnHomeLila4));
+
+        playerHomePositions.add(view.findViewById(R.id.btnHomeGreen1));
+        playerHomePositions.add(view.findViewById(R.id.btnHomeGreen2));
+        playerHomePositions.add(view.findViewById(R.id.btnHomeGreen3));
+        playerHomePositions.add(view.findViewById(R.id.btnHomeGreen4));
+
+        playerHomePositions.add(view.findViewById(R.id.btnHomeBlue1));
+        playerHomePositions.add(view.findViewById(R.id.btnHomeBlue2));
+        playerHomePositions.add(view.findViewById(R.id.btnHomeBlue3));
+        playerHomePositions.add(view.findViewById(R.id.btnHomeBlue4));
+
+        playerHomePositions.add(view.findViewById(R.id.btnHomeYellow1));
+        playerHomePositions.add(view.findViewById(R.id.btnHomeYellow1));
+        playerHomePositions.add(view.findViewById(R.id.btnHomeYellow1));
+        playerHomePositions.add(view.findViewById(R.id.btnHomeYellow1));
+
+        playerHomePositions.add(view.findViewById(R.id.btnHomeRed1));
+        playerHomePositions.add(view.findViewById(R.id.btnHomeRed2));
+        playerHomePositions.add(view.findViewById(R.id.btnHomeRed3));
+        playerHomePositions.add(view.findViewById(R.id.btnHomeRed4));
+    }
+
+    private void initalizePlayerGoalPositons(View view) {
+        playerGoalPositions = new ArrayList<>();
+
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalRosa1));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalRosa2));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalRosa3));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalRosa4));
+
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalLila1));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalLila2));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalLila3));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalLila4));
+
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalGreen1));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalGreen2));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalGreen3));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalGreen4));
+
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalBlue1));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalBlue2));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalBlue3));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalBlue4));
+
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalYellow1));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalYellow1));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalYellow1));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalYellow1));
+
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalRed1));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalRed2));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalRed3));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalRed4));
+
     }
 
     private void initializeGameBoard(View view) {
@@ -363,6 +478,10 @@ public class GameBoardFragment extends Fragment {
         gameboardPositions.add(view.findViewById(R.id.gameboardpos34));
         gameboardPositions.add(view.findViewById(R.id.gameboardpos35));
 
+        mapGoalPositons();
+        mapStartPostions();
+
+
     }
 
     private void getBoardContent(ArrayList<ImageView> list) {
@@ -395,7 +514,7 @@ public class GameBoardFragment extends Fragment {
     }
 
     private void pauseTimer() {
-        timeSwapBuff += millisecondsTime;
+        timeSwapBuff = timeSwapBuff + millisecondsTime;
         timerHandler.removeCallbacks(updateTimeRunnable);
     }
 
@@ -407,17 +526,6 @@ public class GameBoardFragment extends Fragment {
         fragmentTransaction.commit();
     }
 
-    private List<ImageView> findImageViewByID(int count) {
-        List<ImageView> imageViews = new ArrayList<>();
-        Resources res = getResources();
-        String packageName = requireContext().getPackageName();
-        for (int i = 1; i <= count; i++) {
-            int id = res.getIdentifier("gameboard" + i, "id", packageName);
-            ImageView imageView = requireView().findViewById(id);
-            imageViews.add(imageView);
-        }
-        return imageViews;
-    }
 
     private void showEndGameFragment() {
         EndGameFragment endGameFragment = new EndGameFragment();

@@ -28,7 +28,7 @@
             android:text="@string/continueButtonDiceFragment"
             android:textSize="10sp" />
 
-        <Button
+        <Buttont
             android:id="@+id/cheatButton"
             android:layout_width="100dp"
             android:layout_height="48dp"
