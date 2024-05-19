@@ -36,6 +36,7 @@ public class PlayerTest {
         assertEquals(newUsername, player.getUsername());
     }
 
+    // fixme this is testing the constructor no the setter
     @Test
     public void testSetAndGetAge() {
         Player player = new Player("Rolf", 20, null, Color.GREEN);
