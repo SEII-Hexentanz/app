@@ -13,6 +13,7 @@ import java.net.UnknownHostException;
 import at.aau.models.Request;
 import at.aau.models.Response;
 
+// fixme prefer instance methods over static methods, if static access is necessary use a singleton
 public class Client extends Thread {
     public static final String TAG = "Client";
     private static final String SERVER_ADDRESS = "10.0.2.2";

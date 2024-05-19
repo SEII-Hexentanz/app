@@ -35,6 +35,7 @@ public class GameBoardFragment extends Fragment {
     private ImageView gameBoard;
     private float mScaleFactor;
 
+    // fixme use arrays length=4 for the homes and goals
     private ImageView btnGreenHome1;
     private ImageView btnGreenHome2;
     private ImageView btnGreenHome3;
@@ -260,6 +261,7 @@ public class GameBoardFragment extends Fragment {
         btnYellowGoal4 = view.findViewById(R.id.btnGoalYellow4);
     }
 
+    // fixme iterate the corresponding array instead of 4 manual assignments
     private void setPlayerHomePositions(SortedSet<Player> players) {
         for (Player player : players) {
             switch (player.color()) {
@@ -305,6 +307,9 @@ public class GameBoardFragment extends Fragment {
             }
         }
     }
+
+    // fixme iterate the corresponding array
+    // fixme merge the setGoal and setHome, as you only have 1 switch case based on the color then
     private void setGoalPositions(SortedSet<Player> players) {
         for (Player player : players) {
             switch (player.color()) {
@@ -371,6 +376,7 @@ public class GameBoardFragment extends Fragment {
         mapGoalPoint.put(at.aau.values.Color.DARK_BLUE, 29);
     }
 
+    // fixme what is this method/variable doing? you have it also as individual variables
     private void initalizePlayerHomePositions(View view) {
         playerHomePositions = new ArrayList<>();
         playerHomePositions.add(view.findViewById(R.id.btnHomeRosa1));
@@ -404,6 +410,7 @@ public class GameBoardFragment extends Fragment {
         playerHomePositions.add(view.findViewById(R.id.btnHomeRed4));
     }
 
+    // fixme what is this method/variable doing? you have it also as individual variables
     private void initalizePlayerGoalPositons(View view) {
         playerGoalPositions = new ArrayList<>();
 
@@ -439,6 +446,7 @@ public class GameBoardFragment extends Fragment {
 
     }
 
+    // fixme iterate the R.ids with Resources::getIdentifier from this.getResources()
     private void initializeGameBoard(View view) {
         gameboardPositions = new ArrayList<>();
         gameboardPositions.add(view.findViewById(R.id.gameboardpos0));

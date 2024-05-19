@@ -30,6 +30,7 @@ public class ClientTest {
 
     @BeforeEach
     public void setUp() throws IOException {
+        // fixme dont introduce deprecated methods
         MockitoAnnotations.initMocks(this);
         when(mockSocket.getOutputStream()).thenReturn(mockOut);
         when(mockSocket.getInputStream()).thenReturn(mockIn);
