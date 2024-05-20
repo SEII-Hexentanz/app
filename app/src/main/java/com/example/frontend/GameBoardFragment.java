@@ -54,6 +54,7 @@ import at.aau.models.Player;
 import at.aau.models.Request;
 import at.aau.payloads.EmptyPayload;
 import at.aau.values.CommandType;
+import at.aau.values.GameState;
 
 
 public class GameBoardFragment extends Fragment implements GameEventListener {
@@ -127,7 +128,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
     private ImageView btnYellowGoal3;
     private ImageView btnYellowGoal4;
 
-    private HashMap<at.aau.values.Color, Integer> mapStartingPoint;
+
 
     private HashMap<at.aau.values.Color, Integer> mapGoalPoint;
 
@@ -167,19 +168,17 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_game_board, container, false);
-
+        Game.INSTANCE.mapStartPositions();
         Game.INSTANCE.setGameEventListener(this);
         Game.INSTANCE.initializePlayerPositions();
         findViews(view);
         initializeGameBoard(view);
-        mapStartPositions();
         setGameBoardUsername();
         onRollDiceClick();
 
         scaleGestureDetector = new ScaleGestureDetector(requireContext(), new ScaleListener());
         initalizePlayerHomePositions(Game.INSTANCE.FrontPlayer());
         getBoardContent(gameboardPositions);
-
         return view;
     }
 
@@ -338,15 +337,6 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
         }
     }
 
-    void mapStartPositions() {
-        mapStartingPoint = new HashMap<>();
-        mapStartingPoint.put(at.aau.values.Color.YELLOW, 26);
-        mapStartingPoint.put(at.aau.values.Color.PINK, 32);
-        mapStartingPoint.put(at.aau.values.Color.RED, 6);
-        mapStartingPoint.put(at.aau.values.Color.GREEN, 20);
-        mapStartingPoint.put(at.aau.values.Color.LIGHT_BLUE, 9);
-        mapStartingPoint.put(at.aau.values.Color.DARK_BLUE, 3);
-    }
 
     void mapGoalPositions() {
         mapGoalPoint = new HashMap<>();

@@ -47,7 +47,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     private final static float shakeThreshold = 10;
     private long lastUpdate = 0;
     private float lastX, lastY, lastZ;
-    private boolean diceThrown = false;
+    private boolean diceThrown;
 
     public DiceFragment() {
         //typical factory method constructor
@@ -68,6 +68,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT); // Lichtsensor hinzufügen
         sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
         sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        this.diceThrown=false;
         dice = new Dice();
     }
 
@@ -182,7 +183,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     private void displayCurrentPlayer() {
         String name = getUsernameFromPreferences();
         if (name != null) {
-            currentPlayerName.setText(name);
+            currentPlayerName.setText(name+ "can roll the dice!");
         } else {
             currentPlayerName.setText("No player found");
         }

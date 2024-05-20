@@ -39,6 +39,7 @@ public enum Game {
     private Map<com.example.frontend.Player, Boolean> canMove = new HashMap<>();
     private GameEventListener eventListener;
     private DiceFragment diceFragment;
+    HashMap<at.aau.values.Color, Integer> mapStartingPoint= new HashMap<>();;
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
@@ -79,10 +80,23 @@ public enum Game {
         }
         return frontPlayer.stream().skip(currentPlayerIndex).findFirst().orElse(null);
     }
+    public void mapStartPositions() {
+        mapStartingPoint.put(at.aau.values.Color.YELLOW, 26);
+        mapStartingPoint.put(at.aau.values.Color.PINK, 32);
+        mapStartingPoint.put(at.aau.values.Color.RED, 6);
+        mapStartingPoint.put(at.aau.values.Color.GREEN, 20);
+        mapStartingPoint.put(at.aau.values.Color.LIGHT_BLUE, 9);
+        mapStartingPoint.put(at.aau.values.Color.DARK_BLUE, 3);
+    }
 
     public void initializePlayerPositions() {
         for (com.example.frontend.Player player : frontPlayer) {
-            playerPositions.put(player, 0);
+            Integer startPosition = mapStartingPoint.get(player.color());
+            if (startPosition != null) {
+                playerPositions.put(player, startPosition);
+            } else {
+                playerPositions.put(player, 0); // Default to position 0 if color not found
+            }
         }
     }
 
@@ -143,12 +157,13 @@ public enum Game {
             return;
         }
         boolean hasAnotherTurn = false;
+        int newPosition=0;
         int currentPosition = getPlayerPosition(currentPlayer);
-        Log.i(TAG,"CurrentPosition:" + currentPosition);
+        Log.i(TAG,"CurrentPosition: " + currentPosition);
         // Check if the player is at "Home" and the dice result allows moving out
-        if (currentPosition == 0) {
+        if (currentPosition == getPlayerPosition(currentPlayer)) {
             if (diceResult == 6) { // Assuming 6 is required to start
-                currentPosition = getStartingPosition(currentPlayer); // Get actual starting position for this player
+                currentPosition = mapStartingPoint.get(currentPlayer.color());
                 setPlayerPosition(currentPlayer, currentPosition);
                 Log.i(TAG, "Player " + currentPlayer.getUsername() + " moves from Home to position " + currentPosition);
                 eventListener.onPlayerPositionChanged(currentPlayer, 0, currentPosition);
@@ -156,14 +171,15 @@ public enum Game {
                 hasAnotherTurn = true; // Player gets another turn
                 //diceFragment.setDiceToDefault();
             } else {
-                Log.i(TAG, "Player " + currentPlayer.getUsername() + " needs a 6 to leave Home.");
+                Log.i(TAG, "Player " + currentPlayer.getUsername() + " needs a 6 to leave Home. His color is" + currentPlayer.color());
                 return; // Player cannot move out of Home without rolling a 6
             }
         } else {
-            int newPosition = currentPosition + diceResult;
+            newPosition = currentPosition + diceResult;
             setPlayerPosition(currentPlayer, newPosition);
             Log.i(TAG, "Player " + currentPlayer.getUsername() + " moved to position " + newPosition);
             eventListener.onPlayerPositionChanged(currentPlayer, currentPosition, newPosition);
+            Client.send(new Request(CommandType.PLAYER_MOVE,new PlayerMovePayload(currentPosition,newPosition, currentPlayer.getUsername())));
             broadcastMove(currentPlayer, currentPosition, newPosition);
             if (diceResult == 6) {
                 hasAnotherTurn = true; // Player gets another turn
@@ -173,13 +189,8 @@ public enum Game {
         if (!hasAnotherTurn) {
             nextPlayer(); // Move to the next player only if the current player does not get another turn
         }
+
     }
-
-    private int getStartingPosition(com.example.frontend.Player currentPlayer) {
-        return 1;
-    }
-
-
 
     public void addPlayers(List<com.example.frontend.Player> playersList) {
         for (com.example.frontend.Player player : playersList) {
@@ -203,6 +214,7 @@ public enum Game {
             canMove.put(newPlayer, canMove.getOrDefault(oldPlayer, false)); // Bewegungsstatus beibehalten
             support.firePropertyChange("players", oldPlayer, newPlayer); // Benachrichtigen der Listener
         }
+
     }
 
     enum Property {

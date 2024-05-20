@@ -88,7 +88,6 @@ public class LobbyFragment extends Fragment implements PropertyChangeListener {
     private void onClickStart() {
         startGame.setOnClickListener(view -> {
             assignColorsToPlayers(Game.INSTANCE.FrontPlayer());
-            Game.INSTANCE.initializePlayerPositions();
             Game.INSTANCE.setGameState(GameState.RUNNING);
             Client.send(new Request(CommandType.START, new EmptyPayload()));
             showGameBoardFragment();
