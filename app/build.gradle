@@ -81,13 +81,13 @@ dependencies {
     implementation libs.legacy.support.v4
     implementation libs.lifecycle.livedata.ktx
     implementation libs.lifecycle.viewmodel.ktx
+    implementation libs.media3.common
     testImplementation libs.junit.jupiter
     testRuntimeOnly libs.junit.jupiter.engine
     testImplementation libs.mockito.core
     testImplementation libs.mockito.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
-
 
     //implementation libs.okhttp
     //testImplementation libs.junit.jupiter.api

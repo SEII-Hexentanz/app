@@ -15,7 +15,7 @@
               </deviceKey>
             </Target>
           </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-04-28T18:37:21.470774389Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-05-17T20:51:30.860330754Z" />
         </State>
       </entry>
       <entry key="app">
@@ -26,12 +26,12 @@
               <deviceKey>
                 <Key>
                   <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\anton\.android\avd\Pixel_3a_API_34_extension_level_7_x86_64.avd" />
+                  <value value="$USER_HOME$/.android/avd/Medium_Phone_API_33.avd" />
                 </Key>
               </deviceKey>
             </Target>
           </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-04-25T06:23:27.158362800Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-05-17T20:30:53.155019796Z" />
         </State>
       </entry>
     </value>

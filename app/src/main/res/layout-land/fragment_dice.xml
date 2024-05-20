@@ -1,54 +1,78 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dice"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingStart="23dp"
-    android:paddingEnd="10dp"
-    android:paddingBottom="10dp">
+    android:orientation="horizontal"
+    android:padding="16dp">
 
-    <ImageView
-        android:id="@+id/diceImage"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:src="@drawable/inital_dice" />
-
+    <!-- Buttons and Player TextView Container -->
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:padding="8dp">
 
         <Button
-            android:id="@+id/continueButtonDiceFragment"
-            android:layout_width="100dp"
-            android:layout_height="48dp"
-            android:layout_marginBottom="5dp"
-            android:text="@string/continueButtonDiceFragment"
-            android:textSize="10sp" />
-
-        <Buttont
             android:id="@+id/cheatButton"
-            android:layout_width="100dp"
-            android:layout_height="48dp"
-            android:layout_marginBottom="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:text="@string/cheatButton"
-            android:textSize="10sp"
-            android:alpha="0.3" />
+            android:textSize="12sp"
+            android:alpha="0.3"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/currentPlayer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/currPlayer"
+            android:textSize="18sp"
+            android:gravity="center" />
+
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/diceResult"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="24sp" />
+    <!-- Dice ImageView and Result Display -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="2"
+        android:padding="8dp">
 
+        <TextView
+            android:id="@+id/closeButton"
+            android:layout_width="63dp"
+            android:layout_height="76dp"
+            android:layout_gravity="end|top"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="X"
+            android:textColor="#FF0000"
+            android:textSize="18sp"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/diceImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/inital_dice" />
+
+    </LinearLayout>
+
+    <!-- Optional Fragment Container or Additional UI -->
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView2"
         android:name="com.example.frontend.LobbyFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
         android:visibility="gone" />
 </LinearLayout>

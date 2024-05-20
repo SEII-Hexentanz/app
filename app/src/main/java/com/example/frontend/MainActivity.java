@@ -2,6 +2,7 @@ package com.example.frontend;
 
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
@@ -133,8 +134,23 @@ public class MainActivity extends AppCompatActivity {
         return age >= 8 && age <= 99;
     }
 
-    public void showCreateLobbyFragment() {
+    public String getUserName(){
         String name = inputUsername.getText().toString();
+        return name;
+    }
+    public void saveUsernameToPreferences() {
+        String name = getUserName();
+        SharedPreferences sharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("username", name);
+        editor.apply();
+    }
+
+
+
+    public void showCreateLobbyFragment() {
+        String name = getUserName();
+        saveUsernameToPreferences();
 
         CreateLobbyFragment createLobbyFragment = CreateLobbyFragment.newInstance(name);
 
