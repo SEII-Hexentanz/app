@@ -42,9 +42,9 @@ public class DiceFragment extends Fragment implements SensorEventListener {
 
     private boolean isButtonLongPressed = false;
     private boolean isSensorCovered = false;
-    private final static float lightSensorThreshold = 10.0f; // Schwellenwert für den Lichtsensor
+    private final static float LIGHT_SENSOR_THRESHOLD = 10.0f; // Schwellenwert für den Lichtsensor
 
-    private final static float shakeThreshold = 10;
+    private final static float SHAKE_THRESHOLD = 10;
     private long lastUpdate = 0;
     private float lastX, lastY, lastZ;
     private boolean diceThrown;
@@ -97,7 +97,6 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         diceImage = view.findViewById(R.id.diceImage);
         continueButton = view.findViewById(R.id.continueButtonDiceFragment);
         cheatButton = view.findViewById(R.id.cheatButton);
-        diceResult = view.findViewById(R.id.diceResult);
         fragmentContainerView = view.findViewById(R.id.fragmentContainerView2);
         currentPlayerName=view.findViewById(R.id.currentPlayer);
         closeButton=view.findViewById(R.id.closeButton);
@@ -140,7 +139,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
             float lightValue = event.values[0];
-            isSensorCovered = lightValue < lightSensorThreshold;
+            isSensorCovered = lightValue < LIGHT_SENSOR_THRESHOLD;
             checkAndPerformCheat();
         } else if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER && !diceThrown) {
             processAccelerometerInput(event);
@@ -159,7 +158,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
 
             float speed = Math.abs(x + y + z - lastX - lastY - lastZ) / diffTime * 10000;
 
-            if (speed > shakeThreshold) {
+            if (speed > SHAKE_THRESHOLD) {
                 //getDiceRollResult
                 int diceValue = dice.useDice();
                 Game.INSTANCE.movePlayer(dice.getDice());
