@@ -512,11 +512,19 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
 
     }
 
+    public ArrayList<ImageView> getGameboardPositions() {
+        return gameboardPositions;
+    }
+
+    public void setGameboardPositions(ArrayList<ImageView> gameboardPositions) {
+        this.gameboardPositions = gameboardPositions;
+    }
+
     private void getBoardContent(ArrayList<ImageView> list) {
         Log.i(TAG, "Board Content: " + String.valueOf(list.size()));
     }
 
-    /*private Runnable updateTimeRunnable = new Runnable() {
+    private Runnable updateTimeRunnable = new Runnable() {
         public void run() {
             long elapsedRealtime = SystemClock.elapsedRealtime();
             remainingTime -= elapsedRealtime - startTime;
@@ -546,7 +554,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
         timerHandler.removeCallbacks(updateTimeRunnable);
         long elapsedRealtime = SystemClock.elapsedRealtime();
         remainingTime -= elapsedRealtime - startTime;
-    }*/
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

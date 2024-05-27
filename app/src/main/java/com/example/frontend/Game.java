@@ -177,6 +177,9 @@ public enum Game {
         } else {
             newPosition = currentPosition + diceResult;
             setPlayerPosition(currentPlayer, newPosition);
+            /*
+            TODO: add implementation that uses set/getGameBoardPosition for updating players position on Board
+             */
             Log.i(TAG, "Player " + currentPlayer.getUsername() + " moved to position " + newPosition);
             eventListener.onPlayerPositionChanged(currentPlayer, currentPosition, newPosition);
             Client.send(new Request(CommandType.PLAYER_MOVE,new PlayerMovePayload(currentPosition,newPosition, currentPlayer.getUsername())));
