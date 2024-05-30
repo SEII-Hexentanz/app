@@ -21,8 +21,8 @@ dependencyResolutionManagement {
 
             url = uri("https://maven.pkg.github.com/SEII-Hexentanz/server")
             credentials {
-                username = System.getenv("USERNAME_GITHUB")
-                password = System.getenv("TOKEN_GITHUB")
+                username = System.getenv("melly0102")
+                password = System.getenv("BRINGmeTHEhorizon99")
             }
         }
     }

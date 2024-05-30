@@ -39,11 +39,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 
 
 import android.view.ScaleGestureDetector;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,12 +54,13 @@ import java.util.SortedSet;
 
 import at.aau.models.Player;
 import at.aau.models.Request;
+import at.aau.payloads.DicePayload;
 import at.aau.payloads.EmptyPayload;
 import at.aau.values.CommandType;
 import at.aau.values.GameState;
 
 
-public class GameBoardFragment extends Fragment implements GameEventListener {
+public class GameBoardFragment extends Fragment implements GameEventListener, PropertyChangeListener {
     public static final String TAG = "GAMEBOARD_FRAGMENT_TAG"; //helps to find it
     private Button diceBtn;
     private TextView usernameTxt, timerText;
@@ -144,7 +148,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
     private ArrayList<ImageView> playerGoalPositions;
 
     public GameBoardFragment() {
-        //leerer Konstruktor notwendig
+        Game.INSTANCE.addPropertyChangeListener(this);
     }
 
 
@@ -222,6 +226,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
 
     private void onRollDiceClick() {
         diceBtn.setOnClickListener(view -> {
+
             showDiceFragment();
         });
     }
@@ -563,6 +568,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
     }
 
     private void showDiceFragment() {
+
         DiceFragment diceFragment = new DiceFragment();
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -647,6 +653,36 @@ public class GameBoardFragment extends Fragment implements GameEventListener {
         // Reset screen orientation to portrait when GameBoardFragment is paused
         requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         //pauseTimer();
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
+        Log.i("GameBoard", "PropertyChangeEvent received: " + propertyChangeEvent.getPropertyName());
+        if (!isAdded()) {
+            // Fragment is not attached, skip this event
+            return;
+        }
+        if (propertyChangeEvent.getPropertyName().equals(Game.Property.MOVE_CHARACTER.name())) {
+            int diceValue = (int) propertyChangeEvent.getNewValue();
+            requireActivity().runOnUiThread(() -> {yourTurn(diceValue);});
+        } else if (propertyChangeEvent.getPropertyName().equals(Game.Property.DICE_ROLLED.name())) {
+            DicePayload payload = (DicePayload) propertyChangeEvent.getNewValue();
+            requireActivity().runOnUiThread(() -> {diceRolled(payload);});
+        }
+    }
+
+    private void yourTurn(int diceValue) {
+        if (isAdded()) {
+            Toast.makeText(requireContext(), "Your turn", Toast.LENGTH_SHORT).show();
+            Log.i("App", "your turn");
+        }
+    }
+
+    private void diceRolled(DicePayload payload) {
+        if (isAdded()) {
+            Toast.makeText(requireContext(), "Player" + payload.player() + " has rolled " + payload.diceValue(), Toast.LENGTH_SHORT).show();
+            Log.i("App", payload.player() + ": " + payload.diceValue());
+        }
     }
 
 }
