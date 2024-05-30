@@ -13,10 +13,10 @@ public class Dice {
         ran = new SecureRandom();
     }
 
-    public int useDice() {
+   /* public int useDice() {
         diceNumber = ran.nextInt(6) + 1;
         return diceNumber;
-    }
+    }*/
 
     //is also sum of dice
     public int getDice() {

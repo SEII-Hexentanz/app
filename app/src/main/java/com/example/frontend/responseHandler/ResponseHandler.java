@@ -3,6 +3,7 @@ package com.example.frontend.responseHandler;
 import com.example.frontend.Game;
 import com.example.frontend.actions.BadRequestAction;
 import com.example.frontend.actions.DefaultAction;
+import com.example.frontend.actions.DiceRolledAction;
 import com.example.frontend.actions.PongAction;
 import com.example.frontend.actions.UpdateStateAction;
 
@@ -22,8 +23,7 @@ public class ResponseHandler {
         put(ResponseType.PONG, new PongAction());
         put(ResponseType.UPDATE_STATE, new UpdateStateAction());
         put(ResponseType.BAD_REQUEST, new BadRequestAction());
-
-
+        put(ResponseType.DICE_ROLLED, new DiceRolledAction());
     }};
 
     public static void execute(ResponseType responseType, Payload payload, Game game) {
