@@ -168,13 +168,11 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
             if (speed > SHAKE_THRESHOLD) {
                 //getDiceRollResult
 
-
-                Game.INSTANCE.movePlayer(dice.getDice());
-                Log.i(TAG,"DICE VALUE: " + dice.getDice());
-
-                // Send the dice roll result to the server
-                sendDiceRollResultToServer();
-                diceThrown = true;
+                if(!diceThrown){
+                    // Send the dice roll result to the server
+                    sendDiceRollRequestToServer();
+                    diceThrown = true;
+                }
             }
 
             lastX = x;
@@ -182,7 +180,7 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
             lastZ = z;
         }
     }
-    private void sendDiceRollResultToServer(){
+    private void sendDiceRollRequestToServer(){
           Client.send(new Request(CommandType.DICE_ROLL, new EmptyPayload()));
     }
 
@@ -272,30 +270,19 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
         if (propertyChangeEvent.getPropertyName().equals(Game.Property.MOVE_CHARACTER.name())) {
             int diceValue = (int) propertyChangeEvent.getNewValue();
             requireActivity().runOnUiThread(() -> {
-                yourTurn(diceValue);
-            });
-        } else if (propertyChangeEvent.getPropertyName().equals(Game.Property.DICE_ROLLED.name())) {
-            DicePayload payload = (DicePayload) propertyChangeEvent.getNewValue();
-            requireActivity().runOnUiThread(() -> {
-                diceRolled(payload);
+                diceRolledResult(diceValue);
             });
         }
     }
 
 
-        private void yourTurn(int diceValue) {
+        private void diceRolledResult(int diceValue) {
             if (isAdded()) {
-                Toast.makeText(requireContext(), "Dice roll result: " + diceValue, Toast.LENGTH_SHORT).show();
                 updateDiceImage(diceImage, diceValue);
 
-                Log.i("DiceFragment", "dice roll ");
-            }
-        }
+                Game.INSTANCE.movePlayer(diceValue);
 
-        private void diceRolled(DicePayload payload) {
-            if (isAdded()) {
-                Toast.makeText(requireContext(), "Player" + payload.player() + " has rolled " + payload.diceValue(), Toast.LENGTH_SHORT).show();
-                Log.i("DiceFragment", payload.player() + ": " + payload.diceValue());
+                Log.i("DiceFragment", "dice roll ");
             }
         }
     }

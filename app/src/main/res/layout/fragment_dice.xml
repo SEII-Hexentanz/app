@@ -44,8 +44,24 @@
             android:layout_weight="1"
             android:text="@string/cheatButton"
             android:textSize="20sp" />
+        <!-- Dice ImageView and Result Display -->
 
-    </LinearLayout>
+
+            <TextView
+                android:id="@+id/closeButton"
+                android:layout_width="63dp"
+                android:layout_height="76dp"
+                android:layout_gravity="end|top"
+                android:background="?android:attr/selectableItemBackground"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="X"
+                android:textColor="#FF0000"
+                android:textSize="18sp"
+                android:visibility="visible" />
+
+
+        </LinearLayout>
 <LinearLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -59,12 +75,15 @@
         tools:layout_editor_absoluteX="120dp"
         tools:layout_editor_absoluteY="200dp" />
 
+
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentDice"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:visibility="visible" />
+
 </LinearLayout>
 
 

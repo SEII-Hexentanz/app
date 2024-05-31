@@ -65,6 +65,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     private Button diceBtn;
     private TextView usernameTxt, timerText;
     private CountDownTimer countDownTimer;
+    private FragmentContainerView diceFragment;
 
     private ImageView gameBoard;
     private float mScaleFactor;
@@ -226,9 +227,14 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
 
     private void onRollDiceClick() {
         diceBtn.setOnClickListener(view -> {
-
+            diceFragment.setVisibility(View.VISIBLE);
             showDiceFragment();
+            diceBtn.setEnabled(false);
         });
+    }
+    
+    private void yourTurn(){
+        diceBtn.setEnabled(true);
     }
 
     private void findViews(View view) {
@@ -236,6 +242,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         usernameTxt = view.findViewById(R.id.txtViewUsername);
         timerText = view.findViewById(R.id.timerTextView);
         gameBoard = view.findViewById(R.id.gridLayoutGameBoard);
+        diceFragment = view.findViewById(R.id.fragmentContainerDice);
 
         btnGreenHome1 = view.findViewById(R.id.btnHomeGreen1);
         btnGreenHome2 = view.findViewById(R.id.btnHomeGreen2);
@@ -664,16 +671,17 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         }
         if (propertyChangeEvent.getPropertyName().equals(Game.Property.MOVE_CHARACTER.name())) {
             int diceValue = (int) propertyChangeEvent.getNewValue();
-            requireActivity().runOnUiThread(() -> {yourTurn(diceValue);});
+            requireActivity().runOnUiThread(() -> {
+                diceRolled(diceValue);});
         } else if (propertyChangeEvent.getPropertyName().equals(Game.Property.DICE_ROLLED.name())) {
             DicePayload payload = (DicePayload) propertyChangeEvent.getNewValue();
             requireActivity().runOnUiThread(() -> {diceRolled(payload);});
         }
     }
 
-    private void yourTurn(int diceValue) {
+    private void diceRolled(int diceValue) {
         if (isAdded()) {
-            Toast.makeText(requireContext(), "Your turn", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Your dice has been rolled", Toast.LENGTH_SHORT).show();
             Log.i("App", "your turn");
         }
     }
@@ -684,5 +692,4 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
             Log.i("App", payload.player() + ": " + payload.diceValue());
         }
     }
-
 }
