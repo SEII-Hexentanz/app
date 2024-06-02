@@ -15,7 +15,6 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerDice"
-        android:name="com.example.frontend.DiceFragment"
         android:layout_width="994dp"
         android:layout_height="874dp"
         android:visibility="gone"
@@ -1041,9 +1040,9 @@
         android:layout_height="48dp"
         android:layout_marginStart="40dp"
         android:layout_marginBottom="52dp"
+        android:enabled="false"
         android:text="@string/roll_dice"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

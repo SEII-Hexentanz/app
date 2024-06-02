@@ -3,6 +3,7 @@ package com.example.frontend;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -21,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
@@ -56,6 +58,7 @@ import at.aau.models.Player;
 import at.aau.models.Request;
 import at.aau.payloads.DicePayload;
 import at.aau.payloads.EmptyPayload;
+import at.aau.payloads.PlayerMovePayload;
 import at.aau.values.CommandType;
 import at.aau.values.GameState;
 
@@ -166,7 +169,6 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         super.onCreate(savedInstanceState);
         Game.INSTANCE.setGameEventListener(this);
         //Display Gameboard only in Landscape Mode
-
     }
 
     @Override
@@ -189,7 +191,18 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
 
         setPlayerHomePositions(Game.INSTANCE.players());
         getBoardContent(gameboardPositions);
+
         return view;
+    }
+
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if(Game.INSTANCE.isMyTurn()){
+            yourTurn();
+        }
     }
 
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
@@ -234,7 +247,9 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     }
     
     private void yourTurn(){
-        diceBtn.setEnabled(true);
+        if(diceBtn != null) {
+            diceBtn.setEnabled(true);
+        }
     }
 
     private void findViews(View view) {
@@ -311,6 +326,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
 
     private void setPlayerHomePositions(SortedSet<Player> players) {
         for (Player player : players) {
+            Log.i("GameBoardFragment", "Set PlayerHomePositions");
             switch (player.color()) {
                 case YELLOW -> {
                     btnYellowHome1.setImageResource(R.drawable.playericon);
@@ -676,14 +692,52 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         } else if (propertyChangeEvent.getPropertyName().equals(Game.Property.DICE_ROLLED.name())) {
             DicePayload payload = (DicePayload) propertyChangeEvent.getNewValue();
             requireActivity().runOnUiThread(() -> {diceRolled(payload);});
+        } else if(propertyChangeEvent.getPropertyName().equals(Game.Property.YOUR_TURN.name())){
+            yourTurn();
         }
     }
 
     private void diceRolled(int diceValue) {
         if (isAdded()) {
+            if(diceValue == 6){
+                showDialoge();
+            }
             Toast.makeText(requireContext(), "Your dice has been rolled", Toast.LENGTH_SHORT).show();
-            Log.i("App", "your turn");
         }
+    }
+
+    private void showDialoge() {
+        Dialog dialog = new Dialog(requireActivity());
+        dialog.setContentView(R.layout.dialog_layout);
+
+        Button moveToStartBtn = dialog.findViewById(R.id.moveToStart);
+        Button revealWitchBtn = dialog.findViewById(R.id.revealCharcter);
+        Button moveOnFieldBtn = dialog.findViewById(R.id.moveOnField);
+
+        moveOnFieldBtn.setOnClickListener(v -> {
+           // Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload()));
+            dialog.dismiss();
+            Log.i("App", "Move Command  will be sent now");
+        });
+        revealWitchBtn.setOnClickListener(v -> {
+            revealWitchFunct();
+            dialog.dismiss();
+            Log.i("App", "RevealWitch Request will be sent now + move request will be sent then");
+        });
+
+        moveToStartBtn.setOnClickListener(v -> {
+            //send request to server
+       //     Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload()));
+
+            dialog.dismiss();
+            Log.i("App", "MoveToStart Request will be sent now");
+        });
+
+        dialog.show();
+    }
+
+    private void revealWitchFunct() {
+        Log.i("App", "Reveal Witch Function");
     }
 
     private void diceRolled(DicePayload payload) {

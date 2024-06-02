@@ -40,6 +40,8 @@ public enum Game {
     private Map<com.example.frontend.Player, Boolean> canMove = new HashMap<>();
     private GameEventListener eventListener;
     private DiceFragment diceFragment;
+
+    private Boolean myTurn = false;
     HashMap<at.aau.values.Color, Integer> mapStartingPoint= new HashMap<>();;
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -154,8 +156,8 @@ public enum Game {
             Log.e(TAG, "Player object is null in broadcastMove");
             return;
         }
-     //   Response response = new Response(ResponseType.UPDATE_STATE, new PlayerMovePayload(oldPosition, newPosition, player.getUsername()));
-     //   ResponseHandler.execute(response.responseType(),response.payload(),Game.INSTANCE);
+         //Response response = new Response(ResponseType.UPDATE_STATE, new PlayerMovePayload(oldPosition, newPosition, player.getUsername()));
+        //ResponseHandler.execute(response.responseType(),response.payload(),Game.INSTANCE);
 
     }
 
@@ -226,7 +228,20 @@ public enum Game {
 
     }
 
+    public void setMyTurn(){
+        myTurn = true;
+        support.firePropertyChange(Property.YOUR_TURN.name(), false, true);
+    }
+
+    public void resetMyTurn(){
+        myTurn = false;
+    }
+
+    public boolean isMyTurn() {
+        return myTurn;
+    }
+
     enum Property {
-        PLAYERS, GAME_STATE, DICE_ROLLED, MOVE_CHARACTER
+        PLAYERS, GAME_STATE, DICE_ROLLED, MOVE_CHARACTER, YOUR_TURN
     }
 }

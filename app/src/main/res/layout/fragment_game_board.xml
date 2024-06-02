@@ -930,6 +930,7 @@
         android:layout_width="101dp"
         android:layout_height="42dp"
         android:layout_marginBottom="48dp"
+        android:enabled="false"
         android:text="@string/roll"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/txtViewUsername"
