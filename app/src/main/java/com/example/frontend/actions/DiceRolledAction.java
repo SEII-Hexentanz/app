@@ -18,7 +18,7 @@ public class DiceRolledAction implements Action {
 
             Log.i("App", "Player " + player.name() + " has rolled " + diceValue);
 
-            game.diceRollAction((DicePayload) payload, game.getCurrentPlayer());
+            game.diceRolledAction((DicePayload) payload, game.getCurrentPlayer());
         } else Log.e("App", "Payload is not an instance of DicePayload");
     }
 }
