@@ -668,7 +668,6 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     }
 
     private void showDiceFragment() {
-
         DiceFragment diceFragment = new DiceFragment();
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -700,15 +699,17 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     }
 
     public void updateImageViews(ImageView oldImageView, ImageView newImageView, com.example.frontend.Player player) {
-        int playerIcon = getPlayerIcon(player);
+        // int playerIcon = getPlayerIcon(player);
+
         if (oldImageView != null) {
             oldImageView.setImageDrawable(null); // clear old position
         }
         if (newImageView != null) {
-            newImageView.setImageResource(playerIcon); // set new position
+            //set defaultPlayerIcon because the color of the witch should not matter if part of reveal!
+            newImageView.setImageResource(R.drawable.playericon); // set new position
         }
     }
-
+    //used for reveal witch!
     private int getPlayerIcon(com.example.frontend.Player player) {
         // Return the drawable resource id based on player details
         switch (player.color()) {
@@ -780,14 +781,15 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     }
 
     private void diceRolled(int diceValue) {
-        if (isAdded()) {
+        if (!isAdded()) {
+            Toast.makeText(requireContext(), "Your dice cannot be rolled", Toast.LENGTH_SHORT).show();
+        } else {
             if (diceValue == 6) {
                 showDialoge();
             }
             Toast.makeText(requireContext(), "Your dice has been rolled", Toast.LENGTH_SHORT).show();
         }
     }
-
     private void showDialoge() {
         Dialog dialog = new Dialog(requireActivity());
         dialog.setContentView(R.layout.dialog_layout);

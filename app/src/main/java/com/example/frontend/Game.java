@@ -2,8 +2,6 @@ package com.example.frontend;
 
 import android.util.Log;
 
-import com.example.frontend.responseHandler.ResponseHandler;
-
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.HashMap;
@@ -13,19 +11,10 @@ import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import at.aau.models.Player;
-import at.aau.models.Request;
-import at.aau.models.Response;
 import at.aau.payloads.DicePayload;
-import at.aau.payloads.EmptyPayload;
-import at.aau.payloads.PlayerMovePayload;
-import at.aau.payloads.RegisterPayload;
-import at.aau.payloads.UpdateStatePayload;
 import at.aau.values.CharacterState;
 import at.aau.values.Color;
-import at.aau.values.CommandType;
 import at.aau.values.GameState;
-import at.aau.values.ResponseType;
 
 public enum Game {
     INSTANCE;
@@ -76,7 +65,7 @@ public enum Game {
         support.firePropertyChange(Property.GAME_STATE.name(), oldGameState, gameState);
     }
 
-    public void diceRollAction(DicePayload payload, com.example.frontend.Player currentPlayer){
+    public void diceRolledAction(DicePayload payload, com.example.frontend.Player currentPlayer){
         if(payload.player().name().equals(currentPlayer.getUsername())){
             support.firePropertyChange(Property.MOVE_CHARACTER.name(), 0, payload.diceValue());
         }else {
@@ -92,10 +81,10 @@ public enum Game {
         return frontPlayer.stream().skip(currentPlayerIndex).findFirst().orElse(null);
     }
     public void mapStartPositions() {
-        mapStartingPoint.put(at.aau.values.Color.YELLOW, 26);
-        mapStartingPoint.put(at.aau.values.Color.PINK, 32);
-        mapStartingPoint.put(at.aau.values.Color.RED, 6);
-        mapStartingPoint.put(at.aau.values.Color.GREEN, 20);
+        mapStartingPoint.put(at.aau.values.Color.YELLOW, 27);
+        mapStartingPoint.put(at.aau.values.Color.PINK, 33);
+        mapStartingPoint.put(at.aau.values.Color.RED, 15);
+        mapStartingPoint.put(at.aau.values.Color.GREEN, 21);
         mapStartingPoint.put(at.aau.values.Color.LIGHT_BLUE, 9);
         mapStartingPoint.put(at.aau.values.Color.DARK_BLUE, 3);
     }

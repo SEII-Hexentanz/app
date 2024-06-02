@@ -12,11 +12,11 @@ public class Dice {
         diceNumber = 0;
         ran = new SecureRandom();
     }
-
-   /* public int useDice() {
+    //for testing purposes on client-side
+    public int useDice() {
         diceNumber = ran.nextInt(6) + 1;
         return diceNumber;
-    }*/
+    }
 
     //is also sum of dice
     public int getDice() {
