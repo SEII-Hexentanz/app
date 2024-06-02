@@ -1,8 +1,6 @@
 
 package com.example.frontend;
 
-import static android.content.Context.MODE_PRIVATE;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,12 +8,10 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ScaleGestureDetector;
 import android.view.View;
-import android.view.ScaleGestureDetector;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -23,44 +19,30 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 
-import android.os.CountDownTimer;
-
-import android.os.Handler;
-import android.os.SystemClock;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 
 
-import android.view.ScaleGestureDetector;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 import java.util.SortedSet;
 
-import at.aau.models.Player;
+
+import at.aau.models.Character;
 import at.aau.models.Request;
 import at.aau.payloads.DicePayload;
-import at.aau.payloads.EmptyPayload;
 import at.aau.payloads.PlayerMovePayload;
+import at.aau.values.CharacterState;
 import at.aau.values.CommandType;
-import at.aau.values.GameState;
 
 
 public class GameBoardFragment extends Fragment implements GameEventListener, PropertyChangeListener {
@@ -136,14 +118,13 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     private ImageView btnYellowGoal4;
 
 
-
     private HashMap<at.aau.values.Color, Integer> mapGoalPoint;
     private ScaleGestureDetector scaleGestureDetector;
     private long startTime = 0L;
     private Handler timerHandler = new Handler();
     private long millisecondsTime = 0L;
     private long timeSwapBuff = 0L;
-    private final long MAX_TIMER_DURATION = 15*60*1000; //1min=60_000 // 15 minutes
+    private final long MAX_TIMER_DURATION = 15 * 60 * 1000; //1min=60_000 // 15 minutes
     private long remainingTime = MAX_TIMER_DURATION;
     private ArrayList<ImageView> gameboardPositions;
 
@@ -189,7 +170,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         initalizePlayerGoalPositons(view);
         initalizePlayerHomePositions(view);
 
-        setPlayerHomePositions(Game.INSTANCE.players());
+        setPlayerHomePositions(Game.INSTANCE.FrontPlayer());
         getBoardContent(gameboardPositions);
 
         return view;
@@ -200,7 +181,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if(Game.INSTANCE.isMyTurn()){
+        if (Game.INSTANCE.isMyTurn()) {
             yourTurn();
         }
     }
@@ -225,14 +206,12 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     }
 
 
-
     private void setGameBoardUsername() {
         if (usernameTxt != null) { // Add null check for safety
             String name = getUsernameFromPreferences();
             usernameTxt.setText(name);
-            Log.i(TAG, "USERNAME: "+ name);
-        }
-        else {
+            Log.i(TAG, "USERNAME: " + name);
+        } else {
             Log.e(TAG, "usernameTxt is not initialized");
         }
     }
@@ -245,9 +224,9 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
             diceBtn.setEnabled(false);
         });
     }
-    
-    private void yourTurn(){
-        if(diceBtn != null) {
+
+    private void yourTurn() {
+        if (diceBtn != null) {
             diceBtn.setEnabled(true);
         }
     }
@@ -329,47 +308,145 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
             Log.i("GameBoardFragment", "Set PlayerHomePositions");
             switch (player.color()) {
                 case YELLOW -> {
+                    Character[] characters = getCharacters(player);
+
                     btnYellowHome1.setImageResource(R.drawable.playericon);
                     btnYellowHome2.setImageResource(R.drawable.playericon);
                     btnYellowHome3.setImageResource(R.drawable.playericon);
                     btnYellowHome4.setImageResource(R.drawable.playericon);
+
+                    btnYellowHome1.setOnClickListener(v -> {
+                        moveToStartCharacter(characters[0]);
+                    });
+                    btnYellowHome2.setOnClickListener(v -> {
+                        moveToStartCharacter(characters[1]);
+                    });
+                    btnYellowHome3.setOnClickListener(v -> {
+                        moveToStartCharacter(characters[2]);
+                    });
+                    btnYellowHome4.setOnClickListener(v -> {
+                        moveToStartCharacter(characters[3]);
+                    });
                 }
 
                 case PINK -> {
+                       Character[] characters = getCharacters(player);
+
                     btnRosaHome1.setImageResource(R.drawable.playericon);
                     btnRosaHome2.setImageResource(R.drawable.playericon);
                     btnRosaHome3.setImageResource(R.drawable.playericon);
                     btnRosaHome4.setImageResource(R.drawable.playericon);
+
+                  btnRosaHome1.setOnClickListener(v -> {
+                        moveToStartCharacter(characters[0]);});
+                    btnRosaHome2.setOnClickListener(v -> {
+                        moveToStartCharacter(characters[1]);});
+                    btnRosaHome3.setOnClickListener(v -> {
+                        moveToStartCharacter(characters[2]);});
+                    btnRosaHome4.setOnClickListener(v -> {
+                        moveToStartCharacter(characters[3]);});
+
+
                 }
                 case RED -> {
+                    Character[] characters = getCharacters(player);
+
                     btnRedHome1.setImageResource(R.drawable.playericon);
                     btnRedHome2.setImageResource(R.drawable.playericon);
                     btnRedHome3.setImageResource(R.drawable.playericon);
                     btnRedHome4.setImageResource(R.drawable.playericon);
+
+                    btnRedHome1.setOnClickListener(v -> {
+                        moveToStartCharacter(characters[0]);});
+                    btnRedHome2.setOnClickListener(v -> {
+                        moveToStartCharacter(characters[1]);});
+                    btnRedHome3.setOnClickListener(v -> {
+                        moveToStartCharacter(characters[2]);});
+                    btnRedHome4.setOnClickListener(v -> {
+                        moveToStartCharacter(characters[3]);});
                 }
 
                 case GREEN -> {
+                    Character[] characters = getCharacters(player);
+
                     btnGreenHome1.setImageResource(R.drawable.playericon);
                     btnGreenHome2.setImageResource(R.drawable.playericon);
                     btnGreenHome3.setImageResource(R.drawable.playericon);
                     btnGreenHome4.setImageResource(R.drawable.playericon);
+
+                    btnGreenHome1.setOnClickListener(v -> {
+                        moveToStartCharacter(characters[0]);});
+                    btnGreenHome2.setOnClickListener(v -> {
+                        moveToStartCharacter(characters[1]);});
+                    btnGreenHome3.setOnClickListener(v -> {
+                        moveToStartCharacter(characters[2]);});
+                    btnGreenHome4.setOnClickListener(v -> {
+                        moveToStartCharacter(characters[3]);});
                 }
                 case LIGHT_BLUE -> {
+                    Character[] characters = getCharacters(player);
+
                     btnBlueHome1.setImageResource(R.drawable.playericon);
                     btnBlueHome2.setImageResource(R.drawable.playericon);
                     btnBlueHome3.setImageResource(R.drawable.playericon);
                     btnBlueHome4.setImageResource(R.drawable.playericon);
+
+                    btnBlueHome1.setOnClickListener(v -> {
+                        moveToStartCharacter(characters[0]);});
+                    btnBlueHome2.setOnClickListener(v -> {
+                        moveToStartCharacter(characters[1]);});
+                    btnBlueHome3.setOnClickListener(v -> {
+                        moveToStartCharacter(characters[2]);});
+                    btnBlueHome4.setOnClickListener(v -> {
+                        moveToStartCharacter(characters[3]);});
                 }
 
                 case DARK_BLUE -> {
+                    Character[] characters = getCharacters(player);
+
                     btnLilaHome1.setImageResource(R.drawable.playericon);
                     btnLilaHome2.setImageResource(R.drawable.playericon);
                     btnLilaHome3.setImageResource(R.drawable.playericon);
                     btnLilaHome4.setImageResource(R.drawable.playericon);
+
+                    btnLilaHome1.setOnClickListener(v -> {
+                        moveToStartCharacter(characters[0]);});
+                    btnLilaHome2.setOnClickListener(v -> {
+                        moveToStartCharacter(characters[1]);});
+                    btnLilaHome3.setOnClickListener(v -> {
+                        moveToStartCharacter(characters[2]);});
+                    btnLilaHome4.setOnClickListener(v -> {
+                        moveToStartCharacter(characters[3]);});
                 }
             }
         }
     }
+
+    private void moveToStartCharacter(Character c) {
+
+        if (gameboardPositions.isEmpty()) {
+            throw new NullPointerException("Gameboard is not initalized yet.");
+        } else {
+
+            if (c.status().equals(CharacterState.HOME)) {
+                Log.i("App", "Character " + c.id() + " is currently in HOME");
+            } else if (c.status().equals(CharacterState.FIELD)) {
+                Log.i("App", "Character " + c.id() + " is currently on the field");
+            } else if (c.status().equals(CharacterState.GOAL)) {
+                Log.i("App", "Character " + c.id() + " is currently in GOAL");
+            }
+        }
+    }
+
+    private Character[] getCharacters(Player player) {
+        if (player.characters != null) {
+            List<Character> characterList = player.characters;
+            return characterList.toArray(new Character[0]);
+        }
+
+        return new Character[0];
+    }
+
     private void setGoalPositions(SortedSet<Player> players) {
         for (Player player : players) {
             switch (player.color()) {
@@ -608,6 +685,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
     @Override
     public void onPlayerPositionChanged(com.example.frontend.Player player, int oldPosition, int newPosition) {
         requireActivity().runOnUiThread(() -> {
@@ -630,6 +708,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
             newImageView.setImageResource(playerIcon); // set new position
         }
     }
+
     private int getPlayerIcon(com.example.frontend.Player player) {
         // Return the drawable resource id based on player details
         switch (player.color()) {
@@ -688,18 +767,21 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         if (propertyChangeEvent.getPropertyName().equals(Game.Property.MOVE_CHARACTER.name())) {
             int diceValue = (int) propertyChangeEvent.getNewValue();
             requireActivity().runOnUiThread(() -> {
-                diceRolled(diceValue);});
+                diceRolled(diceValue);
+            });
         } else if (propertyChangeEvent.getPropertyName().equals(Game.Property.DICE_ROLLED.name())) {
             DicePayload payload = (DicePayload) propertyChangeEvent.getNewValue();
-            requireActivity().runOnUiThread(() -> {diceRolled(payload);});
-        } else if(propertyChangeEvent.getPropertyName().equals(Game.Property.YOUR_TURN.name())){
+            requireActivity().runOnUiThread(() -> {
+                diceRolled(payload);
+            });
+        } else if (propertyChangeEvent.getPropertyName().equals(Game.Property.YOUR_TURN.name())) {
             yourTurn();
         }
     }
 
     private void diceRolled(int diceValue) {
         if (isAdded()) {
-            if(diceValue == 6){
+            if (diceValue == 6) {
                 showDialoge();
             }
             Toast.makeText(requireContext(), "Your dice has been rolled", Toast.LENGTH_SHORT).show();
@@ -715,7 +797,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         Button moveOnFieldBtn = dialog.findViewById(R.id.moveOnField);
 
         moveOnFieldBtn.setOnClickListener(v -> {
-           // Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload()));
+            // Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload()));
             dialog.dismiss();
             Log.i("App", "Move Command  will be sent now");
         });
@@ -727,7 +809,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
 
         moveToStartBtn.setOnClickListener(v -> {
             //send request to server
-       //     Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload()));
+            //Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload()));
 
             dialog.dismiss();
             Log.i("App", "MoveToStart Request will be sent now");
