@@ -119,7 +119,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     private ImageView btnYellowGoal4;
 
 
-    private HashMap<at.aau.values.Color, Integer> mapGoalPoint;
+    HashMap<at.aau.values.Color, Integer> mapGoalPoint;
     private ScaleGestureDetector scaleGestureDetector;
     private long startTime = 0L;
     private Handler timerHandler = new Handler();
@@ -536,6 +536,92 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         playerHomePositions.add(view.findViewById(R.id.btnHomeRed2));
         playerHomePositions.add(view.findViewById(R.id.btnHomeRed3));
         playerHomePositions.add(view.findViewById(R.id.btnHomeRed4));
+    }
+
+    private void initalizePlayerGoalPositions(View view) {
+        playerGoalPositions = new ArrayList<>();
+
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalGreen1));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalGreen2));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalGreen3));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalGreen4));
+
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalLila1));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalLila2));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalLila3));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalLila4));
+
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalYellow1));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalYellow2));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalYellow3));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalYellow4));
+
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalRosa1));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalRosa2));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalRosa3));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalRosa4));
+
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalBlue1));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalBlue2));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalBlue3));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalBlue4));
+
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalRed1));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalRed2));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalRed3));
+        playerGoalPositions.add(view.findViewById(R.id.btnGoalRed4));
+    }
+
+    public void moveFigureToGoal(String color, int diceValue) {
+        List<ImageView> homeViews = new ArrayList<>();
+        List<ImageView> goalViews = new ArrayList<>();
+
+        switch (color.toLowerCase()) {
+            case "green":
+                homeViews = playerHomePositions.subList(0, 4);
+                goalViews = playerGoalPositions.subList(0, 4);
+                break;
+            case "lila":
+                homeViews = playerHomePositions.subList(4, 8);
+                goalViews = playerGoalPositions.subList(4, 8);
+                break;
+            case "yellow":
+                homeViews = playerHomePositions.subList(8, 12);
+                goalViews = playerGoalPositions.subList(8, 12);
+                break;
+            case "rosa":
+                homeViews = playerHomePositions.subList(12, 16);
+                goalViews = playerGoalPositions.subList(12, 16);
+                break;
+            case "blue":
+                homeViews = playerHomePositions.subList(16, 20);
+                goalViews = playerGoalPositions.subList(16, 20);
+                break;
+            case "red":
+                homeViews = playerHomePositions.subList(20, 24);
+                goalViews = playerGoalPositions.subList(20, 24);
+                break;
+        }
+
+        for (int i = 0; i < homeViews.size(); i++) {
+            ImageView homeView = homeViews.get(i);
+            ImageView goalView = goalViews.get(i);
+
+            if (homeView.getVisibility() == View.VISIBLE) {
+                int homePosition = getHomePosition(homeView);
+                if (homePosition <= 6 && diceValue >= homePosition) {
+                    homeView.setVisibility(View.INVISIBLE);
+                    goalView.setVisibility(View.VISIBLE);
+                    Toast.makeText(getActivity(), "Figure moved to goal!", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+            }
+        }
+    }
+
+    private int getHomePosition(ImageView homeView) {
+        String homeId = getResources().getResourceEntryName(homeView.getId());
+        return Integer.parseInt(homeId.replaceAll("\\D", ""));
     }
 
     private void initalizePlayerGoalPositons(View view) {

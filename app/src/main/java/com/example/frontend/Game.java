@@ -176,14 +176,17 @@ public enum Game {
             }
         } else {
             newPosition = currentPosition + diceResult;
-            setPlayerPosition(currentPlayer, newPosition);
-            /*
-            TODO: add implementation that uses set/getGameBoardPosition for updating players position on Board
-             */
-            Log.i(TAG, "Player " + currentPlayer.getUsername() + " moved to position " + newPosition);
-            eventListener.onPlayerPositionChanged(currentPlayer, currentPosition, newPosition);
-       //     Client.send(new Request(CommandType.PLAYER_MOVE,new PlayerMovePayload(currentPosition,newPosition, currentPlayer.getUsername())));
-            broadcastMove(currentPlayer, currentPosition, newPosition);
+            //check if goal is in sight
+            GameBoardFragment gameBoardFragment = (GameBoardFragment) eventListener;
+            if (currentPosition + diceResult > gameBoardFragment.mapGoalPoint.get(currentPlayer.color()) - 6) {
+                gameBoardFragment.moveFigureToGoal(currentPlayer.color().name().toLowerCase(), diceResult);
+            } else {
+                setPlayerPosition(currentPlayer, newPosition);
+                Log.i(TAG, "Player " + currentPlayer.getUsername() + " moved to position " + newPosition);
+                eventListener.onPlayerPositionChanged(currentPlayer, currentPosition, newPosition);
+                broadcastMove(currentPlayer, currentPosition, newPosition);
+            }
+
             if (diceResult == 6) {
                 hasAnotherTurn = true; // Player gets another turn
             }
