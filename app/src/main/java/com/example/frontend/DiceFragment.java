@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
@@ -22,14 +23,18 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import at.aau.models.Player;
 import at.aau.models.Request;
+import at.aau.payloads.DicePayload;
 import at.aau.payloads.EmptyPayload;
 import at.aau.payloads.PlayerMovePayload;
 import at.aau.payloads.RegisterPayload;
 import at.aau.values.CommandType;
 
-public class DiceFragment extends Fragment implements SensorEventListener {
+public class DiceFragment extends Fragment implements SensorEventListener, PropertyChangeListener {
     public static final String TAG = "DICE_FRAGMENT_TAG";
     private SensorManager sensorManager;
     private Sensor lightSensor;
@@ -50,10 +55,11 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     private boolean diceThrown;
 
     public DiceFragment() {
-        //typical factory method constructor
+        Game.INSTANCE.addPropertyChangeListener(this);
+
     }
 
-    public static DiceFragment newInstance() {
+    public static DiceFragment newInstance(int diceValue) {
         DiceFragment diceFragment = new DiceFragment();
         Bundle args = new Bundle();
         diceFragment.setArguments(args);
@@ -63,6 +69,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         sensorManager = (SensorManager) requireActivity().getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT); // Lichtsensor hinzufügen
@@ -160,14 +167,12 @@ public class DiceFragment extends Fragment implements SensorEventListener {
 
             if (speed > SHAKE_THRESHOLD) {
                 //getDiceRollResult
-                int diceValue = dice.useDice();
-                Game.INSTANCE.movePlayer(dice.getDice());
-                updateDiceImage(diceImage, diceValue);
-                Log.i(TAG,"DICE VALUE: " + dice.getDice());
 
-                // Send the dice roll result to the server
-                sendDiceRollResultToServer();
-                diceThrown = true;
+                if(!diceThrown){
+                    // Send the dice roll result to the server
+                    sendDiceRollRequestToServer();
+                    diceThrown = true;
+                }
             }
 
             lastX = x;
@@ -175,7 +180,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
             lastZ = z;
         }
     }
-    private void sendDiceRollResultToServer(){
+    private void sendDiceRollRequestToServer(){
           Client.send(new Request(CommandType.DICE_ROLL, new EmptyPayload()));
     }
 
@@ -207,7 +212,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Not needed for this example
     }
-
+//
     private void updateDiceImage(ImageView diceImage, int diceValue) {
         switch (diceValue) {
             case 1:
@@ -255,4 +260,30 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
-}
+    @Override
+    public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
+        Log.i("DiceFragment", "PropertyChangeEvent received: " + propertyChangeEvent.getPropertyName());
+        if (!isAdded()) {
+            // Fragment is not attached, skip this event
+            return;
+        }
+        if (propertyChangeEvent.getPropertyName().equals(Game.Property.MOVE_CHARACTER.name())) {
+            int diceValue = (int) propertyChangeEvent.getNewValue();
+            requireActivity().runOnUiThread(() -> {
+                diceRolledResult(diceValue);
+            });
+        }
+    }
+
+
+        private void diceRolledResult(int diceValue) {
+            if (isAdded()) {
+                updateDiceImage(diceImage, diceValue);
+
+                Game.INSTANCE.movePlayer(diceValue);
+                Game.INSTANCE.resetMyTurn();
+
+                Log.i("DiceFragment", "dice roll ");
+            }
+        }
+    }

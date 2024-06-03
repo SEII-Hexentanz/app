@@ -76,9 +76,9 @@ public class Player implements Comparable<Player> {
     }
 
     public Player updateCharacterState(int characterIndex, CharacterState newState) {
-        Character updatedCharacter = new Character(characters.get(characterIndex).position(), newState);
+   //     Character updatedCharacter = new Character(characters.get(characterIndex).position(), newState);
         List<Character> updatedCharacters = new ArrayList<>(characters);
-        updatedCharacters.set(characterIndex, updatedCharacter);
+      //  updatedCharacters.set(characterIndex, updatedCharacter);
         return new Player(username, age, updatedCharacters, color);
     }
 

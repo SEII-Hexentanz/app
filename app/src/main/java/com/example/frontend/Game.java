@@ -2,8 +2,6 @@ package com.example.frontend;
 
 import android.util.Log;
 
-import com.example.frontend.responseHandler.ResponseHandler;
-
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.HashMap;
@@ -13,18 +11,10 @@ import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import at.aau.models.Player;
-import at.aau.models.Request;
-import at.aau.models.Response;
-import at.aau.payloads.EmptyPayload;
-import at.aau.payloads.PlayerMovePayload;
-import at.aau.payloads.RegisterPayload;
-import at.aau.payloads.UpdateStatePayload;
+import at.aau.payloads.DicePayload;
 import at.aau.values.CharacterState;
 import at.aau.values.Color;
-import at.aau.values.CommandType;
 import at.aau.values.GameState;
-import at.aau.values.ResponseType;
 
 public enum Game {
     INSTANCE;
@@ -39,6 +29,8 @@ public enum Game {
     private Map<com.example.frontend.Player, Boolean> canMove = new HashMap<>();
     private GameEventListener eventListener;
     private DiceFragment diceFragment;
+
+    private Boolean myTurn = false;
     HashMap<at.aau.values.Color, Integer> mapStartingPoint= new HashMap<>();;
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -73,6 +65,14 @@ public enum Game {
         support.firePropertyChange(Property.GAME_STATE.name(), oldGameState, gameState);
     }
 
+    public void diceRolledAction(DicePayload payload, com.example.frontend.Player currentPlayer){
+        if(payload.player().name().equals(currentPlayer.getUsername())){
+            support.firePropertyChange(Property.MOVE_CHARACTER.name(), 0, payload.diceValue());
+        }else {
+            support.firePropertyChange(Property.DICE_ROLLED.name(), null, payload);
+        }
+    }
+
     public com.example.frontend.Player getCurrentPlayer() {
         if (frontPlayer.isEmpty()) {
             Log.e(TAG, "No players available.");
@@ -81,10 +81,10 @@ public enum Game {
         return frontPlayer.stream().skip(currentPlayerIndex).findFirst().orElse(null);
     }
     public void mapStartPositions() {
-        mapStartingPoint.put(at.aau.values.Color.YELLOW, 26);
-        mapStartingPoint.put(at.aau.values.Color.PINK, 32);
-        mapStartingPoint.put(at.aau.values.Color.RED, 6);
-        mapStartingPoint.put(at.aau.values.Color.GREEN, 20);
+        mapStartingPoint.put(at.aau.values.Color.YELLOW, 27);
+        mapStartingPoint.put(at.aau.values.Color.PINK, 33);
+        mapStartingPoint.put(at.aau.values.Color.RED, 15);
+        mapStartingPoint.put(at.aau.values.Color.GREEN, 21);
         mapStartingPoint.put(at.aau.values.Color.LIGHT_BLUE, 9);
         mapStartingPoint.put(at.aau.values.Color.DARK_BLUE, 3);
     }
@@ -145,8 +145,8 @@ public enum Game {
             Log.e(TAG, "Player object is null in broadcastMove");
             return;
         }
-        Response response = new Response(ResponseType.UPDATE_STATE, new PlayerMovePayload(oldPosition, newPosition, player.getUsername()));
-        ResponseHandler.execute(response.responseType(),response.payload(),Game.INSTANCE);
+         //Response response = new Response(ResponseType.UPDATE_STATE, new PlayerMovePayload(oldPosition, newPosition, player.getUsername()));
+        //ResponseHandler.execute(response.responseType(),response.payload(),Game.INSTANCE);
 
     }
 
@@ -163,7 +163,7 @@ public enum Game {
         // Check if the player is at "Home" and the dice result allows moving out
         if (currentPosition == getPlayerPosition(currentPlayer)) {
             if (diceResult == 6) { // Assuming 6 is required to start
-                currentPosition = mapStartingPoint.get(currentPlayer.color());
+               currentPosition = mapStartingPoint.get(currentPlayer.color());
                 setPlayerPosition(currentPlayer, currentPosition);
                 Log.i(TAG, "Player " + currentPlayer.getUsername() + " moves from Home to position " + currentPosition);
                 eventListener.onPlayerPositionChanged(currentPlayer, 0, currentPosition);
@@ -182,7 +182,7 @@ public enum Game {
              */
             Log.i(TAG, "Player " + currentPlayer.getUsername() + " moved to position " + newPosition);
             eventListener.onPlayerPositionChanged(currentPlayer, currentPosition, newPosition);
-            Client.send(new Request(CommandType.PLAYER_MOVE,new PlayerMovePayload(currentPosition,newPosition, currentPlayer.getUsername())));
+       //     Client.send(new Request(CommandType.PLAYER_MOVE,new PlayerMovePayload(currentPosition,newPosition, currentPlayer.getUsername())));
             broadcastMove(currentPlayer, currentPosition, newPosition);
             if (diceResult == 6) {
                 hasAnotherTurn = true; // Player gets another turn
@@ -198,7 +198,7 @@ public enum Game {
     public void addPlayers(List<com.example.frontend.Player> playersList) {
         for (com.example.frontend.Player player : playersList) {
             if (!frontPlayer.contains(player)) {
-                Color color = Color.values()[frontPlayer.size() % Color.values().length];
+               Color color = Color.values()[frontPlayer.size() % Color.values().length];
                 com.example.frontend.Player coloredPlayer = new com.example.frontend.Player(player.getUsername(), player.getAge(), player.getCharacters(),player.color());
                 frontPlayer.add(coloredPlayer);
                 playerPositions.put(coloredPlayer, 0);
@@ -220,7 +220,20 @@ public enum Game {
 
     }
 
+    public void setMyTurn(){
+        myTurn = true;
+        support.firePropertyChange(Property.YOUR_TURN.name(), false, true);
+    }
+
+    public void resetMyTurn(){
+        myTurn = false;
+    }
+
+    public boolean isMyTurn() {
+        return myTurn;
+    }
+
     enum Property {
-        PLAYERS, GAME_STATE
+        PLAYERS, GAME_STATE, DICE_ROLLED, MOVE_CHARACTER, YOUR_TURN
     }
 }

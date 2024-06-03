@@ -13,9 +13,17 @@
     android:background="@color/black">
 
 
-
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerDice"
+        android:layout_width="994dp"
+        android:layout_height="874dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -56,126 +64,126 @@
                     android:layout_marginStart="1100dp"
                     android:layout_marginTop="785dp"
                     android:background="#00FFFFFF"
+                    android:contentDescription="Home1"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"
-                    android:contentDescription="Home1"/>
+                    tools:layout_editor_absoluteY="269dp" />
 
                 <ImageView
                     android:id="@+id/btnHomeGreen2"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="143dp"
-                    tools:layout_editor_absoluteY="258dp"
                     android:layout_marginStart="1035dp"
                     android:layout_marginTop="799dp"
-                    android:contentDescription="Home2"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="Home2"
+                    tools:layout_editor_absoluteX="143dp"
+                    tools:layout_editor_absoluteY="258dp" />
 
                 <ImageView
                     android:id="@+id/btnHomeGreen3"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="161dp"
-                    tools:layout_editor_absoluteY="245dp"
                     android:layout_marginStart="1025dp"
                     android:layout_marginTop="735dp"
-                    android:contentDescription="Home3"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="Home3"
+                    tools:layout_editor_absoluteX="161dp"
+                    tools:layout_editor_absoluteY="245dp" />
 
                 <ImageView
                     android:id="@+id/btnHomeGreen4"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:layout_editor_absoluteX="180dp"
                     android:layout_marginStart="1100dp"
                     android:layout_marginTop="725dp"
-                    android:contentDescription="Home4"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="Home4"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_editor_absoluteX="180dp" />
 
 
                 <ImageView
                     android:id="@+id/btnHomeLila4"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"
                     android:layout_marginStart="875dp"
                     android:layout_marginTop="240dp"
-                    android:contentDescription="LilaHome4"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="LilaHome4"
+                    tools:layout_editor_absoluteX="119dp"
+                    tools:layout_editor_absoluteY="269dp" />
 
                 <ImageView
                     android:id="@+id/btnHomeLila3"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
 
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="143dp"
-                    tools:layout_editor_absoluteY="258dp"
                     android:layout_marginStart="930dp"
                     android:layout_marginTop="220dp"
-                    android:contentDescription="LilaHome3"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="LilaHome3"
+                    tools:layout_editor_absoluteX="143dp"
+                    tools:layout_editor_absoluteY="258dp" />
 
                 <ImageView
                     android:id="@+id/btnHomeLila2"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
 
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="161dp"
-                    tools:layout_editor_absoluteY="245dp"
                     android:layout_marginStart="920dp"
                     android:layout_marginTop="166dp"
-                    android:contentDescription="LilaHome2" />
+                    android:background="#00FFFFFF"
+                    android:contentDescription="LilaHome2"
+                    tools:layout_editor_absoluteX="161dp"
+                    tools:layout_editor_absoluteY="245dp" />
 
                 <ImageView
                     android:id="@+id/btnHomeLila1"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:layout_editor_absoluteX="180dp"
                     android:layout_marginStart="850dp"
                     android:layout_marginTop="180dp"
-                    android:contentDescription="LilaHome1" />
+                    android:background="#00FFFFFF"
+                    android:contentDescription="LilaHome1"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_editor_absoluteX="180dp" />
 
                 <ImageView
                     android:id="@+id/btnHomeYellow1"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"
-
                     android:layout_marginStart="680dp"
                     android:layout_marginTop="688dp"
-                    android:contentDescription="YellowHome1"/>
+                    android:background="#00FFFFFF"
+
+                    android:contentDescription="YellowHome1"
+                    tools:layout_editor_absoluteX="119dp"
+                    tools:layout_editor_absoluteY="269dp" />
 
                 <ImageView
                     android:id="@+id/btnHomeYellow2"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
 
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="143dp"
-                    tools:layout_editor_absoluteY="258dp"
-
                     android:layout_marginStart="730dp"
                     android:layout_marginTop="738dp"
-                    android:contentDescription="YellowHome2"/>
+                    android:background="#00FFFFFF"
+
+                    android:contentDescription="YellowHome2"
+                    tools:layout_editor_absoluteX="143dp"
+                    tools:layout_editor_absoluteY="258dp" />
 
                 <ImageView
                     android:id="@+id/btnHomeYellow3"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
 
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="161dp"
-                    tools:layout_editor_absoluteY="245dp"
                     android:layout_marginStart="770dp"
                     android:layout_marginTop="680dp"
-                    android:contentDescription="YellowHome3"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="YellowHome3"
+                    tools:layout_editor_absoluteX="161dp"
+                    tools:layout_editor_absoluteY="245dp" />
 
                 <ImageView
                     android:id="@+id/btnHomeYellow4"
@@ -183,145 +191,145 @@
                     android:layout_height="48dp"
 
 
-                    android:background="#00FFFFFF"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:layout_editor_absoluteX="180dp"
                     android:layout_marginStart="720dp"
                     android:layout_marginTop="640dp"
-                    android:contentDescription="YellowHome2"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="YellowHome2"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_editor_absoluteX="180dp" />
 
                 <ImageView
                     android:id="@+id/btnHomeRosa1"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"
                     android:layout_marginStart="610dp"
                     android:layout_marginTop="370dp"
-                    android:contentDescription="RosaHome1"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="RosaHome1"
+                    tools:layout_editor_absoluteX="119dp"
+                    tools:layout_editor_absoluteY="269dp" />
 
                 <ImageView
                     android:id="@+id/btnHomeRosa2"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="143dp"
-                    tools:layout_editor_absoluteY="258dp"
                     android:layout_marginStart="670dp"
                     android:layout_marginTop="385dp"
-                    android:contentDescription="RosaHome2"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="RosaHome2"
+                    tools:layout_editor_absoluteX="143dp"
+                    tools:layout_editor_absoluteY="258dp" />
 
                 <ImageView
                     android:id="@+id/btnHomeRosa3"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="161dp"
-                    tools:layout_editor_absoluteY="245dp"
                     android:layout_marginStart="656dp"
                     android:layout_marginTop="440dp"
-                    android:contentDescription="RosaHome3"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="RosaHome3"
+                    tools:layout_editor_absoluteX="161dp"
+                    tools:layout_editor_absoluteY="245dp" />
 
                 <ImageView
                     android:id="@+id/btnHomeRosa4"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:layout_editor_absoluteX="180dp"
                     android:layout_marginStart="600dp"
                     android:layout_marginTop="420dp"
-                    android:contentDescription="RosaHome4"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="RosaHome4"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_editor_absoluteX="180dp" />
 
                 <ImageView
                     android:id="@+id/btnHomeBlue1"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"
                     android:layout_marginStart="1280dp"
                     android:layout_marginTop="280dp"
-                    android:contentDescription="BlueHome1"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="BlueHome1"
+                    tools:layout_editor_absoluteX="119dp"
+                    tools:layout_editor_absoluteY="269dp" />
 
                 <ImageView
                     android:id="@+id/btnHomeBlue2"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="143dp"
-                    tools:layout_editor_absoluteY="258dp"
                     android:layout_marginStart="1230dp"
                     android:layout_marginTop="245dp"
-                    android:contentDescription="BlueHome2"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="BlueHome2"
+                    tools:layout_editor_absoluteX="143dp"
+                    tools:layout_editor_absoluteY="258dp" />
 
                 <ImageView
                     android:id="@+id/btnHomeBlue3"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="161dp"
-                    tools:layout_editor_absoluteY="245dp"
                     android:layout_marginStart="1190dp"
                     android:layout_marginTop="280dp"
-                    android:contentDescription="BlueHome3"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="BlueHome3"
+                    tools:layout_editor_absoluteX="161dp"
+                    tools:layout_editor_absoluteY="245dp" />
 
                 <ImageView
                     android:id="@+id/btnHomeBlue4"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:layout_editor_absoluteX="180dp"
                     android:layout_marginStart="1230dp"
                     android:layout_marginTop="320dp"
-                    android:contentDescription="BlueHome4"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="BlueHome4"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_editor_absoluteX="180dp" />
 
                 <ImageView
                     android:id="@+id/btnHomeRed1"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"
                     android:layout_marginStart="1355dp"
                     android:layout_marginTop="535dp"
-                    android:contentDescription="RedHome1"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="RedHome1"
+                    tools:layout_editor_absoluteX="119dp"
+                    tools:layout_editor_absoluteY="269dp" />
 
                 <ImageView
                     android:id="@+id/btnHomeRed2"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
 
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="143dp"
-                    tools:layout_editor_absoluteY="258dp"
                     android:layout_marginStart="1295dp"
                     android:layout_marginTop="520dp"
-                    android:contentDescription="RedHome2"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="RedHome2"
+                    tools:layout_editor_absoluteX="143dp"
+                    tools:layout_editor_absoluteY="258dp" />
 
                 <ImageView
                     android:id="@+id/btnHomeRed3"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="161dp"
-                    tools:layout_editor_absoluteY="245dp"
                     android:layout_marginStart="1285dp"
                     android:layout_marginTop="575dp"
-                    android:contentDescription="RedHome3"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="RedHome3"
+                    tools:layout_editor_absoluteX="161dp"
+                    tools:layout_editor_absoluteY="245dp" />
 
                 <ImageView
                     android:id="@+id/btnHomeRed4"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:layout_editor_absoluteX="180dp"
                     android:layout_marginStart="1345dp"
                     android:layout_marginTop="585dp"
-                    android:contentDescription="RedHome4"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="RedHome4"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_editor_absoluteX="180dp" />
 
                 <!-- Button for Goalfields -->
 
@@ -330,202 +338,200 @@
                     android:id="@+id/btnGoalLila4"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="320dp"
-                    tools:layout_editor_absoluteY="74dp"
                     android:layout_marginStart="340dp"
                     android:layout_marginTop="695dp"
-                    android:contentDescription="GoalLila"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="GoalLila"
+                    tools:layout_editor_absoluteX="320dp"
+                    tools:layout_editor_absoluteY="74dp" />
 
                 <ImageView
                     android:id="@+id/btnGoalLila3"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="344dp"
-                    tools:layout_editor_absoluteY="73dp"
                     android:layout_marginStart="390dp"
                     android:layout_marginTop="669dp"
-                    android:contentDescription="GoalLila"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="GoalLila"
+                    tools:layout_editor_absoluteX="344dp"
+                    tools:layout_editor_absoluteY="73dp" />
 
                 <ImageView
                     android:id="@+id/btnGoalLila2"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
+                    android:layout_marginStart="440dp"
+                    android:layout_marginTop="630dp"
                     android:background="#00FFFFFF"
                     tools:layout_editor_absoluteX="325dp"
-                    tools:layout_editor_absoluteY="97dp"
-                    android:layout_marginStart="440dp"
-                    android:layout_marginTop="630dp"/>
+                    tools:layout_editor_absoluteY="97dp" />
 
                 <ImageView
                     android:id="@+id/btnGoalLila1"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:layout_editor_absoluteX="344dp"
                     android:layout_marginStart="490dp"
                     android:layout_marginTop="610dp"
-                    android:contentDescription="GoalLila"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="GoalLila"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_editor_absoluteX="344dp" />
 
                 <ImageView
                     android:id="@+id/btnGoalYellow1"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="289dp"
-                    tools:layout_editor_absoluteY="269dp"
                     android:layout_marginStart="1360dp"
                     android:layout_marginTop="775dp"
-                    android:contentDescription="GoalYellow"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="GoalYellow"
+                    tools:layout_editor_absoluteX="289dp"
+                    tools:layout_editor_absoluteY="269dp" />
 
                 <ImageView
                     android:id="@+id/btnGoalYellow2"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
 
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="271dp"
-                    tools:layout_editor_absoluteY="282dp"
                     android:layout_marginStart="1415dp"
                     android:layout_marginTop="795dp"
-                    android:contentDescription="GoalYellow"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="GoalYellow"
+                    tools:layout_editor_absoluteX="271dp"
+                    tools:layout_editor_absoluteY="282dp" />
 
                 <ImageView
                     android:id="@+id/btnGoalYellow3"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
 
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="269dp"
-                    tools:layout_editor_absoluteY="258dp"
                     android:layout_marginStart="1480dp"
                     android:layout_marginTop="810dp"
-                    android:contentDescription="GoalYellow"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="GoalYellow"
+                    tools:layout_editor_absoluteX="269dp"
+                    tools:layout_editor_absoluteY="258dp" />
 
                 <ImageView
                     android:id="@+id/btnGoalYellow4"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:layout_editor_absoluteX="248dp"
                     android:layout_marginStart="1540dp"
                     android:layout_marginTop="820dp"
-                    android:contentDescription="GoalYellow"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="GoalYellow"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_editor_absoluteX="248dp" />
 
                 <ImageView
                     android:id="@+id/btnGoalRosa1"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="248dp"
-                    tools:layout_editor_absoluteY="155dp"
                     android:layout_marginStart="800dp"
                     android:layout_marginTop="870dp"
-                    android:contentDescription="GoalRosa"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="GoalRosa"
+                    tools:layout_editor_absoluteX="248dp"
+                    tools:layout_editor_absoluteY="155dp" />
 
                 <ImageView
                     android:id="@+id/btnGoalRosa2"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="251dp"
-                    tools:layout_editor_absoluteY="178dp"
                     android:layout_marginStart="740dp"
                     android:layout_marginTop="880dp"
-                    android:contentDescription="GoalRosa"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="GoalRosa"
+                    tools:layout_editor_absoluteX="251dp"
+                    tools:layout_editor_absoluteY="178dp" />
 
                 <ImageView
                     android:id="@+id/btnGoalRosa3"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="226dp"
-                    tools:layout_editor_absoluteY="175dp"
                     android:layout_marginStart="680dp"
                     android:layout_marginTop="890dp"
-                    android:contentDescription="GoalRosa"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="GoalRosa"
+                    tools:layout_editor_absoluteX="226dp"
+                    tools:layout_editor_absoluteY="175dp" />
 
                 <ImageView
                     android:id="@+id/btnGoalRosa4"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:layout_editor_absoluteX="232dp"
                     android:layout_marginStart="610dp"
                     android:layout_marginTop="905dp"
-                    android:contentDescription="GoalRosa"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="GoalRosa"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_editor_absoluteX="232dp" />
 
                 <ImageView
                     android:id="@+id/btnGoalBlue1"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="462dp"
-                    tools:layout_editor_absoluteY="129dp"
                     android:layout_marginStart="600dp"
                     android:layout_marginTop="195dp"
-                    android:contentDescription="GoalBlue"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="GoalBlue"
+                    tools:layout_editor_absoluteX="462dp"
+                    tools:layout_editor_absoluteY="129dp" />
 
                 <ImageView
                     android:id="@+id/btnGoalBlue2"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="445dp"
-                    tools:layout_editor_absoluteY="110dp"
                     android:layout_marginStart="540dp"
                     android:layout_marginTop="170dp"
-                    android:contentDescription="GoalBlue"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="GoalBlue"
+                    tools:layout_editor_absoluteX="445dp"
+                    tools:layout_editor_absoluteY="110dp" />
 
                 <ImageView
                     android:id="@+id/btnGoalBlue3"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="462dp"
-                    tools:layout_editor_absoluteY="100dp"
                     android:layout_marginStart="475dp"
                     android:layout_marginTop="155dp"
-                    android:contentDescription="GoalBlue"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="GoalBlue"
+                    tools:layout_editor_absoluteX="462dp"
+                    tools:layout_editor_absoluteY="100dp" />
 
                 <ImageView
                     android:id="@+id/btnGoalBlue4"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:layout_editor_absoluteX="486dp"
                     android:layout_marginStart="420dp"
                     android:layout_marginTop="125dp"
-                    android:contentDescription="GoalBlue"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="GoalBlue"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_editor_absoluteX="486dp" />
 
                 <ImageView
                     android:id="@+id/btnGoalGreen1"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="382dp"
-                    tools:layout_editor_absoluteY="292dp"
                     android:layout_marginStart="1485dp"
                     android:layout_marginTop="355dp"
+                    android:background="#00FFFFFF"
                     android:contentDescription="GoalGreen"
-                    />
+                    tools:layout_editor_absoluteX="382dp"
+                    tools:layout_editor_absoluteY="292dp" />
 
                 <ImageView
                     android:id="@+id/btnGoalGreen2"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="413dp"
-                    tools:layout_editor_absoluteY="290dp"
                     android:layout_marginStart="1540dp"
                     android:layout_marginTop="330dp"
+                    android:background="#00FFFFFF"
                     android:contentDescription="GoalGreen"
-                    />
+                    tools:layout_editor_absoluteX="413dp"
+                    tools:layout_editor_absoluteY="290dp" />
 
                 <ImageView
                     android:id="@+id/btnGoalGreen3"
@@ -543,57 +549,56 @@
                     android:id="@+id/btnGoalGreen4"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:layout_editor_absoluteX="413dp"
                     android:layout_marginStart="1650dp"
                     android:layout_marginTop="270dp"
-                    android:contentDescription="GoalGreen"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="GoalGreen"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_editor_absoluteX="413dp" />
 
                 <ImageView
                     android:id="@+id/btnGoalRed1"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="486dp"
-                    tools:layout_editor_absoluteY="204dp"
                     android:layout_marginStart="1165dp"
                     android:layout_marginTop="75dp"
-                    android:contentDescription="GoalRed"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="GoalRed"
+                    tools:layout_editor_absoluteX="486dp"
+                    tools:layout_editor_absoluteY="204dp" />
 
                 <ImageView
                     android:id="@+id/btnGoalRed2"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="486dp"
-                    tools:layout_editor_absoluteY="221dp"
                     android:layout_marginStart="1225dp"
                     android:layout_marginTop="68dp"
-                    android:contentDescription="GoalRed"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="GoalRed"
+                    tools:layout_editor_absoluteX="486dp"
+                    tools:layout_editor_absoluteY="221dp" />
 
                 <ImageView
                     android:id="@+id/btnGoalRed3"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    tools:layout_editor_absoluteX="509dp"
-                    tools:layout_editor_absoluteY="234dp"
                     android:layout_marginStart="1285dp"
                     android:layout_marginTop="55dp"
-                    android:contentDescription="GoalRed"/>
+                    android:background="#00FFFFFF"
+                    android:contentDescription="GoalRed"
+                    tools:layout_editor_absoluteX="509dp"
+                    tools:layout_editor_absoluteY="234dp" />
 
                 <ImageView
                     android:id="@+id/btnGoalRed4"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00FFFFFF"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:layout_editor_absoluteX="509dp"
                     android:layout_marginStart="1345dp"
                     android:layout_marginTop="58dp"
+                    android:background="#00FFFFFF"
                     android:contentDescription="GoalRed"
-                    />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_editor_absoluteX="509dp" />
                 <!-- FieldmageButtons-->
 
                 <ImageView
@@ -605,7 +610,7 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home0"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
 
                 <ImageView
                     android:id="@+id/gameboardpos1"
@@ -616,7 +621,8 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home1"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
+
                 <ImageView
                     android:id="@+id/gameboardpos2"
                     android:layout_width="48dp"
@@ -626,7 +632,7 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home0"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
 
                 <ImageView
                     android:id="@+id/gameboardpos3"
@@ -637,7 +643,8 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home1"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
+
                 <ImageView
                     android:id="@+id/gameboardpos4"
                     android:layout_width="48dp"
@@ -647,7 +654,7 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home0"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
 
                 <ImageView
                     android:id="@+id/gameboardpos5"
@@ -658,7 +665,8 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home1"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
+
                 <ImageView
                     android:id="@+id/gameboardpos6"
                     android:layout_width="48dp"
@@ -668,7 +676,7 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home0"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
 
                 <ImageView
                     android:id="@+id/gameboardpos7"
@@ -679,7 +687,8 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home1"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
+
                 <ImageView
                     android:id="@+id/gameboardpos8"
                     android:layout_width="48dp"
@@ -689,7 +698,7 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home0"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
 
 
                 <ImageView
@@ -701,7 +710,8 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home0"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
+
                 <ImageView
                     android:id="@+id/gameboardpos10"
                     android:layout_width="48dp"
@@ -711,7 +721,8 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home1"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
+
                 <ImageView
                     android:id="@+id/gameboardpos11"
                     android:layout_width="48dp"
@@ -721,7 +732,8 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home0"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
+
                 <ImageView
                     android:id="@+id/gameboardpos12"
                     android:layout_width="48dp"
@@ -731,7 +743,8 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home1"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
+
                 <ImageView
                     android:id="@+id/gameboardpos13"
                     android:layout_width="48dp"
@@ -741,7 +754,7 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home0"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
 
                 <!-- Repeat the ImageView element to create 32 copies -->
                 <ImageView
@@ -753,7 +766,8 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home1"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
+
                 <ImageView
                     android:id="@+id/gameboardpos15"
                     android:layout_width="48dp"
@@ -763,7 +777,7 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home0"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
 
                 <!-- Repeat the ImageView element to create 32 copies -->
                 <ImageView
@@ -775,7 +789,8 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home1"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
+
                 <ImageView
                     android:id="@+id/gameboardpos17"
                     android:layout_width="48dp"
@@ -785,7 +800,8 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home0"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
+
                 <ImageView
                     android:id="@+id/gameboardpos18"
                     android:layout_width="48dp"
@@ -795,7 +811,8 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home1"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
+
                 <ImageView
                     android:id="@+id/gameboardpos19"
                     android:layout_width="48dp"
@@ -805,7 +822,8 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home1"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
+
                 <ImageView
                     android:id="@+id/gameboardpos20"
                     android:layout_width="48dp"
@@ -815,7 +833,8 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home0"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
+
                 <ImageView
                     android:id="@+id/gameboardpos21"
                     android:layout_width="48dp"
@@ -825,7 +844,8 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home1"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
+
                 <ImageView
                     android:id="@+id/gameboardpos22"
                     android:layout_width="48dp"
@@ -835,7 +855,8 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home0"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
+
                 <ImageView
                     android:id="@+id/gameboardpos23"
                     android:layout_width="48dp"
@@ -845,7 +866,7 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home1"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
 
                 <ImageView
                     android:id="@+id/gameboardpos24"
@@ -856,7 +877,7 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home0"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
 
                 <ImageView
                     android:id="@+id/gameboardpos25"
@@ -867,7 +888,7 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home1"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
 
                 <ImageView
                     android:id="@+id/gameboardpos26"
@@ -878,7 +899,7 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home0"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
 
                 <!-- Repeat the ImageView element to create 32 copies -->
                 <ImageView
@@ -890,7 +911,7 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home1"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
 
                 <ImageView
                     android:id="@+id/gameboardpos28"
@@ -901,7 +922,8 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home0"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
+
                 <ImageView
                     android:id="@+id/gameboardpos29"
                     android:layout_width="48dp"
@@ -911,7 +933,7 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home1"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
 
                 <ImageView
                     android:id="@+id/gameboardpos30"
@@ -922,7 +944,7 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home0"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
 
                 <ImageView
                     android:id="@+id/gameboardpos31"
@@ -934,7 +956,7 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home1"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
 
                 <ImageView
                     android:id="@+id/gameboardpos32"
@@ -945,7 +967,8 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home1"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
+
                 <ImageView
                     android:id="@+id/gameboardpos33"
                     android:layout_width="48dp"
@@ -955,7 +978,8 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home1"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
+
                 <ImageView
                     android:id="@+id/gameboardpos34"
                     android:layout_width="48dp"
@@ -965,7 +989,8 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home1"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
+
                 <ImageView
                     android:id="@+id/gameboardpos35"
                     android:layout_width="48dp"
@@ -975,7 +1000,7 @@
                     android:background="#00FFFFFF"
                     android:contentDescription="Home1"
                     tools:layout_editor_absoluteX="119dp"
-                    tools:layout_editor_absoluteY="269dp"/>
+                    tools:layout_editor_absoluteY="269dp" />
             </FrameLayout>
         </HorizontalScrollView>
 
@@ -1015,9 +1040,9 @@
         android:layout_height="48dp"
         android:layout_marginStart="40dp"
         android:layout_marginBottom="52dp"
+        android:enabled="false"
         android:text="@string/roll_dice"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
