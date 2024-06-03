@@ -8,6 +8,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ScaleGestureDetector;
@@ -494,14 +495,14 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     }
 
 
-    void mapGoalPositions() {
+    void mapGoalPositions() { //sets Start point for game
         mapGoalPoint = new HashMap<>();
         mapGoalPoint.put(at.aau.values.Color.YELLOW, 26);
         mapGoalPoint.put(at.aau.values.Color.PINK, 32);
-        mapGoalPoint.put(at.aau.values.Color.RED, 6);
+        mapGoalPoint.put(at.aau.values.Color.RED, 14);
         mapGoalPoint.put(at.aau.values.Color.GREEN, 20);
-        mapGoalPoint.put(at.aau.values.Color.LIGHT_BLUE, 0);
-        mapGoalPoint.put(at.aau.values.Color.DARK_BLUE, 29);
+        mapGoalPoint.put(at.aau.values.Color.LIGHT_BLUE, 9);
+        mapGoalPoint.put(at.aau.values.Color.DARK_BLUE, 3);
     }
 
     private void initalizePlayerHomePositions(View view) {

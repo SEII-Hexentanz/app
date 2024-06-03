@@ -6,7 +6,7 @@ import com.example.frontend.actions.DefaultAction;
 import com.example.frontend.actions.DiceRolledAction;
 import com.example.frontend.actions.PongAction;
 import com.example.frontend.actions.UpdateStateAction;
-import com.example.frontend.actions.YourTurnAction;
+//import com.example.frontend.actions.YourTurnAction;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +25,7 @@ public class ResponseHandler {
         put(ResponseType.UPDATE_STATE, new UpdateStateAction());
         put(ResponseType.BAD_REQUEST, new BadRequestAction());
         put(ResponseType.DICE_ROLLED, new DiceRolledAction());
-        put(ResponseType.YOUR_TURN, new YourTurnAction());
+        //put(ResponseType.YOUR_TURN, new YourTurnAction());
     }};
 
     public static void execute(ResponseType responseType, Payload payload, Game game) {
