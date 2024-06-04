@@ -1,37 +1,56 @@
 package com.example.frontend;
 
+import android.content.res.Resources;
 import android.util.Log;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
+import at.aau.models.Character;
+import at.aau.models.Request;
 import at.aau.payloads.DicePayload;
+import at.aau.payloads.PlayerMovePayload;
 import at.aau.values.CharacterState;
 import at.aau.values.Color;
+import at.aau.values.CommandType;
 import at.aau.values.GameState;
+import at.aau.values.MoveType;
 
 public enum Game {
     INSTANCE;
 
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
-    private SortedSet<at.aau.models.Player> players = new TreeSet<>();
+    private final SortedSet<at.aau.models.Player> players = new TreeSet<>();
     private SortedSet<com.example.frontend.Player> frontPlayer = new TreeSet<>();
     private GameState gameState = GameState.LOBBY;
-    private Map<com.example.frontend.Player, Integer> playerPositions = new HashMap<>();
+    private final Map<com.example.frontend.Player, Integer> playerPositions = new HashMap<>();
     private int currentPlayerIndex = 0;
     public static final String TAG = "GAME_TAG";
-    private Map<com.example.frontend.Player, Boolean> canMove = new HashMap<>();
+    private final Map<com.example.frontend.Player, Boolean> canMove = new HashMap<>();
     private GameEventListener eventListener;
     private DiceFragment diceFragment;
-
+    private String playerName;
     private Boolean myTurn = false;
-    HashMap<at.aau.values.Color, Integer> mapStartingPoint= new HashMap<>();;
+    final HashMap<at.aau.values.Color, Integer> mapStartingPoint= new HashMap<>();;
+
+    private Player currentPlayer = null;
+
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+    }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
@@ -78,7 +97,18 @@ public enum Game {
             Log.e(TAG, "No players available.");
             return null;
         }
-        return frontPlayer.stream().skip(currentPlayerIndex).findFirst().orElse(null);
+
+        if(currentPlayer == null){
+            for(Player player : frontPlayer){
+                if(player.getUsername().equals(playerName)){
+                    return currentPlayer = player;
+                } else {
+                    Log.e("App", "Player with name " + playerName + " does not exist");
+                }
+            }
+        }
+
+        return currentPlayer;
     }
     public void mapStartPositions() {
         mapStartingPoint.put(at.aau.values.Color.YELLOW, 27);
@@ -230,7 +260,67 @@ public enum Game {
         return myTurn;
     }
 
+    public void moveToStart() {
+    }
+
+    public void nameAlreadyExists() {
+        support.firePropertyChange(Property.USERNAME_ALREADY_EXISTS.name(), false, true);
+    }
+
+    public void playerRegistered() {
+        support.firePropertyChange(Property.PLAYER_REGISTERED.name(), false, true);
+
+    }
+    public Character getNextCharacterForStart(){
+        for(Character c: Game.INSTANCE.getCurrentPlayer().characters){
+            if(c.status().equals(CharacterState.HOME)){
+                return c;
+            }
+        }
+        return null;
+    }
+
+    public int moveCharacterToStartingPostion(Character c) {
+        int position = mapStartingPoint.get(currentPlayer.color());
+       Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), position, MoveType.MOVE_TO_FIELD)));
+        return position;
+    }
+
+    public void updateCharacterPosition(UUID uuid, int i, MoveType moveType) {
+        for(Player p : frontPlayer){
+            for(Character c : p.characters){
+                if(c.id().equals(uuid)){
+                    int oldPosition = c.position();
+                    Character newCharacter = new Character(c.id(), i, c.status());
+                    p.setCharacters(p.characters.stream().map(character -> character.equals(c)
+                                    ? newCharacter
+                                    : character)
+                            .collect(Collectors.toCollection(ArrayList::new)));
+
+                    UpdatePositionObject upo = new UpdatePositionObject(newCharacter, p, moveType, oldPosition);
+
+                    support.firePropertyChange(Property.UPDATE_CHARACTER_POSITION.name(), null, upo);
+                    return;
+                }
+            }
+        }
+
+        throw new Resources.NotFoundException("Character not found");
+    }
+
+    private Character getCharacterById(UUID uuid) {
+        for(Player p : frontPlayer){
+            for(Character c : p.characters){
+                if(c.id().equals(uuid)){
+                    return c;
+                }
+            }
+        }
+
+        throw new Resources.NotFoundException("Character not found");
+    }
+
     enum Property {
-        PLAYERS, GAME_STATE, DICE_ROLLED, MOVE_CHARACTER, YOUR_TURN
+        PLAYERS, GAME_STATE, DICE_ROLLED, MOVE_CHARACTER, YOUR_TURN, USERNAME_ALREADY_EXISTS, PLAYER_REGISTERED, UPDATE_CHARACTER_POSITION
     }
 }

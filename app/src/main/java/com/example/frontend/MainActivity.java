@@ -15,17 +15,25 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.widget.Toast;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Objects;
+import java.util.concurrent.CancellationException;
 
 import at.aau.models.Request;
+import at.aau.payloads.DicePayload;
 import at.aau.payloads.RegisterPayload;
 import at.aau.values.CommandType;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PropertyChangeListener {
     private final Client client = new Client();
     private Button btnStart;
     private TextView inputUsername;
@@ -33,6 +41,10 @@ public class MainActivity extends AppCompatActivity {
     private View createLobbyFragment;
     View rootView;
 
+    private final String CREATE_LOBBY_FRAGMENT = "create_lobby";
+    public MainActivity(){
+        Game.INSTANCE.addPropertyChangeListener(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,14 +79,14 @@ public class MainActivity extends AppCompatActivity {
         String responseUser = inputUsername.getText().toString();
         String responesAge = inputAge.getText().toString();
 
-        Log.i("Change Fragement", "Fragment change event started");
-        if (createLobbyFragment.getVisibility() == View.INVISIBLE) {
+        /*if (createLobbyFragment.getVisibility() == View.INVISIBLE) {
             createLobbyFragment.setVisibility(View.GONE);
         } else {
             createLobbyFragment.setVisibility(View.VISIBLE);
-            showCreateLobbyFragment();
+            //
+        }*/
+        //createLobbyFragment.setVisibility(View.VISIBLE);
 
-        }
         Client.send(new Request(CommandType.REGISTER, new RegisterPayload(responseUser, Integer.parseInt(responesAge))));
         Log.i("ResponseAge", responesAge);
 
@@ -134,10 +146,11 @@ public class MainActivity extends AppCompatActivity {
         return age >= 8 && age <= 99;
     }
 
-    public String getUserName(){
+    public String getUserName() {
         String name = inputUsername.getText().toString();
         return name;
     }
+
     public void saveUsernameToPreferences() {
         String name = getUserName();
         SharedPreferences sharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE);
@@ -147,10 +160,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     public void showCreateLobbyFragment() {
         String name = getUserName();
         saveUsernameToPreferences();
+        Game.INSTANCE.setPlayerName(name);
 
         CreateLobbyFragment createLobbyFragment = CreateLobbyFragment.newInstance(name);
 
@@ -158,14 +171,30 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         fragmentTransaction.replace(R.id.fragmentContainerView2, createLobbyFragment);
-        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.addToBackStack(CREATE_LOBBY_FRAGMENT);
         fragmentTransaction.commit();
     }
 
     private void hideKeyboard(View view) {
-
         InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
+        Log.i("App", "PropertyChangeEvent received: " + propertyChangeEvent.getPropertyName());
+        if (propertyChangeEvent.getPropertyName().equals(Game.Property.USERNAME_ALREADY_EXISTS.name())) {
+            runOnUiThread(() -> {
+                Toast.makeText(this, "Name already in use", Toast.LENGTH_SHORT).show();
+            });
+        } else if (propertyChangeEvent.getPropertyName().equals(Game.Property.PLAYER_REGISTERED.name())) {
+
+            runOnUiThread(() -> {
+            Log.i("Change Fragement", "Fragment change event started");
+            createLobbyFragment.setVisibility(View.VISIBLE);
+            showCreateLobbyFragment();
+        });
+            }
     }
 }
 
