@@ -11,9 +11,13 @@ import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import at.aau.models.Character;
+import at.aau.models.Request;
 import at.aau.payloads.DicePayload;
+import at.aau.payloads.PlayerMovePayload;
 import at.aau.values.CharacterState;
 import at.aau.values.Color;
+import at.aau.values.CommandType;
 import at.aau.values.GameState;
 
 public enum Game {
@@ -261,6 +265,20 @@ public enum Game {
     public void playerRegistered() {
         support.firePropertyChange(Property.PLAYER_REGISTERED.name(), false, true);
 
+    }
+    public Character getNextCharacterForStart(){
+        for(Character c: Game.INSTANCE.getCurrentPlayer().characters){
+            if(c.status().equals(CharacterState.HOME)){
+                return c;
+            }
+        }
+        return null;
+    }
+
+    public int moveCharacterToStartingPostion(Character c) {
+        int position = mapStartingPoint.get(currentPlayer.color());
+       // Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), position, CharacterState.FIELD)));
+        return position;
     }
 
     enum Property {

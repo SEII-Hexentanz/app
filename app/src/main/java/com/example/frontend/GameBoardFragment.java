@@ -38,11 +38,7 @@ import java.util.SortedSet;
 
 
 import at.aau.models.Character;
-import at.aau.models.Request;
 import at.aau.payloads.DicePayload;
-import at.aau.payloads.PlayerMovePayload;
-import at.aau.values.CharacterState;
-import at.aau.values.CommandType;
 
 
 public class GameBoardFragment extends Fragment implements GameEventListener, PropertyChangeListener {
@@ -127,10 +123,25 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     private final long MAX_TIMER_DURATION = 15 * 60 * 1000; //1min=60_000 // 15 minutes
     private long remainingTime = MAX_TIMER_DURATION;
     private ArrayList<ImageView> gameboardPositions;
+    private ArrayList<ImageView> btnYelloHome;
+    private ArrayList<ImageView> btnRosaHome;
+    private ArrayList<ImageView> btnRedHome;
+    private ArrayList<ImageView> btnGreenHome;
+    private ArrayList<ImageView> btnBlueHome;
+    private ArrayList<ImageView> btnLilaHome;
+
+    private ArrayList<ImageView> btnYellowGoal;
+    private ArrayList<ImageView> btnRosaGoal;
+    private ArrayList<ImageView> btnRedGoal;
+    private ArrayList<ImageView> btnGreenGoal;
+    private ArrayList<ImageView> btnBlueGoal;
+    private ArrayList<ImageView> btnLilaGoal;
+
 
     private ArrayList<ImageView> playerHomePositions;
 
     private ArrayList<ImageView> playerGoalPositions;
+    //ArrayList für jedes einzelne Home und jedes einzelne Goal am Feld
 
     public GameBoardFragment() {
         Game.INSTANCE.addPropertyChangeListener(this);
@@ -238,70 +249,96 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         gameBoard = view.findViewById(R.id.gridLayoutGameBoard);
         diceFragment = view.findViewById(R.id.fragmentContainerDice);
 
-        btnGreenHome1 = view.findViewById(R.id.btnHomeGreen1);
-        btnGreenHome2 = view.findViewById(R.id.btnHomeGreen2);
-        btnGreenHome3 = view.findViewById(R.id.btnHomeGreen3);
-        btnGreenHome4 = view.findViewById(R.id.btnHomeGreen4);
 
-        btnRedHome1 = view.findViewById(R.id.btnHomeRed1);
-        btnRedHome2 = view.findViewById(R.id.btnHomeRed2);
-        btnRedHome3 = view.findViewById(R.id.btnHomeRed3);
-        btnRedHome4 = view.findViewById(R.id.btnHomeRed4);
-
-        btnBlueHome1 = view.findViewById(R.id.btnHomeBlue1);
-        btnBlueHome2 = view.findViewById(R.id.btnHomeBlue2);
-        btnBlueHome3 = view.findViewById(R.id.btnHomeBlue3);
-        btnBlueHome4 = view.findViewById(R.id.btnHomeBlue4);
-
-        btnLilaHome1 = view.findViewById(R.id.btnHomeLila1);
-        btnLilaHome2 = view.findViewById(R.id.btnHomeLila2);
-        btnLilaHome3 = view.findViewById(R.id.btnHomeLila3);
-        btnLilaHome4 = view.findViewById(R.id.btnHomeLila4);
-
-        btnRosaHome1 = view.findViewById(R.id.btnHomeRosa1);
-        btnRosaHome2 = view.findViewById(R.id.btnHomeRosa2);
-        btnRosaHome3 = view.findViewById(R.id.btnHomeRosa3);
-        btnRosaHome4 = view.findViewById(R.id.btnHomeRosa4);
-
-        btnYellowHome1 = view.findViewById(R.id.btnHomeYellow1);
-        btnYellowHome2 = view.findViewById(R.id.btnHomeYellow2);
-        btnYellowHome3 = view.findViewById(R.id.btnHomeYellow3);
-        btnYellowHome4 = view.findViewById(R.id.btnHomeYellow4);
+        //Yellow
+        btnYelloHome = new ArrayList<>();
+        btnYelloHome.add(view.findViewById(R.id.btnHomeYellow1));
+        btnYelloHome.add(view.findViewById(R.id.btnHomeYellow2));
+        btnYelloHome.add(view.findViewById(R.id.btnHomeYellow3));
+        btnYelloHome.add(view.findViewById(R.id.btnHomeYellow4));
 
 
-        btnGreenGoal1 = view.findViewById(R.id.btnGoalGreen1);
-        btnGreenGoal2 = view.findViewById(R.id.btnGoalGreen2);
-        btnGreenGoal3 = view.findViewById(R.id.btnGoalGreen3);
-        btnGreenGoal4 = view.findViewById(R.id.btnGoalGreen4);
+        btnYellowGoal = new ArrayList<>();
+        btnYellowGoal.add(view.findViewById(R.id.btnGoalYellow1));
+        btnYellowGoal.add(view.findViewById(R.id.btnGoalYellow2));
+        btnYellowGoal.add(view.findViewById(R.id.btnGoalYellow3));
+        btnYellowGoal.add(view.findViewById(R.id.btnGoalYellow4));
 
-        btnRedGoal1 = view.findViewById(R.id.btnGoalRed1);
-        btnRedGoal2 = view.findViewById(R.id.btnGoalRed2);
-        btnRedGoal3 = view.findViewById(R.id.btnGoalRed3);
-        btnRedGoal4 = view.findViewById(R.id.btnGoalRed4);
+        //Rosa
+        btnRosaHome = new ArrayList<>();
+        btnRosaHome.add(view.findViewById(R.id.btnHomeRosa1));
+        btnRosaHome.add(view.findViewById(R.id.btnHomeRosa2));
+        btnRosaHome.add(view.findViewById(R.id.btnHomeRosa3));
+        btnRosaHome.add(view.findViewById(R.id.btnHomeRosa4));
 
-        btnBlueGoal1 = view.findViewById(R.id.btnGoalBlue1);
-        btnBlueGoal2 = view.findViewById(R.id.btnGoalBlue2);
-        btnBlueGoal3 = view.findViewById(R.id.btnGoalBlue3);
-        btnBlueGoal4 = view.findViewById(R.id.btnGoalBlue4);
 
-        btnLilaGoal1 = view.findViewById(R.id.btnGoalLila1);
-        btnLilaGoal2 = view.findViewById(R.id.btnGoalLila2);
-        btnLilaGoal3 = view.findViewById(R.id.btnGoalLila3);
-        btnLilaGoal4 = view.findViewById(R.id.btnGoalLila4);
+        btnRosaGoal = new ArrayList<>();
+        btnRosaGoal.add(view.findViewById(R.id.btnGoalRosa1));
+        btnRosaGoal.add(view.findViewById(R.id.btnGoalRosa2));
+        btnRosaGoal.add(view.findViewById(R.id.btnGoalRosa3));
+        btnRosaGoal.add(view.findViewById(R.id.btnGoalRosa4));
 
-        btnRosaGoal1 = view.findViewById(R.id.btnGoalRosa1);
-        btnRosaGoal2 = view.findViewById(R.id.btnGoalRosa2);
-        btnRosaGoal3 = view.findViewById(R.id.btnGoalRosa3);
-        btnRosaGoal4 = view.findViewById(R.id.btnGoalRosa4);
 
-        btnYellowGoal1 = view.findViewById(R.id.btnGoalYellow1);
-        btnYellowGoal2 = view.findViewById(R.id.btnGoalYellow2);
-        btnYellowGoal3 = view.findViewById(R.id.btnGoalYellow3);
-        btnYellowGoal4 = view.findViewById(R.id.btnGoalYellow4);
+        //Red
+        btnRedHome = new ArrayList<>();
+        btnRedHome.add(view.findViewById(R.id.btnHomeRed1));
+        btnRedHome.add(view.findViewById(R.id.btnHomeRed2));
+        btnRedHome.add(view.findViewById(R.id.btnHomeRed3));
+        btnRedHome.add(view.findViewById(R.id.btnHomeRed4));
+
+        btnRedGoal = new ArrayList<>();
+        btnRedGoal.add(view.findViewById(R.id.btnGoalRed1));
+        btnRedGoal.add(view.findViewById(R.id.btnGoalRed2));
+        btnRedGoal.add(view.findViewById(R.id.btnGoalRed3));
+        btnRedGoal.add(view.findViewById(R.id.btnGoalRed4));
+
+
+        //Green
+        btnGreenHome = new ArrayList<>();
+        btnGreenHome.add(view.findViewById(R.id.btnHomeGreen1));
+        btnGreenHome.add(view.findViewById(R.id.btnHomeGreen2));
+        btnGreenHome.add(view.findViewById(R.id.btnHomeGreen3));
+        btnGreenHome.add(view.findViewById(R.id.btnHomeGreen4));
+
+
+        btnGreenGoal = new ArrayList<>();
+
+        btnGreenGoal.add(view.findViewById(R.id.btnGoalGreen1));
+        btnGreenGoal.add(view.findViewById(R.id.btnGoalGreen2));
+        btnGreenGoal.add(view.findViewById(R.id.btnGoalGreen3));
+        btnGreenGoal.add(view.findViewById(R.id.btnGoalGreen4));
+
+
+        //Blue
+        btnBlueHome = new ArrayList<>();
+        btnBlueHome.add(view.findViewById(R.id.btnHomeBlue1));
+        btnBlueHome.add(view.findViewById(R.id.btnHomeBlue2));
+        btnBlueHome.add(view.findViewById(R.id.btnHomeBlue3));
+        btnBlueHome.add(view.findViewById(R.id.btnHomeBlue4));
+
+        btnBlueGoal = new ArrayList<>();
+        btnBlueGoal.add(view.findViewById(R.id.btnGoalBlue1));
+        btnBlueGoal.add(view.findViewById(R.id.btnGoalBlue2));
+        btnBlueGoal.add(view.findViewById(R.id.btnGoalBlue3));
+        btnBlueGoal.add(view.findViewById(R.id.btnGoalBlue4));
+
+
+        //LILA aka Dark_Blue
+
+        btnLilaHome = new ArrayList<>();
+        btnLilaHome.add(view.findViewById(R.id.btnHomeLila1));
+        btnLilaHome.add(view.findViewById(R.id.btnHomeLila2));
+        btnLilaHome.add(view.findViewById(R.id.btnHomeLila3));
+        btnLilaHome.add(view.findViewById(R.id.btnHomeLila4));
+
+        btnLilaGoal = new ArrayList<>();
+        btnLilaGoal.add(view.findViewById(R.id.btnGoalLila1));
+        btnLilaGoal.add(view.findViewById(R.id.btnGoalLila2));
+        btnLilaGoal.add(view.findViewById(R.id.btnGoalLila3));
+        btnLilaGoal.add(view.findViewById(R.id.btnGoalLila4));
 
 
     }
-
 
     private void setPlayerHomePositions(SortedSet<Player> players) {
         for (Player player : players) {
@@ -315,7 +352,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
                     btnYellowHome3.setImageResource(R.drawable.playericon);
                     btnYellowHome4.setImageResource(R.drawable.playericon);
 
-                    btnYellowHome1.setOnClickListener(v -> {
+                /*    btnYellowHome1.setOnClickListener(v -> {
                         moveToStartCharacter(characters[0]);
                     });
                     btnYellowHome2.setOnClickListener(v -> {
@@ -327,16 +364,18 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
                     btnYellowHome4.setOnClickListener(v -> {
                         moveToStartCharacter(characters[3]);
                     });
+
+                 */
                 }
 
                 case PINK -> {
-                       Character[] characters = getCharacters(player);
+                    Character[] characters = getCharacters(player);
 
                     btnRosaHome1.setImageResource(R.drawable.playericon);
                     btnRosaHome2.setImageResource(R.drawable.playericon);
                     btnRosaHome3.setImageResource(R.drawable.playericon);
                     btnRosaHome4.setImageResource(R.drawable.playericon);
-
+/*
                   btnRosaHome1.setOnClickListener(v -> {
                         moveToStartCharacter(characters[0]);});
                     btnRosaHome2.setOnClickListener(v -> {
@@ -345,6 +384,8 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
                         moveToStartCharacter(characters[2]);});
                     btnRosaHome4.setOnClickListener(v -> {
                         moveToStartCharacter(characters[3]);});
+
+ */
 
 
                 }
@@ -356,7 +397,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
                     btnRedHome3.setImageResource(R.drawable.playericon);
                     btnRedHome4.setImageResource(R.drawable.playericon);
 
-                    btnRedHome1.setOnClickListener(v -> {
+                   /* btnRedHome1.setOnClickListener(v -> {
                         moveToStartCharacter(characters[0]);});
                     btnRedHome2.setOnClickListener(v -> {
                         moveToStartCharacter(characters[1]);});
@@ -364,6 +405,8 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
                         moveToStartCharacter(characters[2]);});
                     btnRedHome4.setOnClickListener(v -> {
                         moveToStartCharacter(characters[3]);});
+                        */
+
                 }
 
                 case GREEN -> {
@@ -373,7 +416,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
                     btnGreenHome2.setImageResource(R.drawable.playericon);
                     btnGreenHome3.setImageResource(R.drawable.playericon);
                     btnGreenHome4.setImageResource(R.drawable.playericon);
-
+/*
                     btnGreenHome1.setOnClickListener(v -> {
                         moveToStartCharacter(characters[0]);});
                     btnGreenHome2.setOnClickListener(v -> {
@@ -382,6 +425,8 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
                         moveToStartCharacter(characters[2]);});
                     btnGreenHome4.setOnClickListener(v -> {
                         moveToStartCharacter(characters[3]);});
+                        */
+
                 }
                 case LIGHT_BLUE -> {
                     Character[] characters = getCharacters(player);
@@ -390,7 +435,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
                     btnBlueHome2.setImageResource(R.drawable.playericon);
                     btnBlueHome3.setImageResource(R.drawable.playericon);
                     btnBlueHome4.setImageResource(R.drawable.playericon);
-
+/*
                     btnBlueHome1.setOnClickListener(v -> {
                         moveToStartCharacter(characters[0]);});
                     btnBlueHome2.setOnClickListener(v -> {
@@ -399,6 +444,8 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
                         moveToStartCharacter(characters[2]);});
                     btnBlueHome4.setOnClickListener(v -> {
                         moveToStartCharacter(characters[3]);});
+
+ */
                 }
 
                 case DARK_BLUE -> {
@@ -409,7 +456,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
                     btnLilaHome3.setImageResource(R.drawable.playericon);
                     btnLilaHome4.setImageResource(R.drawable.playericon);
 
-                    btnLilaHome1.setOnClickListener(v -> {
+                 /*   btnLilaHome1.setOnClickListener(v -> {
                         moveToStartCharacter(characters[0]);});
                     btnLilaHome2.setOnClickListener(v -> {
                         moveToStartCharacter(characters[1]);});
@@ -417,25 +464,46 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
                         moveToStartCharacter(characters[2]);});
                     btnLilaHome4.setOnClickListener(v -> {
                         moveToStartCharacter(characters[3]);});
+
+                  */
                 }
             }
         }
     }
 
-    private void moveToStartCharacter(Character c) {
+    private void moveCharacterToStartingPositon() {
 
         if (gameboardPositions.isEmpty()) {
             throw new NullPointerException("Gameboard is not initalized yet.");
         } else {
+            Character c = Game.INSTANCE.getNextCharacterForStart();
+            if (c != null) {
+                int position = Game.INSTANCE.moveCharacterToStartingPostion(c);
 
-            if (c.status().equals(CharacterState.HOME)) {
+                gameboardPositions.get(position).setOnClickListener(v -> {
+                    moveCharacterOnField(c);
+                });
+
+                gameboardPositions.get(position).setImageResource(R.drawable.playericon);
+
+            } else {
+                Toast.makeText(requireContext(), "No character in HOME left", Toast.LENGTH_SHORT).show();
+                showDialoge();
+                //Log.e("App", "No character left in HOME");
+            }
+          /*  if (c.status().equals(CharacterState.HOME)) {
                 Log.i("App", "Character " + c.id() + " is currently in HOME");
+
             } else if (c.status().equals(CharacterState.FIELD)) {
                 Log.i("App", "Character " + c.id() + " is currently on the field");
             } else if (c.status().equals(CharacterState.GOAL)) {
                 Log.i("App", "Character " + c.id() + " is currently in GOAL");
             }
+        }*/
         }
+    }
+
+    private void moveCharacterOnField(Character c) {
     }
 
     private Character[] getCharacters(Player player) {
@@ -446,6 +514,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
 
         return new Character[0];
     }
+
 
     private void setGoalPositions(SortedSet<Player> players) {
         for (Player player : players) {
@@ -709,6 +778,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
             newImageView.setImageResource(R.drawable.playericon); // set new position
         }
     }
+
     //used for reveal witch!
     private int getPlayerIcon(com.example.frontend.Player player) {
         // Return the drawable resource id based on player details
@@ -790,6 +860,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
             Toast.makeText(requireContext(), "Your dice has been rolled", Toast.LENGTH_SHORT).show();
         }
     }
+
     private void showDialoge() {
         Dialog dialog = new Dialog(requireActivity());
         dialog.setContentView(R.layout.dialog_layout);
