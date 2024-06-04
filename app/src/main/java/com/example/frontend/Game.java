@@ -29,9 +29,19 @@ public enum Game {
     private Map<com.example.frontend.Player, Boolean> canMove = new HashMap<>();
     private GameEventListener eventListener;
     private DiceFragment diceFragment;
-
+    private String playerName;
     private Boolean myTurn = false;
     HashMap<at.aau.values.Color, Integer> mapStartingPoint= new HashMap<>();;
+
+    private Player currentPlayer = null;
+
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+    }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
@@ -78,7 +88,18 @@ public enum Game {
             Log.e(TAG, "No players available.");
             return null;
         }
-        return frontPlayer.stream().skip(currentPlayerIndex).findFirst().orElse(null);
+
+        if(currentPlayer == null){
+            for(Player player : frontPlayer){
+                if(player.getUsername().equals(playerName)){
+                    return currentPlayer = player;
+                } else {
+                    Log.e("App", "Player with name " + playerName + " does not exist");
+                }
+            }
+        }
+
+        return currentPlayer;
     }
     public void mapStartPositions() {
         mapStartingPoint.put(at.aau.values.Color.YELLOW, 27);
@@ -230,7 +251,19 @@ public enum Game {
         return myTurn;
     }
 
+    public void moveToStart() {
+    }
+
+    public void nameAlreadyExists() {
+        support.firePropertyChange(Property.USERNAME_ALREADY_EXISTS.name(), false, true);
+    }
+
+    public void playerRegistered() {
+        support.firePropertyChange(Property.PLAYER_REGISTERED.name(), false, true);
+
+    }
+
     enum Property {
-        PLAYERS, GAME_STATE, DICE_ROLLED, MOVE_CHARACTER, YOUR_TURN
+        PLAYERS, GAME_STATE, DICE_ROLLED, MOVE_CHARACTER, YOUR_TURN, USERNAME_ALREADY_EXISTS, PLAYER_REGISTERED
     }
 }

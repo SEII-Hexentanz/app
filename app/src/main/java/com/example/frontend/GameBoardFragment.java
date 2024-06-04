@@ -776,7 +776,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
                 diceRolled(payload);
             });
         } else if (propertyChangeEvent.getPropertyName().equals(Game.Property.YOUR_TURN.name())) {
-            yourTurn();
+            requireActivity().runOnUiThread(this::yourTurn);
         }
     }
 
@@ -812,7 +812,6 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         moveToStartBtn.setOnClickListener(v -> {
             //send request to server
             //Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload()));
-
             dialog.dismiss();
             Log.i("App", "MoveToStart Request will be sent now");
         });

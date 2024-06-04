@@ -4,6 +4,8 @@ import com.example.frontend.Game;
 import com.example.frontend.actions.BadRequestAction;
 import com.example.frontend.actions.DefaultAction;
 import com.example.frontend.actions.DiceRolledAction;
+import com.example.frontend.actions.NameExistsAction;
+import com.example.frontend.actions.PlayerRegisteredAction;
 import com.example.frontend.actions.PongAction;
 import com.example.frontend.actions.UpdateStateAction;
 import com.example.frontend.actions.YourTurnAction;
@@ -26,6 +28,8 @@ public class ResponseHandler {
         put(ResponseType.BAD_REQUEST, new BadRequestAction());
         put(ResponseType.DICE_ROLLED, new DiceRolledAction());
         put(ResponseType.YOUR_TURN, new YourTurnAction());
+        put(ResponseType.NAME_ALREADY_EXISTS, new NameExistsAction());
+        put(ResponseType.PLAYER_SUCCESSFULLY_REGISTERED, new PlayerRegisteredAction());
     }};
 
     public static void execute(ResponseType responseType, Payload payload, Game game) {
