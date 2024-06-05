@@ -61,6 +61,12 @@ jacoco {
     toolVersion = "0.8.12"
 }
 
+allprojects {
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    }
+}
+
 sonar {
     properties {
         property "sonar.projectKey", "SEII-Hexentanz_app"

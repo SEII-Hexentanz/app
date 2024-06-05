@@ -1,4 +1,3 @@
-
 package com.example.frontend;
 
 import android.app.Dialog;
@@ -509,52 +508,6 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         playerGoalPositions.add(view.findViewById(R.id.btnGoalRed4));
     }
 
-    public void moveFigureToGoal(String color, int diceValue) {
-        List<ImageView> homeViews = new ArrayList<>();
-        List<ImageView> goalViews = new ArrayList<>();
-
-        switch (color.toLowerCase()) {
-            case "green":
-                homeViews = playerHomePositions.subList(0, 4);
-                goalViews = playerGoalPositions.subList(0, 4);
-                break;
-            case "lila":
-                homeViews = playerHomePositions.subList(4, 8);
-                goalViews = playerGoalPositions.subList(4, 8);
-                break;
-            case "yellow":
-                homeViews = playerHomePositions.subList(8, 12);
-                goalViews = playerGoalPositions.subList(8, 12);
-                break;
-            case "rosa":
-                homeViews = playerHomePositions.subList(12, 16);
-                goalViews = playerGoalPositions.subList(12, 16);
-                break;
-            case "blue":
-                homeViews = playerHomePositions.subList(16, 20);
-                goalViews = playerGoalPositions.subList(16, 20);
-                break;
-            case "red":
-                homeViews = playerHomePositions.subList(20, 24);
-                goalViews = playerGoalPositions.subList(20, 24);
-                break;
-        }
-
-        for (int i = 0; i < homeViews.size(); i++) {
-            ImageView homeView = homeViews.get(i);
-            ImageView goalView = goalViews.get(i);
-
-            if (homeView.getVisibility() == View.VISIBLE) {
-                int homePosition = getHomePosition(homeView);
-                if (homePosition <= 6 && diceValue >= homePosition) {
-                    homeView.setVisibility(View.INVISIBLE);
-                    goalView.setVisibility(View.VISIBLE);
-                    Toast.makeText(getActivity(), "Figure moved to goal!", Toast.LENGTH_SHORT).show();
-                    break;
-                }
-            }
-        }
-    }
 
     private int getHomePosition(ImageView homeView) {
         String homeId = getResources().getResourceEntryName(homeView.getId());
@@ -821,8 +774,55 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         }
     }
 
+    private void moveCharacterToGoal(UpdatePositionObject upo){
+        Log.i(TAG,"Character gets relocated from field to goal");
+        moveCharacterOnField(upo.getCharacter(),upo.getOldPosition(),upo.getMoveType());
+        //add counter when player moved 36 so it can move to goal summiert oldPositions
+        // dice summer auf feld summieren und wenn == 27 und gleicher Spieler mit gleicher GoalFarbe kann er ins Goal
+        ///setGoalPositions --> gibt Goal Positions von SPieler aus
+        Log.i(TAG,"Character will be on goal");
+        int currentPosition = upo.getCharacter().position();
+        int goalPosition = mapGoalPoint.get(upo.getPlayer().color());
+        if(Math.abs(goalPosition-currentPosition) <=6){
+            switch(upo.getPlayer().color()){
+                case YELLOW:
+                    moveToGoalPosition(upo,btnYellowGoal);
+                    break;
+                case PINK:
+                    moveToGoalPosition(upo,btnRosaGoal);
+                    break;
+                case RED:
+                    moveToGoalPosition(upo,btnRedGoal);
+                    break;
+                case GREEN:
+                    moveToGoalPosition(upo, btnGreenGoal);
+                    break;
+                case LIGHT_BLUE:
+                    moveToGoalPosition(upo,btnBlueGoal);
+                    break;
+                case DARK_BLUE:
+                    moveToGoalPosition(upo, btnLilaGoal);
+                    break;
+            }
+            Log.i(TAG, "Character moved to goal");
+        }else{
+            Log.i(TAG,"Character not near Goal");
+        }
+
+    }
+
+    private void moveToGoalPosition(UpdatePositionObject upo, ArrayList<ImageView> goalPositions) {
+        for (ImageView goalPosition : goalPositions) {
+            if (goalPosition.getDrawable() == null) {
+                goalPosition.setImageResource(R.drawable.playericon);
+                Log.d("App", "Character moved to goal position");
+                return;
+            }
+        }
+    }
+
     private void moveCharacterToField(UpdatePositionObject upo) {
-        Log.i("App", "Character gets relocated from home to field");
+        Log.i(TAG, "Character gets relocated from home to field");
         moveCharacterOnField(upo.getCharacter(), upo.getOldPosition(), upo.getMoveType());
 
         Log.i("App", "Character will be hidden from home");
