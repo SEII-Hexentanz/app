@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
@@ -26,12 +25,8 @@ import androidx.fragment.app.FragmentTransaction;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import at.aau.models.Player;
 import at.aau.models.Request;
-import at.aau.payloads.DicePayload;
 import at.aau.payloads.EmptyPayload;
-import at.aau.payloads.PlayerMovePayload;
-import at.aau.payloads.RegisterPayload;
 import at.aau.values.CommandType;
 
 public class DiceFragment extends Fragment implements SensorEventListener, PropertyChangeListener {
@@ -280,7 +275,7 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
             if (isAdded()) {
                 updateDiceImage(diceImage, diceValue);
 
-                Game.INSTANCE.movePlayer(diceValue);
+                //Game.INSTANCE.movePlayer(diceValue);
                 Game.INSTANCE.resetMyTurn();
 
                 Log.i("DiceFragment", "dice roll ");

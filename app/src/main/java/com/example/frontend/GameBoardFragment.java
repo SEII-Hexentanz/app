@@ -39,11 +39,8 @@ import java.util.SortedSet;
 
 
 import at.aau.models.Character;
-import at.aau.models.Request;
 import at.aau.payloads.DicePayload;
-import at.aau.payloads.PlayerMovePayload;
-import at.aau.values.CharacterState;
-import at.aau.values.CommandType;
+import at.aau.values.MoveType;
 
 
 public class GameBoardFragment extends Fragment implements GameEventListener, PropertyChangeListener {
@@ -56,68 +53,6 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     private ImageView gameBoard;
     private float mScaleFactor;
 
-    private ImageView btnGreenHome1;
-    private ImageView btnGreenHome2;
-    private ImageView btnGreenHome3;
-    private ImageView btnGreenHome4;
-
-    private ImageView btnRedHome1;
-    private ImageView btnRedHome2;
-    private ImageView btnRedHome3;
-    private ImageView btnRedHome4;
-
-    private ImageView btnBlueHome1;
-    private ImageView btnBlueHome2;
-    private ImageView btnBlueHome3;
-    private ImageView btnBlueHome4;
-
-
-    private ImageView btnLilaHome1;
-    private ImageView btnLilaHome2;
-    private ImageView btnLilaHome3;
-    private ImageView btnLilaHome4;
-
-    private ImageView btnRosaHome1;
-    private ImageView btnRosaHome2;
-    private ImageView btnRosaHome3;
-    private ImageView btnRosaHome4;
-
-    private ImageView btnYellowHome1;
-    private ImageView btnYellowHome2;
-    private ImageView btnYellowHome3;
-    private ImageView btnYellowHome4;
-
-    private ImageView btnGreenGoal1;
-    private ImageView btnGreenGoal2;
-    private ImageView btnGreenGoal3;
-    private ImageView btnGreenGoal4;
-
-    private ImageView btnRedGoal1;
-    private ImageView btnRedGoal2;
-    private ImageView btnRedGoal3;
-    private ImageView btnRedGoal4;
-
-    private ImageView btnBlueGoal1;
-    private ImageView btnBlueGoal2;
-    private ImageView btnBlueGoal3;
-    private ImageView btnBlueGoal4;
-
-
-    private ImageView btnLilaGoal1;
-    private ImageView btnLilaGoal2;
-    private ImageView btnLilaGoal3;
-    private ImageView btnLilaGoal4;
-
-    private ImageView btnRosaGoal1;
-    private ImageView btnRosaGoal2;
-    private ImageView btnRosaGoal3;
-    private ImageView btnRosaGoal4;
-
-    private ImageView btnYellowGoal1;
-    private ImageView btnYellowGoal2;
-    private ImageView btnYellowGoal3;
-    private ImageView btnYellowGoal4;
-
 
     HashMap<at.aau.values.Color, Integer> mapGoalPoint;
     private ScaleGestureDetector scaleGestureDetector;
@@ -128,10 +63,25 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     private final long MAX_TIMER_DURATION = 15 * 60 * 1000; //1min=60_000 // 15 minutes
     private long remainingTime = MAX_TIMER_DURATION;
     private ArrayList<ImageView> gameboardPositions;
+    private ArrayList<ImageView> btnYelloHome;
+    private ArrayList<ImageView> btnRosaHome;
+    private ArrayList<ImageView> btnRedHome;
+    private ArrayList<ImageView> btnGreenHome;
+    private ArrayList<ImageView> btnBlueHome;
+    private ArrayList<ImageView> btnLilaHome;
+
+    private ArrayList<ImageView> btnYellowGoal;
+    private ArrayList<ImageView> btnRosaGoal;
+    private ArrayList<ImageView> btnRedGoal;
+    private ArrayList<ImageView> btnGreenGoal;
+    private ArrayList<ImageView> btnBlueGoal;
+    private ArrayList<ImageView> btnLilaGoal;
+
 
     private ArrayList<ImageView> playerHomePositions;
 
     private ArrayList<ImageView> playerGoalPositions;
+    //ArrayList für jedes einzelne Home und jedes einzelne Goal am Feld
 
     public GameBoardFragment() {
         Game.INSTANCE.addPropertyChangeListener(this);
@@ -239,204 +189,190 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         gameBoard = view.findViewById(R.id.gridLayoutGameBoard);
         diceFragment = view.findViewById(R.id.fragmentContainerDice);
 
-        btnGreenHome1 = view.findViewById(R.id.btnHomeGreen1);
-        btnGreenHome2 = view.findViewById(R.id.btnHomeGreen2);
-        btnGreenHome3 = view.findViewById(R.id.btnHomeGreen3);
-        btnGreenHome4 = view.findViewById(R.id.btnHomeGreen4);
 
-        btnRedHome1 = view.findViewById(R.id.btnHomeRed1);
-        btnRedHome2 = view.findViewById(R.id.btnHomeRed2);
-        btnRedHome3 = view.findViewById(R.id.btnHomeRed3);
-        btnRedHome4 = view.findViewById(R.id.btnHomeRed4);
-
-        btnBlueHome1 = view.findViewById(R.id.btnHomeBlue1);
-        btnBlueHome2 = view.findViewById(R.id.btnHomeBlue2);
-        btnBlueHome3 = view.findViewById(R.id.btnHomeBlue3);
-        btnBlueHome4 = view.findViewById(R.id.btnHomeBlue4);
-
-        btnLilaHome1 = view.findViewById(R.id.btnHomeLila1);
-        btnLilaHome2 = view.findViewById(R.id.btnHomeLila2);
-        btnLilaHome3 = view.findViewById(R.id.btnHomeLila3);
-        btnLilaHome4 = view.findViewById(R.id.btnHomeLila4);
-
-        btnRosaHome1 = view.findViewById(R.id.btnHomeRosa1);
-        btnRosaHome2 = view.findViewById(R.id.btnHomeRosa2);
-        btnRosaHome3 = view.findViewById(R.id.btnHomeRosa3);
-        btnRosaHome4 = view.findViewById(R.id.btnHomeRosa4);
-
-        btnYellowHome1 = view.findViewById(R.id.btnHomeYellow1);
-        btnYellowHome2 = view.findViewById(R.id.btnHomeYellow2);
-        btnYellowHome3 = view.findViewById(R.id.btnHomeYellow3);
-        btnYellowHome4 = view.findViewById(R.id.btnHomeYellow4);
+        //Yellow
+        btnYelloHome = new ArrayList<>();
+        btnYelloHome.add(view.findViewById(R.id.btnHomeYellow1));
+        btnYelloHome.add(view.findViewById(R.id.btnHomeYellow2));
+        btnYelloHome.add(view.findViewById(R.id.btnHomeYellow3));
+        btnYelloHome.add(view.findViewById(R.id.btnHomeYellow4));
 
 
-        btnGreenGoal1 = view.findViewById(R.id.btnGoalGreen1);
-        btnGreenGoal2 = view.findViewById(R.id.btnGoalGreen2);
-        btnGreenGoal3 = view.findViewById(R.id.btnGoalGreen3);
-        btnGreenGoal4 = view.findViewById(R.id.btnGoalGreen4);
+        btnYellowGoal = new ArrayList<>();
+        btnYellowGoal.add(view.findViewById(R.id.btnGoalYellow1));
+        btnYellowGoal.add(view.findViewById(R.id.btnGoalYellow2));
+        btnYellowGoal.add(view.findViewById(R.id.btnGoalYellow3));
+        btnYellowGoal.add(view.findViewById(R.id.btnGoalYellow4));
 
-        btnRedGoal1 = view.findViewById(R.id.btnGoalRed1);
-        btnRedGoal2 = view.findViewById(R.id.btnGoalRed2);
-        btnRedGoal3 = view.findViewById(R.id.btnGoalRed3);
-        btnRedGoal4 = view.findViewById(R.id.btnGoalRed4);
+        //Rosa
+        btnRosaHome = new ArrayList<>();
+        btnRosaHome.add(view.findViewById(R.id.btnHomeRosa1));
+        btnRosaHome.add(view.findViewById(R.id.btnHomeRosa2));
+        btnRosaHome.add(view.findViewById(R.id.btnHomeRosa3));
+        btnRosaHome.add(view.findViewById(R.id.btnHomeRosa4));
 
-        btnBlueGoal1 = view.findViewById(R.id.btnGoalBlue1);
-        btnBlueGoal2 = view.findViewById(R.id.btnGoalBlue2);
-        btnBlueGoal3 = view.findViewById(R.id.btnGoalBlue3);
-        btnBlueGoal4 = view.findViewById(R.id.btnGoalBlue4);
 
-        btnLilaGoal1 = view.findViewById(R.id.btnGoalLila1);
-        btnLilaGoal2 = view.findViewById(R.id.btnGoalLila2);
-        btnLilaGoal3 = view.findViewById(R.id.btnGoalLila3);
-        btnLilaGoal4 = view.findViewById(R.id.btnGoalLila4);
+        btnRosaGoal = new ArrayList<>();
+        btnRosaGoal.add(view.findViewById(R.id.btnGoalRosa1));
+        btnRosaGoal.add(view.findViewById(R.id.btnGoalRosa2));
+        btnRosaGoal.add(view.findViewById(R.id.btnGoalRosa3));
+        btnRosaGoal.add(view.findViewById(R.id.btnGoalRosa4));
 
-        btnRosaGoal1 = view.findViewById(R.id.btnGoalRosa1);
-        btnRosaGoal2 = view.findViewById(R.id.btnGoalRosa2);
-        btnRosaGoal3 = view.findViewById(R.id.btnGoalRosa3);
-        btnRosaGoal4 = view.findViewById(R.id.btnGoalRosa4);
 
-        btnYellowGoal1 = view.findViewById(R.id.btnGoalYellow1);
-        btnYellowGoal2 = view.findViewById(R.id.btnGoalYellow2);
-        btnYellowGoal3 = view.findViewById(R.id.btnGoalYellow3);
-        btnYellowGoal4 = view.findViewById(R.id.btnGoalYellow4);
+        //Red
+        btnRedHome = new ArrayList<>();
+        btnRedHome.add(view.findViewById(R.id.btnHomeRed1));
+        btnRedHome.add(view.findViewById(R.id.btnHomeRed2));
+        btnRedHome.add(view.findViewById(R.id.btnHomeRed3));
+        btnRedHome.add(view.findViewById(R.id.btnHomeRed4));
+
+        btnRedGoal = new ArrayList<>();
+        btnRedGoal.add(view.findViewById(R.id.btnGoalRed1));
+        btnRedGoal.add(view.findViewById(R.id.btnGoalRed2));
+        btnRedGoal.add(view.findViewById(R.id.btnGoalRed3));
+        btnRedGoal.add(view.findViewById(R.id.btnGoalRed4));
+
+
+        //Green
+        btnGreenHome = new ArrayList<>();
+        btnGreenHome.add(view.findViewById(R.id.btnHomeGreen1));
+        btnGreenHome.add(view.findViewById(R.id.btnHomeGreen2));
+        btnGreenHome.add(view.findViewById(R.id.btnHomeGreen3));
+        btnGreenHome.add(view.findViewById(R.id.btnHomeGreen4));
+
+
+        btnGreenGoal = new ArrayList<>();
+
+        btnGreenGoal.add(view.findViewById(R.id.btnGoalGreen1));
+        btnGreenGoal.add(view.findViewById(R.id.btnGoalGreen2));
+        btnGreenGoal.add(view.findViewById(R.id.btnGoalGreen3));
+        btnGreenGoal.add(view.findViewById(R.id.btnGoalGreen4));
+
+
+        //Blue
+        btnBlueHome = new ArrayList<>();
+        btnBlueHome.add(view.findViewById(R.id.btnHomeBlue1));
+        btnBlueHome.add(view.findViewById(R.id.btnHomeBlue2));
+        btnBlueHome.add(view.findViewById(R.id.btnHomeBlue3));
+        btnBlueHome.add(view.findViewById(R.id.btnHomeBlue4));
+
+        btnBlueGoal = new ArrayList<>();
+        btnBlueGoal.add(view.findViewById(R.id.btnGoalBlue1));
+        btnBlueGoal.add(view.findViewById(R.id.btnGoalBlue2));
+        btnBlueGoal.add(view.findViewById(R.id.btnGoalBlue3));
+        btnBlueGoal.add(view.findViewById(R.id.btnGoalBlue4));
+
+
+        //LILA aka Dark_Blue
+
+        btnLilaHome = new ArrayList<>();
+        btnLilaHome.add(view.findViewById(R.id.btnHomeLila1));
+        btnLilaHome.add(view.findViewById(R.id.btnHomeLila2));
+        btnLilaHome.add(view.findViewById(R.id.btnHomeLila3));
+        btnLilaHome.add(view.findViewById(R.id.btnHomeLila4));
+
+        btnLilaGoal = new ArrayList<>();
+        btnLilaGoal.add(view.findViewById(R.id.btnGoalLila1));
+        btnLilaGoal.add(view.findViewById(R.id.btnGoalLila2));
+        btnLilaGoal.add(view.findViewById(R.id.btnGoalLila3));
+        btnLilaGoal.add(view.findViewById(R.id.btnGoalLila4));
 
 
     }
-
 
     private void setPlayerHomePositions(SortedSet<Player> players) {
         for (Player player : players) {
             Log.i("GameBoardFragment", "Set PlayerHomePositions");
             switch (player.color()) {
                 case YELLOW -> {
-                    Character[] characters = getCharacters(player);
 
-                    btnYellowHome1.setImageResource(R.drawable.playericon);
-                    btnYellowHome2.setImageResource(R.drawable.playericon);
-                    btnYellowHome3.setImageResource(R.drawable.playericon);
-                    btnYellowHome4.setImageResource(R.drawable.playericon);
-
-                    btnYellowHome1.setOnClickListener(v -> {
-                        moveToStartCharacter(characters[0]);
-                    });
-                    btnYellowHome2.setOnClickListener(v -> {
-                        moveToStartCharacter(characters[1]);
-                    });
-                    btnYellowHome3.setOnClickListener(v -> {
-                        moveToStartCharacter(characters[2]);
-                    });
-                    btnYellowHome4.setOnClickListener(v -> {
-                        moveToStartCharacter(characters[3]);
-                    });
+                    btnYelloHome.get(0).setImageResource(R.drawable.playericon);
+                    btnYelloHome.get(1).setImageResource(R.drawable.playericon);
+                    btnYelloHome.get(2).setImageResource(R.drawable.playericon);
+                    btnYelloHome.get(3).setImageResource(R.drawable.playericon);
                 }
 
                 case PINK -> {
-                       Character[] characters = getCharacters(player);
 
-                    btnRosaHome1.setImageResource(R.drawable.playericon);
-                    btnRosaHome2.setImageResource(R.drawable.playericon);
-                    btnRosaHome3.setImageResource(R.drawable.playericon);
-                    btnRosaHome4.setImageResource(R.drawable.playericon);
-
-                  btnRosaHome1.setOnClickListener(v -> {
-                        moveToStartCharacter(characters[0]);});
-                    btnRosaHome2.setOnClickListener(v -> {
-                        moveToStartCharacter(characters[1]);});
-                    btnRosaHome3.setOnClickListener(v -> {
-                        moveToStartCharacter(characters[2]);});
-                    btnRosaHome4.setOnClickListener(v -> {
-                        moveToStartCharacter(characters[3]);});
+                    btnRosaHome.get(0).setImageResource(R.drawable.playericon);
+                    btnRosaHome.get(1).setImageResource(R.drawable.playericon);
+                    btnRosaHome.get(2).setImageResource(R.drawable.playericon);
+                    btnRosaHome.get(3).setImageResource(R.drawable.playericon);
 
 
                 }
                 case RED -> {
-                    Character[] characters = getCharacters(player);
 
-                    btnRedHome1.setImageResource(R.drawable.playericon);
-                    btnRedHome2.setImageResource(R.drawable.playericon);
-                    btnRedHome3.setImageResource(R.drawable.playericon);
-                    btnRedHome4.setImageResource(R.drawable.playericon);
+                    btnRedHome.get(0).setImageResource(R.drawable.playericon);
+                    btnRedHome.get(1).setImageResource(R.drawable.playericon);
+                    btnRedHome.get(2).setImageResource(R.drawable.playericon);
+                    btnRedHome.get(3).setImageResource(R.drawable.playericon);
 
-                    btnRedHome1.setOnClickListener(v -> {
-                        moveToStartCharacter(characters[0]);});
-                    btnRedHome2.setOnClickListener(v -> {
-                        moveToStartCharacter(characters[1]);});
-                    btnRedHome3.setOnClickListener(v -> {
-                        moveToStartCharacter(characters[2]);});
-                    btnRedHome4.setOnClickListener(v -> {
-                        moveToStartCharacter(characters[3]);});
+
                 }
 
                 case GREEN -> {
-                    Character[] characters = getCharacters(player);
 
-                    btnGreenHome1.setImageResource(R.drawable.playericon);
-                    btnGreenHome2.setImageResource(R.drawable.playericon);
-                    btnGreenHome3.setImageResource(R.drawable.playericon);
-                    btnGreenHome4.setImageResource(R.drawable.playericon);
+                    btnRedHome.get(0).setImageResource(R.drawable.playericon);
+                    btnRedHome.get(1).setImageResource(R.drawable.playericon);
+                    btnRedHome.get(2).setImageResource(R.drawable.playericon);
+                    btnRedHome.get(3).setImageResource(R.drawable.playericon);
 
-                    btnGreenHome1.setOnClickListener(v -> {
-                        moveToStartCharacter(characters[0]);});
-                    btnGreenHome2.setOnClickListener(v -> {
-                        moveToStartCharacter(characters[1]);});
-                    btnGreenHome3.setOnClickListener(v -> {
-                        moveToStartCharacter(characters[2]);});
-                    btnGreenHome4.setOnClickListener(v -> {
-                        moveToStartCharacter(characters[3]);});
                 }
                 case LIGHT_BLUE -> {
-                    Character[] characters = getCharacters(player);
 
-                    btnBlueHome1.setImageResource(R.drawable.playericon);
-                    btnBlueHome2.setImageResource(R.drawable.playericon);
-                    btnBlueHome3.setImageResource(R.drawable.playericon);
-                    btnBlueHome4.setImageResource(R.drawable.playericon);
-
-                    btnBlueHome1.setOnClickListener(v -> {
-                        moveToStartCharacter(characters[0]);});
-                    btnBlueHome2.setOnClickListener(v -> {
-                        moveToStartCharacter(characters[1]);});
-                    btnBlueHome3.setOnClickListener(v -> {
-                        moveToStartCharacter(characters[2]);});
-                    btnBlueHome4.setOnClickListener(v -> {
-                        moveToStartCharacter(characters[3]);});
+                    btnBlueHome.get(0).setImageResource(R.drawable.playericon);
+                    btnBlueHome.get(1).setImageResource(R.drawable.playericon);
+                    btnBlueHome.get(2).setImageResource(R.drawable.playericon);
+                    btnBlueHome.get(3).setImageResource(R.drawable.playericon);
                 }
 
                 case DARK_BLUE -> {
-                    Character[] characters = getCharacters(player);
 
-                    btnLilaHome1.setImageResource(R.drawable.playericon);
-                    btnLilaHome2.setImageResource(R.drawable.playericon);
-                    btnLilaHome3.setImageResource(R.drawable.playericon);
-                    btnLilaHome4.setImageResource(R.drawable.playericon);
-
-                    btnLilaHome1.setOnClickListener(v -> {
-                        moveToStartCharacter(characters[0]);});
-                    btnLilaHome2.setOnClickListener(v -> {
-                        moveToStartCharacter(characters[1]);});
-                    btnLilaHome3.setOnClickListener(v -> {
-                        moveToStartCharacter(characters[2]);});
-                    btnLilaHome4.setOnClickListener(v -> {
-                        moveToStartCharacter(characters[3]);});
+                    btnLilaHome.get(0).setImageResource(R.drawable.playericon);
+                    btnLilaHome.get(1).setImageResource(R.drawable.playericon);
+                    btnLilaHome.get(2).setImageResource(R.drawable.playericon);
+                    btnLilaHome.get(3).setImageResource(R.drawable.playericon);
                 }
             }
         }
     }
 
-    private void moveToStartCharacter(Character c) {
+    private void moveCharacterToStartingPosition() {
 
         if (gameboardPositions.isEmpty()) {
             throw new NullPointerException("Gameboard is not initalized yet.");
         } else {
+            Character c = Game.INSTANCE.getNextCharacterForStart();
+            if (c != null) {
+                Game.INSTANCE.moveCharacterToStartingPostion(c);
 
-            if (c.status().equals(CharacterState.HOME)) {
-                Log.i("App", "Character " + c.id() + " is currently in HOME");
-            } else if (c.status().equals(CharacterState.FIELD)) {
-                Log.i("App", "Character " + c.id() + " is currently on the field");
-            } else if (c.status().equals(CharacterState.GOAL)) {
-                Log.i("App", "Character " + c.id() + " is currently in GOAL");
+            } else {
+                Toast.makeText(requireContext(), "No character in HOME left", Toast.LENGTH_SHORT).show();
+                showDialoge();
             }
         }
+    }
+
+    private void moveCharacterOnField(Character c, int oldPosition, MoveType moveType) {
+        Log.d("App", "Character " + c.id() + " gets set to position " + c.position() + " from " + oldPosition);
+        gameboardPositions.get(c.position()).setImageResource(R.drawable.playericon);
+
+        gameboardPositions.get(c.position()).setOnClickListener(v -> {
+            //send move request to server
+            doCharacterAction(c);
+        });
+
+        if (moveType.equals(MoveType.MOVE_ON_FIELD) || moveType.equals(MoveType.MOVE_TO_GOAL)) {
+            Log.d("App", "Character " + c.id() + " gets hidden on old position " + oldPosition);
+            gameboardPositions.get(oldPosition).setBackgroundColor(Integer.parseInt("#00FFFFFF"));
+            gameboardPositions.get(oldPosition).setOnClickListener(v -> {
+                //do nothing
+            });
+        }
+    }
+
+    private void doCharacterAction(Character c) {
     }
 
     private Character[] getCharacters(Player player) {
@@ -448,47 +384,48 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         return new Character[0];
     }
 
+
     private void setGoalPositions(SortedSet<Player> players) {
         for (Player player : players) {
             switch (player.color()) {
                 case YELLOW -> {
-                    btnYellowGoal1.setImageResource(R.drawable.playericon);
-                    btnYellowGoal2.setImageResource(R.drawable.playericon);
-                    btnYellowGoal3.setImageResource(R.drawable.playericon);
-                    btnYellowGoal4.setImageResource(R.drawable.playericon);
+                    btnYellowGoal.get(0).setImageResource(R.drawable.playericon);
+                    btnYellowGoal.get(1).setImageResource(R.drawable.playericon);
+                    btnYellowGoal.get(2).setImageResource(R.drawable.playericon);
+                    btnYellowGoal.get(3).setImageResource(R.drawable.playericon);
                 }
 
                 case PINK -> {
-                    btnRosaGoal1.setImageResource(R.drawable.playericon);
-                    btnRosaGoal2.setImageResource(R.drawable.playericon);
-                    btnRosaGoal3.setImageResource(R.drawable.playericon);
-                    btnRosaGoal4.setImageResource(R.drawable.playericon);
+                    btnRosaGoal.get(0).setImageResource(R.drawable.playericon);
+                    btnRosaGoal.get(1).setImageResource(R.drawable.playericon);
+                    btnRosaGoal.get(2).setImageResource(R.drawable.playericon);
+                    btnRosaGoal.get(3).setImageResource(R.drawable.playericon);
                 }
                 case RED -> {
-                    btnRedGoal1.setImageResource(R.drawable.playericon);
-                    btnRedGoal2.setImageResource(R.drawable.playericon);
-                    btnRedGoal3.setImageResource(R.drawable.playericon);
-                    btnRedGoal4.setImageResource(R.drawable.playericon);
+                    btnRedGoal.get(0).setImageResource(R.drawable.playericon);
+                    btnRedGoal.get(1).setImageResource(R.drawable.playericon);
+                    btnRedGoal.get(2).setImageResource(R.drawable.playericon);
+                    btnRedGoal.get(3).setImageResource(R.drawable.playericon);
                 }
 
                 case GREEN -> {
-                    btnGreenGoal1.setImageResource(R.drawable.playericon);
-                    btnGreenGoal2.setImageResource(R.drawable.playericon);
-                    btnGreenGoal3.setImageResource(R.drawable.playericon);
-                    btnGreenGoal4.setImageResource(R.drawable.playericon);
+                    btnGreenGoal.get(0).setImageResource(R.drawable.playericon);
+                    btnGreenGoal.get(1).setImageResource(R.drawable.playericon);
+                    btnGreenGoal.get(2).setImageResource(R.drawable.playericon);
+                    btnGreenGoal.get(3).setImageResource(R.drawable.playericon);
                 }
                 case LIGHT_BLUE -> {
-                    btnBlueGoal1.setImageResource(R.drawable.playericon);
-                    btnBlueGoal2.setImageResource(R.drawable.playericon);
-                    btnBlueGoal3.setImageResource(R.drawable.playericon);
-                    btnBlueGoal4.setImageResource(R.drawable.playericon);
+                    btnBlueGoal.get(0).setImageResource(R.drawable.playericon);
+                    btnBlueGoal.get(1).setImageResource(R.drawable.playericon);
+                    btnBlueGoal.get(2).setImageResource(R.drawable.playericon);
+                    btnBlueGoal.get(3).setImageResource(R.drawable.playericon);
                 }
 
                 case DARK_BLUE -> {
-                    btnLilaGoal1.setImageResource(R.drawable.playericon);
-                    btnLilaGoal2.setImageResource(R.drawable.playericon);
-                    btnLilaGoal3.setImageResource(R.drawable.playericon);
-                    btnLilaGoal4.setImageResource(R.drawable.playericon);
+                    btnLilaGoal.get(0).setImageResource(R.drawable.playericon);
+                    btnLilaGoal.get(1).setImageResource(R.drawable.playericon);
+                    btnLilaGoal.get(2).setImageResource(R.drawable.playericon);
+                    btnLilaGoal.get(3).setImageResource(R.drawable.playericon);
                 }
             }
         }
@@ -804,25 +741,19 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
             newImageView.setImageResource(R.drawable.playericon); // set new position
         }
     }
-    //used for reveal witch!
+
+    //necessary methdo for revealWitch
     private int getPlayerIcon(com.example.frontend.Player player) {
         // Return the drawable resource id based on player details
-        switch (player.color()) {
-            case YELLOW:
-                return R.drawable.yellowhat;
-            case PINK:
-                return R.drawable.pinkhat;
-            case RED:
-                return R.drawable.redhat;
-            case GREEN:
-                return R.drawable.greenhat;
-            case LIGHT_BLUE:
-                return R.drawable.lightbluehat;
-            case DARK_BLUE:
-                return R.drawable.bluehat;
-            // add other cases as necessary
-        }
-        return -1; // default or error case
+        return switch (player.color()) {
+            case YELLOW -> R.drawable.yellowhat;
+            case PINK -> R.drawable.pinkhat;
+            case RED -> R.drawable.redhat;
+            case GREEN -> R.drawable.greenhat;
+            case LIGHT_BLUE -> R.drawable.lightbluehat;
+            case DARK_BLUE -> R.drawable.bluehat;
+
+        };
     }
 
 
@@ -841,6 +772,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         if (remainingTime > 0) {
             //startTimer();
+            Log.i("App", "startTimer");
         }
         Game.INSTANCE.setGameEventListener(this);
     }
@@ -862,29 +794,72 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         }
         if (propertyChangeEvent.getPropertyName().equals(Game.Property.MOVE_CHARACTER.name())) {
             int diceValue = (int) propertyChangeEvent.getNewValue();
-            requireActivity().runOnUiThread(() -> {
-                diceRolled(diceValue);
-            });
+            requireActivity().runOnUiThread(() -> diceRolled(diceValue));
         } else if (propertyChangeEvent.getPropertyName().equals(Game.Property.DICE_ROLLED.name())) {
             DicePayload payload = (DicePayload) propertyChangeEvent.getNewValue();
-            requireActivity().runOnUiThread(() -> {
-                diceRolled(payload);
-            });
+            requireActivity().runOnUiThread(() -> diceRolled(payload));
         } else if (propertyChangeEvent.getPropertyName().equals(Game.Property.YOUR_TURN.name())) {
-            yourTurn();
+            requireActivity().runOnUiThread(this::yourTurn);
+        } else if(propertyChangeEvent.getPropertyName().equals(Game.Property.UPDATE_CHARACTER_POSITION.name())){
+            Log.d("App", "Update of character position starts now");
+            requireActivity().runOnUiThread(() -> updateCharacterPosition((UpdatePositionObject) propertyChangeEvent.getNewValue()));
         }
     }
 
-    private void diceRolled(int diceValue) {
-        if (!isAdded()) {
-            Toast.makeText(requireContext(), "Your dice cannot be rolled", Toast.LENGTH_SHORT).show();
-        } else {
-            if (diceValue == 6) {
-                showDialoge();
-            }
-            Toast.makeText(requireContext(), "Your dice has been rolled", Toast.LENGTH_SHORT).show();
+    private void updateCharacterPosition(UpdatePositionObject upo) {
+        if(upo.getMoveType().equals(MoveType.MOVE_TO_FIELD)){
+            Log.i("App", "Character will be moved from home to field");
+            moveCharacterToField(upo);
+        }else if(upo.getMoveType().equals(MoveType.MOVE_ON_FIELD)){
+            Log.i("App", "Character will be moved on field");
+
+
+        } else if (upo.getMoveType().equals(MoveType.MOVE_TO_GOAL)) {
+            Log.i("App", "Character will be moved from field to goal");
+
+
         }
     }
+
+    private void moveCharacterToField(UpdatePositionObject upo) {
+        Log.i("App", "Character gets relocated from home to field");
+        moveCharacterOnField(upo.getCharacter(), upo.getOldPosition(), upo.getMoveType());
+
+        Log.i("App", "Character will be hidden from home");
+        switch (upo.getPlayer().color()){
+            case YELLOW:
+                hideNextCharacterInHome(btnYelloHome);
+                break;
+            case PINK:
+                hideNextCharacterInHome(btnRosaHome);
+                break;
+            case RED:
+                hideNextCharacterInHome(btnRedHome);
+                break;
+            case GREEN:
+                hideNextCharacterInHome(btnGreenHome);
+                break;
+            case LIGHT_BLUE:
+                hideNextCharacterInHome(btnBlueHome);
+                break;
+            case DARK_BLUE:
+                hideNextCharacterInHome(btnLilaHome);
+                break;
+        }
+    }
+
+    private void hideNextCharacterInHome(ArrayList<ImageView> home) {
+        for(ImageView i:home){
+            if(i.getVisibility() == View.VISIBLE){
+                i.setVisibility(View.INVISIBLE);
+                Log.d("App", "Character hidden in home");
+                return;
+            }
+        }
+    }
+
+
+
     private void showDialoge() {
         Dialog dialog = new Dialog(requireActivity());
         dialog.setContentView(R.layout.dialog_layout);
@@ -907,22 +882,30 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         moveToStartBtn.setOnClickListener(v -> {
             //send request to server
             //Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload()));
-
+            moveCharacterToStartingPosition();
             dialog.dismiss();
             Log.i("App", "MoveToStart Request will be sent now");
         });
 
         dialog.show();
     }
-
-    private void revealWitchFunct() {
-        Log.i("App", "Reveal Witch Function");
+    private void diceRolled(int diceValue) {
+        if (!isAdded()) {
+            Toast.makeText(requireContext(), "Your dice cannot be rolled", Toast.LENGTH_SHORT).show();
+        } else {
+            if (diceValue == 6) {
+                showDialoge();
+            }
+            Toast.makeText(requireContext(), "Your dice has been rolled", Toast.LENGTH_SHORT).show();
+        }
     }
-
     private void diceRolled(DicePayload payload) {
         if (isAdded()) {
             Toast.makeText(requireContext(), "Player" + payload.player() + " has rolled " + payload.diceValue(), Toast.LENGTH_SHORT).show();
             Log.i("App", payload.player() + ": " + payload.diceValue());
         }
+    }
+    private void revealWitchFunct() {
+        Log.i("App", "Reveal Witch Function");
     }
 }

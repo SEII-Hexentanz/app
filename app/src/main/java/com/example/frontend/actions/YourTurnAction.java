@@ -10,7 +10,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import at.aau.payloads.Payload;
-/*import at.aau.payloads.YourTurnPayload;
+import at.aau.payloads.YourTurnPayload;
 
 public class YourTurnAction implements Action {
     @Override
@@ -21,4 +21,3 @@ public class YourTurnAction implements Action {
         } else Log.e("App", "Payload is not an instance of YourTurnPayload");
     }
 }
-*/
