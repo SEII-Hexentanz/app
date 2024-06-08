@@ -30,6 +30,7 @@ import at.aau.values.GameState;
 public class LobbyFragment extends Fragment implements PropertyChangeListener {
 
     ImageButton retCreateLobby;
+    String TAG="LOBBY_FRAGMENT_TAG";
     ArrayList<Player> userList = new ArrayList<>();
     PlayerAdapter adapter;
     private Button startGame;
@@ -131,14 +132,14 @@ public class LobbyFragment extends Fragment implements PropertyChangeListener {
             com.example.frontend.Player coloredPlayer = new com.example.frontend.Player(player.getUsername(), player.getAge(), player.getCharacters(),player.color());
             Game.INSTANCE.updatePlayer(player, coloredPlayer);
             Game.INSTANCE.addPlayers(playersList);
-            Log.i("LOBBY_FRAGMENT", player.getUsername()+ " got color " + color.toString());
+            Log.i(TAG, player.getUsername()+ " got color " + color.toString());
             colorIndex++;
         }
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-        Log.i("App", "PropertyChangeEvent received: " + propertyChangeEvent.getPropertyName());
+        Log.i(TAG, "PropertyChangeEvent received: " + propertyChangeEvent.getPropertyName());
         if (propertyChangeEvent.getPropertyName().equals(Game.Property.PLAYERS.name())) {
             updatePlayerData((SortedSet<Player>) propertyChangeEvent.getNewValue());
         } else if (propertyChangeEvent.getPropertyName().equals(Game.Property.GAME_STATE.name()) &&

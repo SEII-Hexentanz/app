@@ -257,7 +257,7 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
     }
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-        Log.i("DiceFragment", "PropertyChangeEvent received: " + propertyChangeEvent.getPropertyName());
+        Log.i(TAG, "PropertyChangeEvent received: " + propertyChangeEvent.getPropertyName());
         if (!isAdded()) {
             // Fragment is not attached, skip this event
             return;
@@ -278,7 +278,7 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
                 //Game.INSTANCE.movePlayer(diceValue);
                 Game.INSTANCE.resetMyTurn();
 
-                Log.i("DiceFragment", "dice roll ");
+                Log.i(TAG, "dice roll ");
             }
         }
     }

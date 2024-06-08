@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -354,7 +355,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     }
 
     private void moveCharacterOnField(Character c, int oldPosition, MoveType moveType) {
-        Log.d("App", "Character " + c.id() + " gets set to position " + c.position() + " from " + oldPosition);
+        Log.d(TAG, "Character " + c.id() + " gets set to position " + c.position() + " from " + oldPosition);
         gameboardPositions.get(c.position()).setImageResource(R.drawable.playericon);
 
         gameboardPositions.get(c.position()).setOnClickListener(v -> {
@@ -363,8 +364,8 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         });
 
         if (moveType.equals(MoveType.MOVE_ON_FIELD) || moveType.equals(MoveType.MOVE_TO_GOAL)) {
-            Log.d("App", "Character " + c.id() + " gets hidden on old position " + oldPosition);
-            gameboardPositions.get(oldPosition).setBackgroundColor(Integer.parseInt("#00FFFFFF"));
+            Log.d(TAG, "Character " + c.id() + " gets hidden on old position " + oldPosition);
+            gameboardPositions.get(oldPosition).setBackgroundColor(Color.parseColor("#00FFFFFF"));
             gameboardPositions.get(oldPosition).setOnClickListener(v -> {
                 //do nothing
             });
@@ -725,7 +726,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         if (remainingTime > 0) {
             //startTimer();
-            Log.i("App", "startTimer");
+            Log.i(TAG, "startTimer");
         }
         Game.INSTANCE.setGameEventListener(this);
     }
@@ -740,37 +741,43 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
 
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-        Log.i("GameBoard", "PropertyChangeEvent received: " + propertyChangeEvent.getPropertyName());
+        Log.i(TAG, "PropertyChangeEvent received: " + propertyChangeEvent.getPropertyName());
         if (!isAdded()) {
             // Fragment is not attached, skip this event
             return;
         }
         if (propertyChangeEvent.getPropertyName().equals(Game.Property.MOVE_CHARACTER.name())) {
             int diceValue = (int) propertyChangeEvent.getNewValue();
-            requireActivity().runOnUiThread(() -> diceRolled(diceValue));
+            requireActivity().runOnUiThread(() -> {
+                diceRolled(diceValue);
+                Game.INSTANCE.movePlayer(diceValue);  // Call movePlayer here
+            });
         } else if (propertyChangeEvent.getPropertyName().equals(Game.Property.DICE_ROLLED.name())) {
             DicePayload payload = (DicePayload) propertyChangeEvent.getNewValue();
-            requireActivity().runOnUiThread(() -> diceRolled(payload));
+            requireActivity().runOnUiThread(() -> {
+                diceRolled(payload);
+                if (payload.player().name().equals(Game.INSTANCE.getPlayerName())) {
+                    Game.INSTANCE.movePlayer(payload.diceValue());  // Call movePlayer here
+                }
+            });
         } else if (propertyChangeEvent.getPropertyName().equals(Game.Property.YOUR_TURN.name())) {
             requireActivity().runOnUiThread(this::yourTurn);
         } else if(propertyChangeEvent.getPropertyName().equals(Game.Property.UPDATE_CHARACTER_POSITION.name())){
-            Log.d("App", "Update of character position starts now");
+            Log.d(TAG, "Update of character position starts now");
             requireActivity().runOnUiThread(() -> updateCharacterPosition((UpdatePositionObject) propertyChangeEvent.getNewValue()));
         }
     }
 
     private void updateCharacterPosition(UpdatePositionObject upo) {
         if(upo.getMoveType().equals(MoveType.MOVE_TO_FIELD)){
-            Log.i("App", "Character will be moved from home to field");
+            Log.i(TAG, "Character will be moved from home to field");
             moveCharacterToField(upo);
         }else if(upo.getMoveType().equals(MoveType.MOVE_ON_FIELD)){
-            Log.i("App", "Character will be moved on field");
-
-
+            Log.i(TAG, "Character will be moved on field");
+            moveCharacterOnField(upo.getCharacter(), upo.getOldPosition(), upo.getMoveType());
         } else if (upo.getMoveType().equals(MoveType.MOVE_TO_GOAL)) {
-            Log.i("App", "Character will be moved from field to goal");
-
-
+            Log.i(TAG, "Character will be moved from field to goal");
+            moveCharacterToGoal(upo);
         }
     }
 
@@ -815,7 +822,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         for (ImageView goalPosition : goalPositions) {
             if (goalPosition.getDrawable() == null) {
                 goalPosition.setImageResource(R.drawable.playericon);
-                Log.d("App", "Character moved to goal position");
+                Log.d(TAG, "Character moved to goal position");
                 return;
             }
         }
@@ -825,7 +832,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         Log.i(TAG, "Character gets relocated from home to field");
         moveCharacterOnField(upo.getCharacter(), upo.getOldPosition(), upo.getMoveType());
 
-        Log.i("App", "Character will be hidden from home");
+        Log.i(TAG, "Character will be hidden from home");
         switch (upo.getPlayer().color()){
             case YELLOW:
                 hideNextCharacterInHome(btnYelloHome);
@@ -852,7 +859,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         for(ImageView i:home){
             if(i.getVisibility() == View.VISIBLE){
                 i.setVisibility(View.INVISIBLE);
-                Log.d("App", "Character hidden in home");
+                Log.d(TAG, "Character hidden in home");
                 return;
             }
         }
@@ -871,12 +878,12 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         moveOnFieldBtn.setOnClickListener(v -> {
             // Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload()));
             dialog.dismiss();
-            Log.i("App", "Move Command  will be sent now");
+            Log.i(TAG, "Move Command  will be sent now");
         });
         revealWitchBtn.setOnClickListener(v -> {
             revealWitchFunct();
             dialog.dismiss();
-            Log.i("App", "RevealWitch Request will be sent now + move request will be sent then");
+            Log.i(TAG, "RevealWitch Request will be sent now + move request will be sent then");
         });
 
         moveToStartBtn.setOnClickListener(v -> {
@@ -884,7 +891,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
             //Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload()));
             moveCharacterToStartingPosition();
             dialog.dismiss();
-            Log.i("App", "MoveToStart Request will be sent now");
+            Log.i(TAG, "MoveToStart Request will be sent now");
         });
 
         dialog.show();
@@ -902,10 +909,10 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     private void diceRolled(DicePayload payload) {
         if (isAdded()) {
             Toast.makeText(requireContext(), "Player" + payload.player() + " has rolled " + payload.diceValue(), Toast.LENGTH_SHORT).show();
-            Log.i("App", payload.player() + ": " + payload.diceValue());
+            Log.i(TAG, payload.player() + ": " + payload.diceValue());
         }
     }
     private void revealWitchFunct() {
-        Log.i("App", "Reveal Witch Function");
+        Log.i(TAG, "Reveal Witch Function");
     }
 }
