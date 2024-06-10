@@ -624,7 +624,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
 
     private void moveCharacterOnField(Character c, int oldPosition, MoveType moveType) {
         //TODO: add dicepayload and refactor game.java
-        int diceRoll=
+        int diceRoll= 5;
         int maxPosition = 36;
         int newPosition = (oldPosition + diceRoll) % (maxPosition + 1);
 
