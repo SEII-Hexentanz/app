@@ -276,7 +276,7 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
                 updateDiceImage(diceImage, diceValue);
 
                 //Game.INSTANCE.movePlayer(diceValue);
-                Game.INSTANCE.resetMyTurn();
+                //  Game.INSTANCE.resetMyTurn();
 
                 Log.i("DiceFragment", "dice roll ");
             }

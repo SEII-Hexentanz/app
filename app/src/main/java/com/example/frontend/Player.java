@@ -1,6 +1,7 @@
 package com.example.frontend;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import at.aau.models.Character;
@@ -14,6 +15,8 @@ public class Player implements Comparable<Player> {
     private int age;
     private int imageResource;
     private Color color;
+
+
 
     public Player() {
         //Empty constructor
@@ -32,6 +35,7 @@ public class Player implements Comparable<Player> {
             case LIGHT_BLUE -> this.imageResource = R.drawable.lightbluehat;
             case DARK_BLUE -> this.imageResource = R.drawable.bluehat;
         }
+
     }
 
     public String getUsername() {
@@ -66,6 +70,8 @@ public class Player implements Comparable<Player> {
         this.imageResource = imageResource;
     }
 
+
+
     @Override
     public int compareTo(Player o) {
         return o.getAge() - this.getAge();
@@ -76,9 +82,9 @@ public class Player implements Comparable<Player> {
     }
 
     public Player updateCharacterState(int characterIndex, CharacterState newState) {
-   //     Character updatedCharacter = new Character(characters.get(characterIndex).position(), newState);
+        //     Character updatedCharacter = new Character(characters.get(characterIndex).position(), newState);
         List<Character> updatedCharacters = new ArrayList<>(characters);
-      //  updatedCharacters.set(characterIndex, updatedCharacter);
+        //  updatedCharacters.set(characterIndex, updatedCharacter);
         return new Player(username, age, updatedCharacters, color);
     }
 

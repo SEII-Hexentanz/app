@@ -38,7 +38,11 @@ import java.util.SortedSet;
 
 
 import at.aau.models.Character;
+import at.aau.models.Request;
 import at.aau.payloads.DicePayload;
+import at.aau.payloads.PlayerMovePayload;
+import at.aau.values.CharacterState;
+import at.aau.values.CommandType;
 import at.aau.values.MoveType;
 
 
@@ -56,7 +60,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     private HashMap<at.aau.values.Color, Integer> mapGoalPoint;
     private ScaleGestureDetector scaleGestureDetector;
     private long startTime = 0L;
-    private Handler timerHandler = new Handler();
+    //private Handler timerHandler = new Handler();
     private long millisecondsTime = 0L;
     private long timeSwapBuff = 0L;
     private final long MAX_TIMER_DURATION = 15 * 60 * 1000; //1min=60_000 // 15 minutes
@@ -75,13 +79,11 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     private ArrayList<ImageView> btnGreenGoal;
     private ArrayList<ImageView> btnBlueGoal;
     private ArrayList<ImageView> btnLilaGoal;
-
-
     private ArrayList<ImageView> playerHomePositions;
-
     private ArrayList<ImageView> playerGoalPositions;
     //ArrayList für jedes einzelne Home und jedes einzelne Goal am Feld
 
+    private boolean witchRevealVal = false;
     public GameBoardFragment() {
         Game.INSTANCE.addPropertyChangeListener(this);
     }
@@ -364,7 +366,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
 
         if (moveType.equals(MoveType.MOVE_ON_FIELD) || moveType.equals(MoveType.MOVE_TO_GOAL)) {
             Log.d("App", "Character " + c.id() + " gets hidden on old position " + oldPosition);
-            gameboardPositions.get(oldPosition).setBackgroundColor(Integer.parseInt("#00FFFFFF"));
+            gameboardPositions.get(oldPosition).setImageResource(R.drawable.ic_launcher_background);
             gameboardPositions.get(oldPosition).setOnClickListener(v -> {
                 //do nothing
             });
@@ -372,6 +374,16 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     }
 
     private void doCharacterAction(Character c) {
+        if(Game.INSTANCE.isMyTurn()) {
+
+            if (witchRevealVal == true) {
+                Log.i("App", "reveal witch");
+            } else {
+
+                //move command
+                Game.INSTANCE.sendMoveOnFieldRequest(c);
+            }
+        }
     }
 
     private Character[] getCharacters(Player player) {
@@ -717,8 +729,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
             moveCharacterToField(upo);
         }else if(upo.getMoveType().equals(MoveType.MOVE_ON_FIELD)){
             Log.i("App", "Character will be moved on field");
-
-
+            moveCharacterOnField(upo.getCharacter(), upo.getOldPosition(), upo.getMoveType());
         } else if (upo.getMoveType().equals(MoveType.MOVE_TO_GOAL)) {
             Log.i("App", "Character will be moved from field to goal");
 
@@ -779,6 +790,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
             Log.i("App", "Move Command  will be sent now");
         });
         revealWitchBtn.setOnClickListener(v -> {
+            witchRevealVal = true;
             revealWitchFunct();
             dialog.dismiss();
             Log.i("App", "RevealWitch Request will be sent now + move request will be sent then");
