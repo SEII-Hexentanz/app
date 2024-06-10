@@ -2,6 +2,8 @@ package com.example.frontend;
 
 import android.content.res.Resources;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -43,7 +45,8 @@ public enum Game {
     final HashMap<Color, Integer> mapStartingPoint= new HashMap<>();;
 
     private Player currentPlayer = null;
-
+    public ArrayList<ImageView> gameboardPositions;
+    HashMap<at.aau.values.Color, Integer> mapGoalPoint;
     public String getPlayerName() {
         return playerName;
     }
@@ -119,6 +122,27 @@ public enum Game {
         mapStartingPoint.put(Color.DARK_BLUE, 3);
     }
 
+    public void initializeGameBoard(View view) {
+        gameboardPositions = new ArrayList<>();
+        for (int i = 0; i <= 35; i++) {
+            int resID = view.getResources().getIdentifier("gameboardpos" + i, "id", view.getContext().getPackageName());
+            gameboardPositions.add(view.findViewById(resID));
+        }
+
+        mapGoalPositions();
+        mapStartPositions();
+    }
+
+    void mapGoalPositions() {
+        mapGoalPoint = new HashMap<>();
+        mapGoalPoint.put(Color.YELLOW, 26);
+        mapGoalPoint.put(Color.PINK, 32);
+        mapGoalPoint.put(Color.RED, 14);
+        mapGoalPoint.put(Color.GREEN, 20);
+        mapGoalPoint.put(Color.LIGHT_BLUE, 9);
+        mapGoalPoint.put(Color.DARK_BLUE, 3);
+    }
+
     public void initializePlayerPositions() {
         for (Player player : frontPlayer) {
             Integer startPosition = mapStartingPoint.get(player.color());
@@ -134,6 +158,7 @@ public enum Game {
         Integer oldPosition = playerPositions.get(player);
         playerPositions.put(player, position);
         support.firePropertyChange("playerPosition", Optional.ofNullable(oldPosition), position);
+        Log.i(TAG, "Player " + player.getUsername() + " position set to " + position + " from " + oldPosition);
     }
 
     public int getPlayerPosition(Player player) {
@@ -190,39 +215,37 @@ public enum Game {
         boolean hasAnotherTurn = false;
         int currentPosition = getPlayerPosition(currentPlayer);
         int newPosition;
-        int maxPosition = 36; //last position on board
+        int maxPosition = 36;
 
-        // Check if the player is at "Home" and the dice result allows moving out
         if (currentPosition == 0 && diceResult == 6) {
             newPosition = mapStartingPoint.get(currentPlayer.color());
             setPlayerPosition(currentPlayer, newPosition);
             broadcastMove(currentPlayer, 0, newPosition);
-            notifyPlayerPositionChanged(currentPlayer, 0, newPosition); // Notify the change
-            hasAnotherTurn = true; // Player gets another turn
-        } else if (currentPosition > 0) {
-            newPosition = currentPosition + diceResult;
-
-            // Handle wrapping around the board if the new position exceeds maxPosition
-            if (newPosition > maxPosition) {
-                newPosition = newPosition % (maxPosition + 1);
-            }
-
+            notifyPlayerPositionChanged(currentPlayer, 0, newPosition);
+            hasAnotherTurn = true;
+            Log.i(TAG, "setPlayerPosition inside 1st if" + getPlayerPosition(currentPlayer));
+        }
+        else if (currentPosition > 0) {
+            newPosition = (currentPosition + diceResult) % (maxPosition + 1);
             setPlayerPosition(currentPlayer, newPosition);
             broadcastMove(currentPlayer, currentPosition, newPosition);
-            notifyPlayerPositionChanged(currentPlayer, currentPosition, newPosition); // Notify the change
+            notifyPlayerPositionChanged(currentPlayer, currentPosition, newPosition);
+            gameboardPositions.get(newPosition).setImageResource(R.drawable.playericon);
+            Log.i(TAG, "Updated Position to newPosition " + newPosition + " || Current Position is " + currentPosition);
+            Log.i(TAG, "setPlayerPosition insinde else" + getPlayerPosition(currentPlayer));
             if (diceResult == 6) {
-                hasAnotherTurn = true; // Player gets another turn
+                hasAnotherTurn = true;
             }
         } else {
             Log.i(TAG, "Player " + currentPlayer.getUsername() + " cannot move out of Home without rolling a 6.");
         }
 
         if (!hasAnotherTurn) {
-            nextPlayer(); // Move to the next player only if the current player does not get another turn
+            nextPlayer();
         }
     }
 
-    public void notifyPlayerPositionChanged(com.example.frontend.Player player, int oldPosition, int newPosition) {
+    public void notifyPlayerPositionChanged(Player player, int oldPosition, int newPosition) {
         if (eventListener != null) {
             eventListener.onPlayerPositionChanged(player, oldPosition, newPosition);
         }
@@ -232,7 +255,7 @@ public enum Game {
     public void addPlayers(List<Player> playersList) {
         for (Player player : playersList) {
             if (!frontPlayer.contains(player)) {
-               Color color = Color.values()[frontPlayer.size() % Color.values().length];
+                Color color = Color.values()[frontPlayer.size() % Color.values().length];
                 Player coloredPlayer = new Player(player.getUsername(), player.getAge(), player.getCharacters(),player.color());
                 frontPlayer.add(coloredPlayer);
                 playerPositions.put(coloredPlayer, 0);
@@ -286,7 +309,7 @@ public enum Game {
 
     public int moveCharacterToStartingPostion(Character c) {
         int position = mapStartingPoint.get(currentPlayer.color());
-       Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), position, MoveType.MOVE_TO_FIELD)));
+        Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), position, MoveType.MOVE_TO_FIELD)));
         return position;
     }
 

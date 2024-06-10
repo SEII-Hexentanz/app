@@ -52,9 +52,6 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
 
     private ImageView gameBoard;
     private float mScaleFactor;
-
-
-    HashMap<at.aau.values.Color, Integer> mapGoalPoint;
     private ScaleGestureDetector scaleGestureDetector;
     private long startTime = 0L;
     private Handler timerHandler = new Handler();
@@ -62,7 +59,6 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     private long timeSwapBuff = 0L;
     private final long MAX_TIMER_DURATION = 15 * 60 * 1000; //1min=60_000 // 15 minutes
     private long remainingTime = MAX_TIMER_DURATION;
-    private ArrayList<ImageView> gameboardPositions;
     private ArrayList<ImageView> btnYelloHome;
     private ArrayList<ImageView> btnRosaHome;
     private ArrayList<ImageView> btnRedHome;
@@ -117,12 +113,12 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
 
         scaleGestureDetector = new ScaleGestureDetector(requireContext(), new ScaleListener());
 
-        initializeGameBoard(view);
+        Game.INSTANCE.initializeGameBoard(view);
         initalizePlayerGoalPositons(view);
         initalizePlayerHomePositions(view);
 
         setPlayerHomePositions(Game.INSTANCE.FrontPlayer());
-        getBoardContent(gameboardPositions);
+        getBoardContent(Game.INSTANCE.gameboardPositions);
 
         return view;
     }
@@ -340,7 +336,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
 
     private void moveCharacterToStartingPosition() {
 
-        if (gameboardPositions.isEmpty()) {
+        if (Game.INSTANCE.gameboardPositions.isEmpty()) {
             throw new NullPointerException("Gameboard is not initalized yet.");
         } else {
             Character c = Game.INSTANCE.getNextCharacterForStart();
@@ -352,27 +348,6 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
                 showDialoge();
             }
         }
-    }
-
-    private void moveCharacterOnField(Character c, int oldPosition, MoveType moveType) {
-        Log.d(TAG, "Character " + c.id() + " gets set to position " + c.position() + " from " + oldPosition);
-        gameboardPositions.get(c.position()).setImageResource(R.drawable.playericon);
-
-        gameboardPositions.get(c.position()).setOnClickListener(v -> {
-            //send move request to server
-            doCharacterAction(c);
-        });
-
-        if (moveType.equals(MoveType.MOVE_ON_FIELD) || moveType.equals(MoveType.MOVE_TO_GOAL)) {
-            Log.d(TAG, "Character " + c.id() + " gets hidden on old position " + oldPosition);
-            gameboardPositions.get(oldPosition).setBackgroundColor(Color.parseColor("#00FFFFFF"));
-            gameboardPositions.get(oldPosition).setOnClickListener(v -> {
-                //do nothing
-            });
-        }
-    }
-
-    private void doCharacterAction(Character c) {
     }
 
     private Character[] getCharacters(Player player) {
@@ -431,16 +406,6 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         }
     }
 
-
-    void mapGoalPositions() { //sets Start point for game
-        mapGoalPoint = new HashMap<>();
-        mapGoalPoint.put(at.aau.values.Color.YELLOW, 26);
-        mapGoalPoint.put(at.aau.values.Color.PINK, 32);
-        mapGoalPoint.put(at.aau.values.Color.RED, 14);
-        mapGoalPoint.put(at.aau.values.Color.GREEN, 20);
-        mapGoalPoint.put(at.aau.values.Color.LIGHT_BLUE, 9);
-        mapGoalPoint.put(at.aau.values.Color.DARK_BLUE, 3);
-    }
 
     private void initalizePlayerHomePositions(View view) {
         playerHomePositions = new ArrayList<>();
@@ -550,59 +515,6 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
 
     }
 
-    private void initializeGameBoard(View view) {
-        gameboardPositions = new ArrayList<>();
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos0));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos1));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos2));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos3));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos4));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos5));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos6));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos7));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos8));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos9));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos10));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos11));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos12));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos13));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos14));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos15));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos16));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos17));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos18));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos19));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos20));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos21));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos22));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos23));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos24));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos25));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos26));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos27));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos28));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos29));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos30));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos31));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos32));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos33));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos34));
-        gameboardPositions.add(view.findViewById(R.id.gameboardpos35));
-
-        mapGoalPositions();
-        Game.INSTANCE.mapStartPositions();
-
-
-    }
-
-    public ArrayList<ImageView> getGameboardPositions() {
-        return gameboardPositions;
-    }
-
-    public void setGameboardPositions(ArrayList<ImageView> gameboardPositions) {
-        this.gameboardPositions = gameboardPositions;
-    }
-
     private void getBoardContent(ArrayList<ImageView> list) {
         Log.i(TAG, "Board Content: " + String.valueOf(list.size()));
     }
@@ -674,9 +586,9 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     @Override
     public void onPlayerPositionChanged(com.example.frontend.Player player, int oldPosition, int newPosition) {
         requireActivity().runOnUiThread(() -> {
-            if (oldPosition >= 0 && oldPosition < gameboardPositions.size() && newPosition >= 0 && newPosition < gameboardPositions.size()) {
-                ImageView oldImageView = gameboardPositions.get(oldPosition);
-                ImageView newImageView = gameboardPositions.get(newPosition);
+            if (oldPosition >= 0 && oldPosition < Game.INSTANCE.gameboardPositions.size() && newPosition >= 0 && newPosition < Game.INSTANCE.gameboardPositions.size()) {
+                ImageView oldImageView = Game.INSTANCE.gameboardPositions.get(oldPosition);
+                ImageView newImageView = Game.INSTANCE.gameboardPositions.get(newPosition);
                 updateImageViews(oldImageView, newImageView, player);
             } else {
                 Log.e(TAG, "Invalid position(s): oldPosition=" + oldPosition + ", newPosition=" + newPosition);
@@ -710,33 +622,36 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         };
     }
 
+    private void moveCharacterOnField(Character c, int oldPosition, MoveType moveType) {
+        //TODO: add dicepayload and refactor game.java
+        int diceRoll=
+        int maxPosition = 36;
+        int newPosition = (oldPosition + diceRoll) % (maxPosition + 1);
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (countDownTimer != null) {
-            countDownTimer.cancel();
+        Log.i(TAG, "Character " + c.id() + " gets set to position " + newPosition + " from " + oldPosition + "||| diceRoll:" + diceRoll);
+        //Game.INSTANCE.setPlayerPosition(Game.INSTANCE.getCurrentPlayer(), newPosition);
+
+        ImageView newImageView = Game.INSTANCE.gameboardPositions.get(newPosition);
+        newImageView.setImageResource(R.drawable.playericon);
+
+        newImageView.setOnClickListener(v -> {
+            //send move request to server
+            doCharacterAction(c);
+        });
+
+        if (moveType.equals(MoveType.MOVE_ON_FIELD) || moveType.equals(MoveType.MOVE_TO_GOAL)) {
+            Log.i(TAG, "Character " + c.id() + " gets hidden on old position " + oldPosition);
+            ImageView oldImageView = Game.INSTANCE.gameboardPositions.get(oldPosition);
+            oldImageView.setBackgroundColor(Color.parseColor("#00FFFFFF"));
+            oldImageView.setOnClickListener(v -> {
+                //do nothing
+            });
         }
+
+        Log.i(TAG, "Updated Position to newPosition " + newPosition + " || Current Position was " + oldPosition);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        // Set screen orientation to landscape when GameBoardFragment is resumed
-        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        if (remainingTime > 0) {
-            //startTimer();
-            Log.i(TAG, "startTimer");
-        }
-        Game.INSTANCE.setGameEventListener(this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        // Reset screen orientation to portrait when GameBoardFragment is paused
-        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        //pauseTimer();
+    private void doCharacterAction(Character c) {
     }
 
     @Override
@@ -748,22 +663,14 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         }
         if (propertyChangeEvent.getPropertyName().equals(Game.Property.MOVE_CHARACTER.name())) {
             int diceValue = (int) propertyChangeEvent.getNewValue();
-            requireActivity().runOnUiThread(() -> {
-                diceRolled(diceValue);
-                Game.INSTANCE.movePlayer(diceValue);  // Call movePlayer here
-            });
+            requireActivity().runOnUiThread(() -> diceRolled(diceValue));
         } else if (propertyChangeEvent.getPropertyName().equals(Game.Property.DICE_ROLLED.name())) {
             DicePayload payload = (DicePayload) propertyChangeEvent.getNewValue();
-            requireActivity().runOnUiThread(() -> {
-                diceRolled(payload);
-                if (payload.player().name().equals(Game.INSTANCE.getPlayerName())) {
-                    Game.INSTANCE.movePlayer(payload.diceValue());  // Call movePlayer here
-                }
-            });
+            requireActivity().runOnUiThread(() -> diceRolled(payload));
         } else if (propertyChangeEvent.getPropertyName().equals(Game.Property.YOUR_TURN.name())) {
             requireActivity().runOnUiThread(this::yourTurn);
         } else if(propertyChangeEvent.getPropertyName().equals(Game.Property.UPDATE_CHARACTER_POSITION.name())){
-            Log.d(TAG, "Update of character position starts now");
+            Log.i(TAG, "Update of character position starts now");
             requireActivity().runOnUiThread(() -> updateCharacterPosition((UpdatePositionObject) propertyChangeEvent.getNewValue()));
         }
     }
@@ -789,7 +696,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         ///setGoalPositions --> gibt Goal Positions von SPieler aus
         Log.i(TAG,"Character will be on goal");
         int currentPosition = upo.getCharacter().position();
-        int goalPosition = mapGoalPoint.get(upo.getPlayer().color());
+        int goalPosition = Game.INSTANCE.mapGoalPoint.get(upo.getPlayer().color());
         if(Math.abs(goalPosition-currentPosition) <=6){
             switch(upo.getPlayer().color()){
                 case YELLOW:
@@ -822,7 +729,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         for (ImageView goalPosition : goalPositions) {
             if (goalPosition.getDrawable() == null) {
                 goalPosition.setImageResource(R.drawable.playericon);
-                Log.d(TAG, "Character moved to goal position");
+                Log.i(TAG, "Character moved to goal position");
                 return;
             }
         }
@@ -859,7 +766,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         for(ImageView i:home){
             if(i.getVisibility() == View.VISIBLE){
                 i.setVisibility(View.INVISIBLE);
-                Log.d(TAG, "Character hidden in home");
+                Log.i(TAG, "Character hidden in home");
                 return;
             }
         }
@@ -915,4 +822,34 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     private void revealWitchFunct() {
         Log.i(TAG, "Reveal Witch Function");
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+        Game.INSTANCE.removePropertyChangeListener(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Set screen orientation to landscape when GameBoardFragment is resumed
+        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        if (remainingTime > 0) {
+            //startTimer();
+            Log.i(TAG, "startTimer");
+        }
+        Game.INSTANCE.setGameEventListener(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Reset screen orientation to portrait when GameBoardFragment is paused
+        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        //pauseTimer();
+    }
+
 }
