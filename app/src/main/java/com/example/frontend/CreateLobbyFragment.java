@@ -87,7 +87,6 @@ public class CreateLobbyFragment extends Fragment {
 
     private void showGameBoardFragment() {
         String name = nameBox.getText().toString();
-
         GameBoardFragment gameBoardFragment = GameBoardFragment.newInstance(name);
 
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();

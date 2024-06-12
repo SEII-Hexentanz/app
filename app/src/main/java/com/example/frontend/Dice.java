@@ -12,9 +12,10 @@ public class Dice {
         diceNumber = 0;
         ran = new SecureRandom();
     }
-
-    public void useDice() {
+    //for testing purposes on client-side
+    public int useDice() {
         diceNumber = ran.nextInt(6) + 1;
+        return diceNumber;
     }
 
     //is also sum of dice
@@ -23,7 +24,9 @@ public class Dice {
     }
 
 
-    public void setDice(int diceNumber){this.diceNumber=diceNumber;}
+    public void setDice(int diceNumber) {
+        this.diceNumber = diceNumber;
+    }
 
     public void setRan(SecureRandom ran) {
         this.ran = ran;

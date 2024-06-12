@@ -43,4 +43,18 @@ import java.security.SecureRandom;
         int result = dices.getDice();
         assertTrue(result >= 1 && result <= 6, "Nach dem Setzen von SecureRandom sollte der Würfelwert zwischen 1 und 6 liegen.");
     }
+
+     @Test
+     public void testSetDice(){
+         Dice dice = new Dice();
+         dice.setDice(4);
+         assertEquals(4, dice.getDice());
+     }
+
+     @Test
+     public void testToString(){
+         Dice dice = new Dice();
+         dice.setDice(4);
+         assertEquals("dice=4", dice.toString());
+     }
 }
