@@ -2,41 +2,29 @@ package com.example.frontend;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 public class EndGameFragment extends Fragment {
-
-    private static final String ARG_WINNER_NAME = "winnerName";
-
-    private String sieger;
 
     public EndGameFragment() {
         // Required empty public constructor
     }
 
-    public static EndGameFragment newInstance(String winnerName) {
-        EndGameFragment fragment = new EndGameFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_WINNER_NAME, winnerName);
-        fragment.setArguments(args);
-        return fragment;
+    public static EndGameFragment newInstance() {
+        return new EndGameFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            sieger = getArguments().getString(ARG_WINNER_NAME);
-        }
     }
 
 
@@ -47,7 +35,7 @@ public class EndGameFragment extends Fragment {
         TextView winnerNameTextView = view.findViewById(R.id.winnerName);
         Button restartGameButton = view.findViewById(R.id.restartGame);
 
-        winnerNameTextView.setText(getString(R.string.winnerText, sieger));
+        winnerNameTextView.setText(getString(R.string.winnerText, Game.INSTANCE.winner().getUsername()));
 
         restartGameButton.setOnClickListener(v -> {
             showLobbyFragment();
