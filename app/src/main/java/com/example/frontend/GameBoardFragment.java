@@ -284,7 +284,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
 
     private void setPlayerHomePositions(SortedSet<Player> players) {
         for (Player player : players) {
-            Log.i("GameBoardFragment", "Set PlayerHomePositions");
+            Log.i(TAG, "Set PlayerHomePositions");
             switch (player.color()) {
                 case YELLOW -> {
 
@@ -356,7 +356,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         }
     }
     private void moveCharacterOnField(Character c, int oldPosition, MoveType moveType) {
-        Log.d("App", "Character " + c.id() + " gets set to position " + c.position() + " from " + oldPosition);
+        Log.d(TAG, "Character " + c.id() + " gets set to position " + c.position() + " from " + oldPosition);
         gameboardPositions.get(c.position()).setImageResource(R.drawable.playericon);
 
         gameboardPositions.get(c.position()).setOnClickListener(v -> {
@@ -367,7 +367,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         Log.i(TAG,"Stepcounter" + stepCounter);
 
         if (moveType.equals(MoveType.MOVE_ON_FIELD) || moveType.equals(MoveType.MOVE_TO_GOAL)) {
-            Log.d("App", "Character " + c.id() + " gets hidden on old position " + oldPosition);
+            Log.d(TAG, "Character " + c.id() + " gets hidden on old position " + oldPosition);
             gameboardPositions.get(oldPosition).setImageResource(R.drawable.ic_launcher_background);
             gameboardPositions.get(oldPosition).setOnClickListener(v -> {
                 //do nothing
@@ -379,7 +379,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         if(Game.INSTANCE.isMyTurn()) {
 
             if (witchRevealVal == true) {
-                Log.i("App", "reveal witch");
+                Log.i(TAG, "reveal witch");
             } else {
 
                 //move command
@@ -691,7 +691,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         if (remainingTime > 0) {
             //startTimer();
-            Log.i("App", "startTimer");
+            Log.i(TAG, "startTimer");
         }
         Game.INSTANCE.setGameEventListener(this);
     }
@@ -706,7 +706,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
 
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-        Log.i("GameBoard", "PropertyChangeEvent received: " + propertyChangeEvent.getPropertyName());
+        Log.i(TAG, "PropertyChangeEvent received: " + propertyChangeEvent.getPropertyName());
         if (!isAdded()) {
             // Fragment is not attached, skip this event
             return;
