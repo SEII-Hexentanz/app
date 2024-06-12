@@ -4,6 +4,7 @@ import com.example.frontend.Game;
 import com.example.frontend.actions.BadRequestAction;
 import com.example.frontend.actions.DefaultAction;
 import com.example.frontend.actions.DiceRolledAction;
+import com.example.frontend.actions.GameEndAction;
 import com.example.frontend.actions.MoveCharacterAction;
 import com.example.frontend.actions.NameExistsAction;
 import com.example.frontend.actions.PlayerRegisteredAction;
@@ -32,7 +33,7 @@ public class ResponseHandler {
         put(ResponseType.NAME_ALREADY_EXISTS, new NameExistsAction());
         put(ResponseType.PLAYER_SUCCESSFULLY_REGISTERED, new PlayerRegisteredAction());
         put(ResponseType.MOVE_SUCCESSFUL, new MoveCharacterAction());
-        put(ResponseType.GAME_END, new DefaultAction());
+        put(ResponseType.GAME_END, new GameEndAction());
     }};
 
     public static void execute(ResponseType responseType, Payload payload, Game game) {

@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,18 +25,12 @@ import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.HashMap;
-
-
-import android.widget.Toast;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.SortedSet;
-
 
 import at.aau.models.Character;
 import at.aau.payloads.DicePayload;
@@ -708,6 +703,9 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         } else if(propertyChangeEvent.getPropertyName().equals(Game.Property.UPDATE_CHARACTER_POSITION.name())){
             Log.d("App", "Update of character position starts now");
             requireActivity().runOnUiThread(() -> updateCharacterPosition((UpdatePositionObject) propertyChangeEvent.getNewValue()));
+        } else if (propertyChangeEvent.getPropertyName().equals(Game.Property.WINNER.name())) {
+            Log.i("App", "Winner is: " + propertyChangeEvent.getNewValue());
+            requireActivity().runOnUiThread(this::showEndGameFragment);
         }
     }
 
