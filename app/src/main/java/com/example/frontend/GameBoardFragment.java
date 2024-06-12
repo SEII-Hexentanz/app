@@ -720,20 +720,20 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         } else if (propertyChangeEvent.getPropertyName().equals(Game.Property.YOUR_TURN.name())) {
             requireActivity().runOnUiThread(this::yourTurn);
         } else if(propertyChangeEvent.getPropertyName().equals(Game.Property.UPDATE_CHARACTER_POSITION.name())){
-            Log.d("App", "Update of character position starts now");
+            Log.d(TAG, "Update of character position starts now");
             requireActivity().runOnUiThread(() -> updateCharacterPosition((UpdatePositionObject) propertyChangeEvent.getNewValue()));
         }
     }
 
     private void updateCharacterPosition(UpdatePositionObject upo) {
         if(upo.getMoveType().equals(MoveType.MOVE_TO_FIELD)){
-            Log.i("App", "Character will be moved from home to field");
+            Log.i(TAG, "Character will be moved from home to field");
             moveCharacterToField(upo);
         }else if(upo.getMoveType().equals(MoveType.MOVE_ON_FIELD)){
-            Log.i("App", "Character will be moved on field");
+            Log.i(TAG, "Character will be moved on field");
             moveCharacterOnField(upo.getCharacter(), upo.getOldPosition(), upo.getMoveType());
         } else if (upo.getMoveType().equals(MoveType.MOVE_TO_GOAL)) {
-            Log.i("App", "Character will be moved from field to goal");
+            Log.i(TAG, "Character will be moved from field to goal");
             moveCharacterToGoal(upo);
         }
     }
@@ -796,10 +796,10 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     }
 
     private void moveCharacterToField(UpdatePositionObject upo) {
-        Log.i("App", "Character gets relocated from home to field");
+        Log.i(TAG, "Character gets relocated from home to field");
         moveCharacterOnField(upo.getCharacter(), upo.getOldPosition(), upo.getMoveType());
 
-        Log.i("App", "Character will be hidden from home");
+        Log.i(TAG, "Character will be hidden from home");
         switch (upo.getPlayer().color()){
             case YELLOW:
                 hideNextCharacterInHome(btnYelloHome);
@@ -826,7 +826,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         for(ImageView i:home){
             if(i.getVisibility() == View.VISIBLE){
                 i.setVisibility(View.INVISIBLE);
-                Log.d("App", "Character hidden in home");
+                Log.d(TAG, "Character hidden in home");
                 return;
             }
         }
@@ -845,13 +845,13 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         moveOnFieldBtn.setOnClickListener(v -> {
             // Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload()));
             dialog.dismiss();
-            Log.i("App", "Move Command  will be sent now");
+            Log.i(TAG, "Move Command  will be sent now");
         });
         revealWitchBtn.setOnClickListener(v -> {
             witchRevealVal = true;
             revealWitchFunct();
             dialog.dismiss();
-            Log.i("App", "RevealWitch Request will be sent now + move request will be sent then");
+            Log.i(TAG, "RevealWitch Request will be sent now + move request will be sent then");
         });
 
         moveToStartBtn.setOnClickListener(v -> {
@@ -859,7 +859,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
             //Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload()));
             moveCharacterToStartingPosition();
             dialog.dismiss();
-            Log.i("App", "MoveToStart Request will be sent now");
+            Log.i(TAG, "MoveToStart Request will be sent now");
         });
 
         dialog.show();
@@ -877,11 +877,11 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     private void diceRolled(DicePayload payload) {
         if (isAdded()) {
             Toast.makeText(requireContext(), "Player" + payload.player() + " has rolled " + payload.diceValue(), Toast.LENGTH_SHORT).show();
-            Log.i("App", payload.player() + ": " + payload.diceValue());
+            Log.i(TAG, payload.player() + ": " + payload.diceValue());
         }
     }
     private void revealWitchFunct() {
-        Log.i("App", "Reveal Witch Function");
+        Log.i(TAG, "Reveal Witch Function");
     }
 
     public int getStepCounter() {
