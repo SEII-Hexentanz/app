@@ -84,6 +84,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     //ArrayList für jedes einzelne Home und jedes einzelne Goal am Feld
 
     private boolean witchRevealVal = false;
+    private int stepCounter; //to get steps and if <36 --> move around
     public GameBoardFragment() {
         Game.INSTANCE.addPropertyChangeListener(this);
     }
@@ -354,7 +355,6 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
             }
         }
     }
-
     private void moveCharacterOnField(Character c, int oldPosition, MoveType moveType) {
         Log.d("App", "Character " + c.id() + " gets set to position " + c.position() + " from " + oldPosition);
         gameboardPositions.get(c.position()).setImageResource(R.drawable.playericon);
@@ -363,6 +363,8 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
             //send move request to server
             doCharacterAction(c);
         });
+        setStepCounter(Math.abs(c.position()-oldPosition));
+        Log.i(TAG,"Stepcounter" + stepCounter);
 
         if (moveType.equals(MoveType.MOVE_ON_FIELD) || moveType.equals(MoveType.MOVE_TO_GOAL)) {
             Log.d("App", "Character " + c.id() + " gets hidden on old position " + oldPosition);
@@ -732,46 +734,55 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
             moveCharacterOnField(upo.getCharacter(), upo.getOldPosition(), upo.getMoveType());
         } else if (upo.getMoveType().equals(MoveType.MOVE_TO_GOAL)) {
             Log.i("App", "Character will be moved from field to goal");
-
-
+            moveCharacterToGoal(upo);
         }
     }
 
     private void moveCharacterToGoal(UpdatePositionObject upo){
         Log.i(TAG,"Character gets relocated from field to goal");
         moveCharacterOnField(upo.getCharacter(),upo.getOldPosition(),upo.getMoveType());
-        //add counter when player moved 36 so it can move to goal summiert oldPositions
-        // dice summer auf feld summieren und wenn == 27 und gleicher Spieler mit gleicher GoalFarbe kann er ins Goal
-        ///setGoalPositions --> gibt Goal Positions von SPieler aus
+        /**
+         TODO:
+         //add counter when player moved 36 so it can move to goal summiert oldPositions
+         // dice summer auf feld summieren und wenn == 27 und gleicher Spieler mit gleicher GoalFarbe kann er ins Goal
+         ///setGoalPositions --> gibt Goal Positions von SPieler aus
+         // add to propertyChange and call properly method
+         **/
+
         Log.i(TAG,"Character will be on goal");
         int currentPosition = upo.getCharacter().position();
         int goalPosition = mapGoalPoint.get(upo.getPlayer().color());
-        if(Math.abs(goalPosition-currentPosition) <=6){
-            switch(upo.getPlayer().color()){
-                case YELLOW:
-                    moveToGoalPosition(upo,btnYellowGoal);
-                    break;
-                case PINK:
-                    moveToGoalPosition(upo,btnRosaGoal);
-                    break;
-                case RED:
-                    moveToGoalPosition(upo,btnRedGoal);
-                    break;
-                case GREEN:
-                    moveToGoalPosition(upo, btnGreenGoal);
-                    break;
-                case LIGHT_BLUE:
-                    moveToGoalPosition(upo,btnBlueGoal);
-                    break;
-                case DARK_BLUE:
-                    moveToGoalPosition(upo, btnLilaGoal);
-                    break;
+        Log.i(TAG,"Info for current Position " + currentPosition + ", goalPosition " + goalPosition);
+        Log.i(TAG, "Stepcounter " + getStepCounter());
+        if (getStepCounter() >= 36){
+            if(Math.abs(goalPosition-currentPosition) <=6){
+                switch(upo.getPlayer().color()){
+                    case YELLOW:
+                        moveToGoalPosition(upo,btnYellowGoal);
+                        break;
+                    case PINK:
+                        moveToGoalPosition(upo,btnRosaGoal);
+                        break;
+                    case RED:
+                        moveToGoalPosition(upo,btnRedGoal);
+                        break;
+                    case GREEN:
+                        moveToGoalPosition(upo, btnGreenGoal);
+                        break;
+                    case LIGHT_BLUE:
+                        moveToGoalPosition(upo,btnBlueGoal);
+                        break;
+                    case DARK_BLUE:
+                        moveToGoalPosition(upo, btnLilaGoal);
+                        break;
+                }
+                Log.i(TAG, "Character moved to goal");
+            }else{
+                Log.i(TAG,"Character not near Goal");
             }
-            Log.i(TAG, "Character moved to goal");
         }else{
-            Log.i(TAG,"Character not near Goal");
+            moveCharacterOnField(upo.getCharacter(), upo.getOldPosition(), upo.getMoveType());
         }
-
     }
 
     private void moveToGoalPosition(UpdatePositionObject upo, ArrayList<ImageView> goalPositions) {
@@ -871,5 +882,14 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     }
     private void revealWitchFunct() {
         Log.i("App", "Reveal Witch Function");
+    }
+
+    public int getStepCounter() {
+        return stepCounter;
+    }
+
+    // Setter for stepCounter
+    public void setStepCounter(int stepCounter) {
+        this.stepCounter = stepCounter;
     }
 }
