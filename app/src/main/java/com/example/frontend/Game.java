@@ -66,8 +66,8 @@ public enum Game {
         return frontPlayer;
     }
 
-    public SortedSet<at.aau.models.Player> players(){
-        return players;
+    public SortedSet<Player> players() {
+        return frontPlayer;
     }
 
     public void setPlayers(SortedSet<com.example.frontend.Player> players) {
