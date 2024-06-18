@@ -21,7 +21,6 @@ import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -51,7 +50,6 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
 
     public DiceFragment() {
         Game.INSTANCE.addPropertyChangeListener(this);
-
     }
 
     public static DiceFragment newInstance(int diceValue) {
@@ -67,10 +65,10 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
 
         sensorManager = (SensorManager) requireActivity().getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT); // Lichtsensor hinzufügen
+        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
         sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
         sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        this.diceThrown=false;
+        this.diceThrown = false;
         dice = new Dice();
     }
 
@@ -90,18 +88,15 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
     }
-
-
 
     private void findViews(View view) {
         diceImage = view.findViewById(R.id.diceImage);
         continueButton = view.findViewById(R.id.continueButtonDiceFragment);
         cheatButton = view.findViewById(R.id.cheatButton);
         fragmentContainerView = view.findViewById(R.id.fragmentContainerView2);
-        currentPlayerName=view.findViewById(R.id.currentPlayer);
-        closeButton=view.findViewById(R.id.closeButton);
+        currentPlayerName = view.findViewById(R.id.currentPlayer);
+        closeButton = view.findViewById(R.id.closeButton);
     }
 
     private void onCloseButtonClick() {
@@ -112,19 +107,23 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
     }
 
     private void onCheatingClick() {
-        cheatButton.setOnLongClickListener(v -> {
-            isButtonLongPressed = true;
-            checkAndPerformCheat();
-            Log.i(TAG,"CHEATING CLICK");
-            return true;
-        });
+        if (isCheatUsed()) {
+            cheatButton.setEnabled(false);
+        } else {
+            cheatButton.setOnLongClickListener(v -> {
+                isButtonLongPressed = true;
+                checkAndPerformCheat();
+                Log.i(TAG, "CHEATING CLICK");
+                return true;
+            });
 
-        cheatButton.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                isButtonLongPressed = false;
-            }
-            return false; // Let the event continue to the long click listener
-        });
+            cheatButton.setOnTouchListener((v, event) -> {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    isButtonLongPressed = false;
+                }
+                return false;
+            });
+        }
     }
 
     private void checkAndPerformCheat() {
@@ -134,6 +133,8 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
             diceThrown = false;
             Log.i(TAG, "Set dice to 6 with sensor covered and button long pressed");
             Client.send(new Request(CommandType.CHEAT, new EmptyPayload()));
+            markCheatAsUsed();
+            cheatButton.setEnabled(false);
         }
     }
 
@@ -161,10 +162,7 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
             float speed = Math.abs(x + y + z - lastX - lastY - lastZ) / diffTime * 10000;
 
             if (speed > SHAKE_THRESHOLD) {
-                //getDiceRollResult
-
-                if(!diceThrown){
-                    // Send the dice roll result to the server
+                if (!diceThrown) {
                     sendDiceRollRequestToServer();
                     diceThrown = true;
                 }
@@ -175,14 +173,15 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
             lastZ = z;
         }
     }
-    private void sendDiceRollRequestToServer(){
-          Client.send(new Request(CommandType.DICE_ROLL, new EmptyPayload()));
+
+    private void sendDiceRollRequestToServer() {
+        Client.send(new Request(CommandType.DICE_ROLL, new EmptyPayload()));
     }
 
     private void displayCurrentPlayer() {
         String name = getUsernameFromPreferences();
         if (name != null) {
-            currentPlayerName.setText(name+ "can roll the dice!");
+            currentPlayerName.setText(name + " can roll the dice!");
         } else {
             currentPlayerName.setText("No player found");
         }
@@ -197,7 +196,7 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
     @Override
     public void onResume() {
         super.onResume();
-        diceImage.setImageResource(R.drawable.inital_dice); // Reset to initial dice image
+        diceImage.setImageResource(R.drawable.inital_dice);
         diceThrown = false;
         sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
         sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
@@ -207,7 +206,7 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Not needed for this example
     }
-//
+
     private void updateDiceImage(ImageView diceImage, int diceValue) {
         switch (diceValue) {
             case 1:
@@ -232,21 +231,32 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
                 diceImage.setImageResource(R.drawable.inital_dice);
         }
     }
-    public void setDiceToDefault(){
+
+    public void setDiceToDefault() {
         diceImage.setImageResource(R.drawable.inital_dice);
     }
 
-
     public String getUsernameFromPreferences() {
         if (getContext() == null) {
-            return "defaultUsername"; // Return default or handle the error as appropriate
+            return "defaultUsername";
         }
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
         return sharedPreferences.getString("username", "defaultUsername");
     }
 
-    private void showGameBoardFragment() {
+    private boolean isCheatUsed() {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean("cheatUsed", false);
+    }
 
+    private void markCheatAsUsed() {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("cheatUsed", true);
+        editor.apply();
+    }
+
+    private void showGameBoardFragment() {
         String name = getUsernameFromPreferences();
         GameBoardFragment gameBoardFragment = GameBoardFragment.newInstance(name);
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
@@ -255,11 +265,11 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
         Log.i("DiceFragment", "PropertyChangeEvent received: " + propertyChangeEvent.getPropertyName());
         if (!isAdded()) {
-            // Fragment is not attached, skip this event
             return;
         }
         if (propertyChangeEvent.getPropertyName().equals(Game.Property.MOVE_CHARACTER.name())) {
@@ -270,15 +280,10 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
         }
     }
 
-
-        private void diceRolledResult(int diceValue) {
-            if (isAdded()) {
-                updateDiceImage(diceImage, diceValue);
-
-                //Game.INSTANCE.movePlayer(diceValue);
-                Game.INSTANCE.resetMyTurn();
-
-                Log.i("DiceFragment", "dice roll ");
-            }
+    private void diceRolledResult(int diceValue) {
+        if (isAdded()) {
+            updateDiceImage(diceImage, diceValue);
+            Log.i("DiceFragment", "dice roll ");
         }
     }
+}

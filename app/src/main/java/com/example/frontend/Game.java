@@ -40,6 +40,7 @@ public enum Game {
     private DiceFragment diceFragment;
     private String playerName;
     private Boolean myTurn = false;
+    private int setDiceVal;
     final HashMap<at.aau.values.Color, Integer> mapStartingPoint= new HashMap<>();;
 
     private Player currentPlayer = null;
@@ -65,8 +66,8 @@ public enum Game {
         return frontPlayer;
     }
 
-    public SortedSet<at.aau.models.Player> players(){
-        return players;
+    public SortedSet<Player> players() {
+        return frontPlayer;
     }
 
     public void setPlayers(SortedSet<com.example.frontend.Player> players) {
@@ -88,10 +89,24 @@ public enum Game {
     public void diceRolledAction(DicePayload payload, com.example.frontend.Player currentPlayer){
         if(payload.player().name().equals(currentPlayer.getUsername())){
             support.firePropertyChange(Property.MOVE_CHARACTER.name(), 0, payload.diceValue());
+            setDiceVal = payload.diceValue();
+
         }else {
             support.firePropertyChange(Property.DICE_ROLLED.name(), null, payload);
+
         }
     }
+    public void sendMoveOnFieldRequest(Character c){
+        int totalStep =c.steps() + setDiceVal;
+        int postition = (c.position()+setDiceVal) % 37;
+        if(totalStep>=27){
+            Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), postition, MoveType.MOVE_TO_GOAL, totalStep)));
+        }else{
+            Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), postition, MoveType.MOVE_ON_FIELD,totalStep)));
+        }
+        resetMyTurn();
+    }
+
 
     public com.example.frontend.Player getCurrentPlayer() {
         if (frontPlayer.isEmpty()) {
@@ -253,6 +268,7 @@ public enum Game {
         support.firePropertyChange(Property.YOUR_TURN.name(), false, true);
     }
 
+
     public void resetMyTurn(){
         myTurn = false;
     }
@@ -283,16 +299,17 @@ public enum Game {
 
     public int moveCharacterToStartingPostion(Character c) {
         int position = mapStartingPoint.get(currentPlayer.color());
-       Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), position, MoveType.MOVE_TO_FIELD)));
+       Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), position, MoveType.MOVE_TO_FIELD,0)));
+       resetMyTurn();
         return position;
     }
 
-    public void updateCharacterPosition(UUID uuid, int i, MoveType moveType) {
+    public void updateCharacterPosition(UUID uuid, int i, MoveType moveType,int steps) {
         for(Player p : frontPlayer){
             for(Character c : p.characters){
                 if(c.id().equals(uuid)){
                     int oldPosition = c.position();
-                    Character newCharacter = new Character(c.id(), i, c.status());
+                    Character newCharacter = new Character(c.id(), i, c.status(),steps);
                     p.setCharacters(p.characters.stream().map(character -> character.equals(c)
                                     ? newCharacter
                                     : character)
@@ -331,6 +348,6 @@ public enum Game {
     }
 
     enum Property {
-        PLAYERS, GAME_STATE, WINNER, DICE_ROLLED, MOVE_CHARACTER, YOUR_TURN, USERNAME_ALREADY_EXISTS, PLAYER_REGISTERED, UPDATE_CHARACTER_POSITION
+        PLAYERS, GAME_STATE, WINNER, DICE_ROLLED, MOVE_CHARACTER, YOUR_TURN, USERNAME_ALREADY_EXISTS, PLAYER_REGISTERED, UPDATE_CHARACTER_POSITION, DICE_THROWN
     }
 }

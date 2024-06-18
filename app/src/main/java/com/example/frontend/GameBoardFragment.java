@@ -33,7 +33,11 @@ import java.util.List;
 import java.util.SortedSet;
 
 import at.aau.models.Character;
+import at.aau.models.Request;
 import at.aau.payloads.DicePayload;
+import at.aau.payloads.PlayerMovePayload;
+import at.aau.values.CharacterState;
+import at.aau.values.CommandType;
 import at.aau.values.MoveType;
 
 
@@ -51,7 +55,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     private HashMap<at.aau.values.Color, Integer> mapGoalPoint;
     private ScaleGestureDetector scaleGestureDetector;
     private long startTime = 0L;
-    private Handler timerHandler = new Handler();
+    //private Handler timerHandler = new Handler();
     private long millisecondsTime = 0L;
     private long timeSwapBuff = 0L;
     private final long MAX_TIMER_DURATION = 15 * 60 * 1000; //1min=60_000 // 15 minutes
@@ -70,13 +74,12 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     private ArrayList<ImageView> btnGreenGoal;
     private ArrayList<ImageView> btnBlueGoal;
     private ArrayList<ImageView> btnLilaGoal;
-
-
     private ArrayList<ImageView> playerHomePositions;
-
     private ArrayList<ImageView> playerGoalPositions;
     //ArrayList für jedes einzelne Home und jedes einzelne Goal am Feld
 
+    private boolean witchRevealVal = false;
+    private int stepCounter; //to get steps and if <36 --> move around
     public GameBoardFragment() {
         Game.INSTANCE.addPropertyChangeListener(this);
     }
@@ -276,7 +279,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
 
     private void setPlayerHomePositions(SortedSet<Player> players) {
         for (Player player : players) {
-            Log.i("GameBoardFragment", "Set PlayerHomePositions");
+            Log.i(TAG, "Set PlayerHomePositions");
             switch (player.color()) {
                 case YELLOW -> {
 
@@ -347,19 +350,20 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
             }
         }
     }
-
     private void moveCharacterOnField(Character c, int oldPosition, MoveType moveType) {
-        Log.d("App", "Character " + c.id() + " gets set to position " + c.position() + " from " + oldPosition);
+        Log.d(TAG, "Character " + c.id() + " gets set to position " + c.position() + " from " + oldPosition);
         gameboardPositions.get(c.position()).setImageResource(R.drawable.playericon);
 
         gameboardPositions.get(c.position()).setOnClickListener(v -> {
             //send move request to server
             doCharacterAction(c);
         });
+        setStepCounter(Math.abs(c.position()-oldPosition));
+        Log.i(TAG,"Stepcounter" + stepCounter);
 
         if (moveType.equals(MoveType.MOVE_ON_FIELD) || moveType.equals(MoveType.MOVE_TO_GOAL)) {
-            Log.d("App", "Character " + c.id() + " gets hidden on old position " + oldPosition);
-            gameboardPositions.get(oldPosition).setBackgroundColor(Integer.parseInt("#00FFFFFF"));
+            Log.d(TAG, "Character " + c.id() + " gets hidden on old position " + oldPosition);
+            gameboardPositions.get(oldPosition).setImageResource(R.drawable.ic_launcher_background);
             gameboardPositions.get(oldPosition).setOnClickListener(v -> {
                 //do nothing
             });
@@ -367,6 +371,16 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     }
 
     private void doCharacterAction(Character c) {
+        if(Game.INSTANCE.isMyTurn()) {
+
+            if (witchRevealVal == true) {
+                Log.i(TAG, "reveal witch");
+            } else {
+
+                //move command
+                Game.INSTANCE.sendMoveOnFieldRequest(c);
+            }
+        }
     }
 
     private Character[] getCharacters(Player player) {
@@ -672,7 +686,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         if (remainingTime > 0) {
             //startTimer();
-            Log.i("App", "startTimer");
+            Log.i(TAG, "startTimer");
         }
         Game.INSTANCE.setGameEventListener(this);
     }
@@ -687,7 +701,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
 
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-        Log.i("GameBoard", "PropertyChangeEvent received: " + propertyChangeEvent.getPropertyName());
+        Log.i(TAG, "PropertyChangeEvent received: " + propertyChangeEvent.getPropertyName());
         if (!isAdded()) {
             // Fragment is not attached, skip this event
             return;
@@ -701,7 +715,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         } else if (propertyChangeEvent.getPropertyName().equals(Game.Property.YOUR_TURN.name())) {
             requireActivity().runOnUiThread(this::yourTurn);
         } else if(propertyChangeEvent.getPropertyName().equals(Game.Property.UPDATE_CHARACTER_POSITION.name())){
-            Log.d("App", "Update of character position starts now");
+            Log.d(TAG, "Update of character position starts now");
             requireActivity().runOnUiThread(() -> updateCharacterPosition((UpdatePositionObject) propertyChangeEvent.getNewValue()));
         } else if (propertyChangeEvent.getPropertyName().equals(Game.Property.WINNER.name())) {
             Log.i("App", "Winner is: " + propertyChangeEvent.getNewValue());
@@ -711,24 +725,79 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
 
     private void updateCharacterPosition(UpdatePositionObject upo) {
         if(upo.getMoveType().equals(MoveType.MOVE_TO_FIELD)){
-            Log.i("App", "Character will be moved from home to field");
+            Log.i(TAG, "Character will be moved from home to field");
             moveCharacterToField(upo);
         }else if(upo.getMoveType().equals(MoveType.MOVE_ON_FIELD)){
-            Log.i("App", "Character will be moved on field");
-
-
+            Log.i(TAG, "Character will be moved on field");
+            moveCharacterOnField(upo.getCharacter(), upo.getOldPosition(), upo.getMoveType());
         } else if (upo.getMoveType().equals(MoveType.MOVE_TO_GOAL)) {
-            Log.i("App", "Character will be moved from field to goal");
+            Log.i(TAG, "Character will be moved from field to goal");
+            moveCharacterToGoal(upo);
+        }
+    }
 
+    private void moveCharacterToGoal(UpdatePositionObject upo){
+        Log.i(TAG,"Character gets relocated from field to goal");
+        moveCharacterOnField(upo.getCharacter(),upo.getOldPosition(),upo.getMoveType());
+        /**
+         TODO:
+         //add counter when player moved 36 so it can move to goal summiert oldPositions
+         // dice summer auf feld summieren und wenn == 27 und gleicher Spieler mit gleicher GoalFarbe kann er ins Goal
+         ///setGoalPositions --> gibt Goal Positions von SPieler aus
+         // add to propertyChange and call properly method
+         **/
 
+        Log.i(TAG,"Character will be on goal");
+        int currentPosition = upo.getCharacter().position();
+        int goalPosition = mapGoalPoint.get(upo.getPlayer().color());
+        Log.i(TAG,"Info for current Position " + currentPosition + ", goalPosition " + goalPosition);
+        Log.i(TAG, "Stepcounter " + getStepCounter());
+        if (getStepCounter() >= 36){
+            if(Math.abs(goalPosition-currentPosition) <=6){
+                switch(upo.getPlayer().color()){
+                    case YELLOW:
+                        moveToGoalPosition(upo,btnYellowGoal);
+                        break;
+                    case PINK:
+                        moveToGoalPosition(upo,btnRosaGoal);
+                        break;
+                    case RED:
+                        moveToGoalPosition(upo,btnRedGoal);
+                        break;
+                    case GREEN:
+                        moveToGoalPosition(upo, btnGreenGoal);
+                        break;
+                    case LIGHT_BLUE:
+                        moveToGoalPosition(upo,btnBlueGoal);
+                        break;
+                    case DARK_BLUE:
+                        moveToGoalPosition(upo, btnLilaGoal);
+                        break;
+                }
+                Log.i(TAG, "Character moved to goal");
+            }else{
+                Log.i(TAG,"Character not near Goal");
+            }
+        }else{
+            moveCharacterOnField(upo.getCharacter(), upo.getOldPosition(), upo.getMoveType());
+        }
+    }
+
+    private void moveToGoalPosition(UpdatePositionObject upo, ArrayList<ImageView> goalPositions) {
+        for (ImageView goalPosition : goalPositions) {
+            if (goalPosition.getDrawable() == null) {
+                goalPosition.setImageResource(R.drawable.playericon);
+                Log.i(TAG, "Character moved to goal position");
+                return;
+            }
         }
     }
 
     private void moveCharacterToField(UpdatePositionObject upo) {
-        Log.i("App", "Character gets relocated from home to field");
+        Log.i(TAG, "Character gets relocated from home to field");
         moveCharacterOnField(upo.getCharacter(), upo.getOldPosition(), upo.getMoveType());
 
-        Log.i("App", "Character will be hidden from home");
+        Log.i(TAG, "Character will be hidden from home");
         switch (upo.getPlayer().color()){
             case YELLOW:
                 hideNextCharacterInHome(btnYelloHome);
@@ -755,7 +824,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         for(ImageView i:home){
             if(i.getVisibility() == View.VISIBLE){
                 i.setVisibility(View.INVISIBLE);
-                Log.d("App", "Character hidden in home");
+                Log.d(TAG, "Character hidden in home");
                 return;
             }
         }
@@ -774,12 +843,13 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         moveOnFieldBtn.setOnClickListener(v -> {
             // Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload()));
             dialog.dismiss();
-            Log.i("App", "Move Command  will be sent now");
+            Log.i(TAG, "Move Command  will be sent now");
         });
         revealWitchBtn.setOnClickListener(v -> {
+            witchRevealVal = true;
             revealWitchFunct();
             dialog.dismiss();
-            Log.i("App", "RevealWitch Request will be sent now + move request will be sent then");
+            Log.i(TAG, "RevealWitch Request will be sent now + move request will be sent then");
         });
 
         moveToStartBtn.setOnClickListener(v -> {
@@ -787,7 +857,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
             //Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload()));
             moveCharacterToStartingPosition();
             dialog.dismiss();
-            Log.i("App", "MoveToStart Request will be sent now");
+            Log.i(TAG, "MoveToStart Request will be sent now");
         });
 
         dialog.show();
@@ -805,10 +875,19 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     private void diceRolled(DicePayload payload) {
         if (isAdded()) {
             Toast.makeText(requireContext(), "Player" + payload.player() + " has rolled " + payload.diceValue(), Toast.LENGTH_SHORT).show();
-            Log.i("App", payload.player() + ": " + payload.diceValue());
+            Log.i(TAG, payload.player() + ": " + payload.diceValue());
         }
     }
     private void revealWitchFunct() {
-        Log.i("App", "Reveal Witch Function");
+        Log.i(TAG, "Reveal Witch Function");
+    }
+
+    public int getStepCounter() {
+        return stepCounter;
+    }
+
+    // Setter for stepCounter
+    public void setStepCounter(int stepCounter) {
+        this.stepCounter = stepCounter;
     }
 }

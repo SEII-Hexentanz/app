@@ -13,7 +13,7 @@ public class MoveCharacterAction implements Action {
     public void execute(Game game, Payload payload) {
         if (payload instanceof PlayerMovePayload playerMovePayload) {
 
-            Game.INSTANCE.updateCharacterPosition(playerMovePayload.characterId(), playerMovePayload.newPosition(), playerMovePayload.moveType());
+            Game.INSTANCE.updateCharacterPosition(playerMovePayload.characterId(), playerMovePayload.newPosition(), playerMovePayload.moveType(), playerMovePayload.steps());
             Log.i("App", "Player has moved");
 
         } else Log.e("App", "Payload is not an instance of playerMovePayload");
