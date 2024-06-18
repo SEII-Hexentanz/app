@@ -52,6 +52,7 @@ public enum Game {
     public void setPlayerName(String playerName) {
         this.playerName = playerName;
     }
+    private Player winner;
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
@@ -337,7 +338,16 @@ public enum Game {
         throw new Resources.NotFoundException("Character not found");
     }
 
+    public Player winner() {
+        return winner;
+    }
+
+    public void setWinner(Player winner) {
+        this.winner = winner;
+        support.firePropertyChange(Property.WINNER.name(), null, winner);
+    }
+
     enum Property {
-        PLAYERS, GAME_STATE, DICE_ROLLED, MOVE_CHARACTER, YOUR_TURN, USERNAME_ALREADY_EXISTS, PLAYER_REGISTERED, UPDATE_CHARACTER_POSITION, DICE_THROWN
+        PLAYERS, GAME_STATE, WINNER, DICE_ROLLED, MOVE_CHARACTER, YOUR_TURN, USERNAME_ALREADY_EXISTS, PLAYER_REGISTERED, UPDATE_CHARACTER_POSITION, DICE_THROWN
     }
 }
