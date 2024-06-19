@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ScaleGestureDetector;
@@ -33,11 +32,7 @@ import java.util.List;
 import java.util.SortedSet;
 
 import at.aau.models.Character;
-import at.aau.models.Request;
 import at.aau.payloads.DicePayload;
-import at.aau.payloads.PlayerMovePayload;
-import at.aau.values.CharacterState;
-import at.aau.values.CommandType;
 import at.aau.values.MoveType;
 
 
@@ -58,7 +53,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     //private Handler timerHandler = new Handler();
     private long millisecondsTime = 0L;
     private long timeSwapBuff = 0L;
-    private final long MAX_TIMER_DURATION = 15 * 60 * 1000; //1min=60_000 // 15 minutes
+    private final long MAX_TIMER_DURATION = 15L * 60L * 1000L; //1min=60_000 // 15 minutes
     private long remainingTime = MAX_TIMER_DURATION;
     private ArrayList<ImageView> gameboardPositions;
     private ArrayList<ImageView> btnYelloHome;
