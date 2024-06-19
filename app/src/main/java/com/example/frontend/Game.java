@@ -109,14 +109,30 @@ public enum Game {
     }
     public void sendMoveOnFieldRequest(Character c){
         int totalStep =c.steps() + setDiceVal;
-        int postition = (c.position()+setDiceVal) % 37;
+        int position = (c.position()+setDiceVal) % 37;
         if(totalStep>=27){
-            Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), postition, MoveType.MOVE_TO_GOAL, totalStep)));
+            Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), position, MoveType.MOVE_TO_GOAL, totalStep)));
         }else{
-            Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), postition, MoveType.MOVE_ON_FIELD,totalStep)));
+            handleCollision(c,position);
+            Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), position, MoveType.MOVE_ON_FIELD,totalStep)));
         }
         resetMyTurn();
     }
+
+    private void handleCollision(Character movingChar, int newPos){
+        for(Player player: frontPlayer){
+            for(Character character : player.characters){
+                if(!character.equals(movingChar) && character.position() == newPos){
+                    Log.i(TAG,"Player "+character.id()+" will go back to start " + newPos);
+                    moveToStart(player, character);
+                    return;
+                }
+            }
+        }
+    }
+
+
+
 
 
     public com.example.frontend.Player getCurrentPlayer() {
@@ -204,51 +220,7 @@ public enum Game {
         }
          //Response response = new Response(ResponseType.UPDATE_STATE, new PlayerMovePayload(oldPosition, newPosition, player.getUsername()));
         //ResponseHandler.execute(response.responseType(),response.payload(),Game.INSTANCE);
-
     }
-
-    public void movePlayer(int diceResult) {
-        com.example.frontend.Player currentPlayer = getCurrentPlayer();
-        if (currentPlayer == null) {
-            Log.e(TAG, "No current player found. Cannot move.");
-            return;
-        }
-        boolean hasAnotherTurn = false;
-        int newPosition=0;
-        int currentPosition = getPlayerPosition(currentPlayer);
-        Log.i(TAG,"CurrentPosition: " + currentPosition);
-        // Check if the player is at "Home" and the dice result allows moving out
-        if (currentPosition == getPlayerPosition(currentPlayer)) {
-            if (diceResult == 6) { // Assuming 6 is required to start
-               currentPosition = mapStartingPoint.get(currentPlayer.color());
-                setPlayerPosition(currentPlayer, currentPosition);
-                Log.i(TAG, "Player " + currentPlayer.getUsername() + " moves from Home to position " + currentPosition);
-                eventListener.onPlayerPositionChanged(currentPlayer, 0, currentPosition);
-                broadcastMove(currentPlayer, 0, currentPosition);
-                hasAnotherTurn = true; // Player gets another turn
-                //diceFragment.setDiceToDefault();
-            } else {
-                Log.i(TAG, "Player " + currentPlayer.getUsername() + " needs a 6 to leave Home. His color is" + currentPlayer.color());
-                return; // Player cannot move out of Home without rolling a 6
-            }
-        } else {
-            newPosition = currentPosition + diceResult;
-            setPlayerPosition(currentPlayer, newPosition);
-            Log.i(TAG, "Player " + currentPlayer.getUsername() + " moved to position " + newPosition);
-            eventListener.onPlayerPositionChanged(currentPlayer, currentPosition, newPosition);
-       //     Client.send(new Request(CommandType.PLAYER_MOVE,new PlayerMovePayload(currentPosition,newPosition, currentPlayer.getUsername())));
-            broadcastMove(currentPlayer, currentPosition, newPosition);
-            if (diceResult == 6) {
-                hasAnotherTurn = true; // Player gets another turn
-            }
-        }
-
-        if (!hasAnotherTurn) {
-            nextPlayer(); // Move to the next player only if the current player does not get another turn
-        }
-
-    }
-
     public void addPlayers(List<com.example.frontend.Player> playersList) {
         for (com.example.frontend.Player player : playersList) {
             if (!frontPlayer.contains(player)) {
@@ -288,7 +260,10 @@ public enum Game {
         return myTurn;
     }
 
-    public void moveToStart() {
+    public void moveToStart(Player player, Character character) {
+        int startPos = mapStartingPoint.get(player.color());
+        Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(character.id(),startPos,MoveType.MOVE_TO_START,0)));
+        updateCharacterPosition(character.id(),startPos,MoveType.MOVE_TO_START,0);
     }
 
     public void nameAlreadyExists() {
@@ -329,6 +304,7 @@ public enum Game {
                     UpdatePositionObject upo = new UpdatePositionObject(newCharacter, p, moveType, oldPosition);
 
                     support.firePropertyChange(Property.UPDATE_CHARACTER_POSITION.name(), null, upo);
+                    handleCollision(newCharacter,i);
                     return;
                 }
             }
