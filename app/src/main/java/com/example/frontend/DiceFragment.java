@@ -30,6 +30,7 @@ import at.aau.values.CommandType;
 
 public class DiceFragment extends Fragment implements SensorEventListener, PropertyChangeListener {
     public static final String TAG = "DICE_FRAGMENT_TAG";
+    public static final String APP_PREFS = "AppPrefs";
     private SensorManager sensorManager;
     private Sensor lightSensor;
     private Sensor accelerometer;
@@ -237,17 +238,17 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
         if (getContext() == null) {
             return "defaultUsername";
         }
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(APP_PREFS, Context.MODE_PRIVATE);
         return sharedPreferences.getString("username", "defaultUsername");
     }
 
     private boolean isCheatUsed() {
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(APP_PREFS, Context.MODE_PRIVATE);
         return sharedPreferences.getBoolean("cheatUsed", false);
     }
 
     private void markCheatAsUsed() {
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(APP_PREFS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("cheatUsed", true);
         editor.apply();
