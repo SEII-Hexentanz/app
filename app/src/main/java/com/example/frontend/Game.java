@@ -28,22 +28,23 @@ import at.aau.values.MoveType;
 public enum Game {
     INSTANCE;
 
+    public static final String TAG = "GAME_TAG";
+    final HashMap<at.aau.values.Color, Integer> mapStartingPoint = new HashMap<>();
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     private final SortedSet<at.aau.models.Player> players = new TreeSet<>();
+    private final Map<com.example.frontend.Player, Integer> playerPositions = new HashMap<>();
+    private final Map<com.example.frontend.Player, Boolean> canMove = new HashMap<>();
     private SortedSet<com.example.frontend.Player> frontPlayer = new TreeSet<>();
     private GameState gameState = GameState.LOBBY;
-    private final Map<com.example.frontend.Player, Integer> playerPositions = new HashMap<>();
     private int currentPlayerIndex = 0;
-    public static final String TAG = "GAME_TAG";
-    private final Map<com.example.frontend.Player, Boolean> canMove = new HashMap<>();
     private GameEventListener eventListener;
     private DiceFragment diceFragment;
     private String playerName;
     private Boolean myTurn = false;
     private int setDiceVal;
-    final HashMap<at.aau.values.Color, Integer> mapStartingPoint= new HashMap<>();;
-
+    ;
     private Player currentPlayer = null;
+    private Player winner;
 
     public String getPlayerName() {
         return playerName;
@@ -52,7 +53,6 @@ public enum Game {
     public void setPlayerName(String playerName) {
         this.playerName = playerName;
     }
-    private Player winner;
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
@@ -86,23 +86,24 @@ public enum Game {
         support.firePropertyChange(Property.GAME_STATE.name(), oldGameState, gameState);
     }
 
-    public void diceRolledAction(DicePayload payload, com.example.frontend.Player currentPlayer){
-        if(payload.player().name().equals(currentPlayer.getUsername())){
+    public void diceRolledAction(DicePayload payload, com.example.frontend.Player currentPlayer) {
+        if (payload.player().name().equals(currentPlayer.getUsername())) {
             support.firePropertyChange(Property.MOVE_CHARACTER.name(), 0, payload.diceValue());
             setDiceVal = payload.diceValue();
 
-        }else {
+        } else {
             support.firePropertyChange(Property.DICE_ROLLED.name(), null, payload);
 
         }
     }
-    public void sendMoveOnFieldRequest(Character c){
-        int totalStep =c.steps() + setDiceVal;
-        int postition = (c.position()+setDiceVal) % 37;
-        if(totalStep>=27){
+
+    public void sendMoveOnFieldRequest(Character c) {
+        int totalStep = c.steps() + setDiceVal;
+        int postition = (c.position() + setDiceVal) % 37;
+        if (totalStep >= 27) {
             Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), postition, MoveType.MOVE_TO_GOAL, totalStep)));
-        }else{
-            Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), postition, MoveType.MOVE_ON_FIELD,totalStep)));
+        } else {
+            Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), postition, MoveType.MOVE_ON_FIELD, totalStep)));
         }
         resetMyTurn();
     }
@@ -114,9 +115,9 @@ public enum Game {
             return null;
         }
 
-        if(currentPlayer == null){
-            for(Player player : frontPlayer){
-                if(player.getUsername().equals(playerName)){
+        if (currentPlayer == null) {
+            for (Player player : frontPlayer) {
+                if (player.getUsername().equals(playerName)) {
                     return currentPlayer = player;
                 } else {
                     Log.e("App", "Player with name " + playerName + " does not exist");
@@ -126,6 +127,7 @@ public enum Game {
 
         return currentPlayer;
     }
+
     public void mapStartPositions() {
         mapStartingPoint.put(at.aau.values.Color.YELLOW, 27);
         mapStartingPoint.put(at.aau.values.Color.PINK, 33);
@@ -191,7 +193,7 @@ public enum Game {
             Log.e(TAG, "Player object is null in broadcastMove");
             return;
         }
-         //Response response = new Response(ResponseType.UPDATE_STATE, new PlayerMovePayload(oldPosition, newPosition, player.getUsername()));
+        //Response response = new Response(ResponseType.UPDATE_STATE, new PlayerMovePayload(oldPosition, newPosition, player.getUsername()));
         //ResponseHandler.execute(response.responseType(),response.payload(),Game.INSTANCE);
 
     }
@@ -203,13 +205,13 @@ public enum Game {
             return;
         }
         boolean hasAnotherTurn = false;
-        int newPosition=0;
+        int newPosition = 0;
         int currentPosition = getPlayerPosition(currentPlayer);
-        Log.i(TAG,"CurrentPosition: " + currentPosition);
+        Log.i(TAG, "CurrentPosition: " + currentPosition);
         // Check if the player is at "Home" and the dice result allows moving out
         if (currentPosition == getPlayerPosition(currentPlayer)) {
             if (diceResult == 6) { // Assuming 6 is required to start
-               currentPosition = mapStartingPoint.get(currentPlayer.color());
+                currentPosition = mapStartingPoint.get(currentPlayer.color());
                 setPlayerPosition(currentPlayer, currentPosition);
                 Log.i(TAG, "Player " + currentPlayer.getUsername() + " moves from Home to position " + currentPosition);
                 eventListener.onPlayerPositionChanged(currentPlayer, 0, currentPosition);
@@ -225,7 +227,7 @@ public enum Game {
             setPlayerPosition(currentPlayer, newPosition);
             Log.i(TAG, "Player " + currentPlayer.getUsername() + " moved to position " + newPosition);
             eventListener.onPlayerPositionChanged(currentPlayer, currentPosition, newPosition);
-       //     Client.send(new Request(CommandType.PLAYER_MOVE,new PlayerMovePayload(currentPosition,newPosition, currentPlayer.getUsername())));
+            //     Client.send(new Request(CommandType.PLAYER_MOVE,new PlayerMovePayload(currentPosition,newPosition, currentPlayer.getUsername())));
             broadcastMove(currentPlayer, currentPosition, newPosition);
             if (diceResult == 6) {
                 hasAnotherTurn = true; // Player gets another turn
@@ -241,8 +243,8 @@ public enum Game {
     public void addPlayers(List<com.example.frontend.Player> playersList) {
         for (com.example.frontend.Player player : playersList) {
             if (!frontPlayer.contains(player)) {
-               Color color = Color.values()[frontPlayer.size() % Color.values().length];
-                com.example.frontend.Player coloredPlayer = new com.example.frontend.Player(player.getUsername(), player.getAge(), player.getCharacters(),player.color());
+                Color color = Color.values()[frontPlayer.size() % Color.values().length];
+                com.example.frontend.Player coloredPlayer = new com.example.frontend.Player(player.getUsername(), player.getAge(), player.getCharacters(), player.color());
                 frontPlayer.add(coloredPlayer);
                 playerPositions.put(coloredPlayer, 0);
                 canMove.put(coloredPlayer, false);
@@ -263,21 +265,18 @@ public enum Game {
 
     }
 
-    public void setMyTurn(){
+    public void setMyTurn() {
         myTurn = true;
         support.firePropertyChange(Property.YOUR_TURN.name(), false, true);
     }
 
 
-    public void resetMyTurn(){
+    public void resetMyTurn() {
         myTurn = false;
     }
 
     public boolean isMyTurn() {
         return myTurn;
-    }
-
-    public void moveToStart() {
     }
 
     public void nameAlreadyExists() {
@@ -288,9 +287,10 @@ public enum Game {
         support.firePropertyChange(Property.PLAYER_REGISTERED.name(), false, true);
 
     }
-    public Character getNextCharacterForStart(){
-        for(Character c: Game.INSTANCE.getCurrentPlayer().characters){
-            if(c.status().equals(CharacterState.HOME)){
+
+    public Character getNextCharacterForStart() {
+        for (Character c : Game.INSTANCE.getCurrentPlayer().characters) {
+            if (c.status().equals(CharacterState.HOME)) {
                 return c;
             }
         }
@@ -299,17 +299,17 @@ public enum Game {
 
     public int moveCharacterToStartingPostion(Character c) {
         int position = mapStartingPoint.get(currentPlayer.color());
-       Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), position, MoveType.MOVE_TO_FIELD,0)));
-       resetMyTurn();
+        Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), position, MoveType.MOVE_TO_FIELD, 0)));
+        resetMyTurn();
         return position;
     }
 
-    public void updateCharacterPosition(UUID uuid, int i, MoveType moveType,int steps) {
-        for(Player p : frontPlayer){
-            for(Character c : p.characters){
-                if(c.id().equals(uuid)){
+    public void updateCharacterPosition(UUID uuid, int i, MoveType moveType, int steps) {
+        for (Player p : frontPlayer) {
+            for (Character c : p.characters) {
+                if (c.id().equals(uuid)) {
                     int oldPosition = c.position();
-                    Character newCharacter = new Character(c.id(), i, c.status(),steps);
+                    Character newCharacter = new Character(c.id(), i, c.status(), steps);
                     p.setCharacters(p.characters.stream().map(character -> character.equals(c)
                                     ? newCharacter
                                     : character)
@@ -327,9 +327,9 @@ public enum Game {
     }
 
     private Character getCharacterById(UUID uuid) {
-        for(Player p : frontPlayer){
-            for(Character c : p.characters){
-                if(c.id().equals(uuid)){
+        for (Player p : frontPlayer) {
+            for (Character c : p.characters) {
+                if (c.id().equals(uuid)) {
                     return c;
                 }
             }
