@@ -2,6 +2,7 @@ package com.example.frontend.responseHandler;
 
 import com.example.frontend.Game;
 import com.example.frontend.actions.BadRequestAction;
+import com.example.frontend.actions.CheatAction;
 import com.example.frontend.actions.DefaultAction;
 import com.example.frontend.actions.DiceRolledAction;
 import com.example.frontend.actions.GameEndAction;
@@ -34,6 +35,7 @@ public class ResponseHandler {
         put(ResponseType.PLAYER_SUCCESSFULLY_REGISTERED, new PlayerRegisteredAction());
         put(ResponseType.MOVE_SUCCESSFUL, new MoveCharacterAction());
         put(ResponseType.GAME_END, new GameEndAction());
+        put(ResponseType.CHEAT_USED_PLAYER, new CheatAction());
     }};
 
     public static void execute(ResponseType responseType, Payload payload, Game game) {

@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 import at.aau.models.Character;
 import at.aau.models.Request;
+import at.aau.payloads.CheatPayload;
 import at.aau.payloads.DicePayload;
 import at.aau.payloads.PlayerMovePayload;
 import at.aau.values.CharacterState;
@@ -53,6 +54,7 @@ public enum Game {
         this.playerName = playerName;
     }
     private Player winner;
+    private boolean cheat_used;
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
@@ -94,6 +96,15 @@ public enum Game {
         }else {
             support.firePropertyChange(Property.DICE_ROLLED.name(), null, payload);
 
+        }
+    }
+
+    public void usedCheatAction(CheatPayload cheatpayload, Player currentPlayer) {
+        if(cheatpayload.player().name().equals(currentPlayer.getUsername())){
+            support.firePropertyChange(Property.PLAYER_USED_CHEAT.name(),false, true);
+            cheat_used=cheatpayload.cheatUsed();
+        }else{
+            support.firePropertyChange(Property.PLAYER_HAS_CHEAT.name(), true, cheatpayload);
         }
     }
     public void sendMoveOnFieldRequest(Character c){
@@ -348,6 +359,6 @@ public enum Game {
     }
 
     enum Property {
-        PLAYERS, GAME_STATE, WINNER, DICE_ROLLED, MOVE_CHARACTER, YOUR_TURN, USERNAME_ALREADY_EXISTS, PLAYER_REGISTERED, UPDATE_CHARACTER_POSITION, DICE_THROWN
+        PLAYERS, GAME_STATE, WINNER, DICE_ROLLED, MOVE_CHARACTER, YOUR_TURN, USERNAME_ALREADY_EXISTS, PLAYER_REGISTERED, UPDATE_CHARACTER_POSITION, DICE_THROWN, PLAYER_USED_CHEAT,PLAYER_HAS_CHEAT
     }
 }
