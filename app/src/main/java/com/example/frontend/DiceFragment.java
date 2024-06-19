@@ -24,7 +24,9 @@ import androidx.fragment.app.FragmentTransaction;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import at.aau.models.Character;
 import at.aau.models.Request;
+import at.aau.payloads.CheatPayload;
 import at.aau.payloads.EmptyPayload;
 import at.aau.values.CommandType;
 
@@ -180,7 +182,8 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
     }
 
     private void sendCheatUsedToServer() {
-        Client.send(new Request(CommandType.CHEAT_USED, new EmptyPayload()));
+        CheatPayload cheatpayload = null;
+        Client.send(new Request(CommandType.CHEAT_USED, new CheatPayload(true, cheatpayload.player())));
     }
 
     private void displayCurrentPlayer() {

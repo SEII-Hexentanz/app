@@ -7,7 +7,6 @@ import com.example.frontend.responseHandler.Action;
 
 import at.aau.models.Player;
 import at.aau.payloads.CheatPayload;
-import at.aau.payloads.DicePayload;
 import at.aau.payloads.Payload;
 
 public class CheatAction implements Action {
