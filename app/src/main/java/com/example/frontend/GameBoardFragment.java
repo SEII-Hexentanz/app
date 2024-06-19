@@ -36,7 +36,7 @@ import at.aau.payloads.DicePayload;
 import at.aau.values.MoveType;
 
 
-public class GameBoardFragment extends Fragment implements GameEventListener, PropertyChangeListener {
+public class GameBoardFragment extends Fragment implements PropertyChangeListener {
     public static final String TAG = "GAMEBOARD_FRAGMENT_TAG"; //helps to find it
     private Button diceBtn;
     private TextView usernameTxt, timerText;
@@ -91,7 +91,6 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Game.INSTANCE.setGameEventListener(this);
         //Display Gameboard only in Landscape Mode
     }
 
@@ -101,7 +100,6 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_game_board, container, false);
         Game.INSTANCE.mapStartPositions();
-        Game.INSTANCE.setGameEventListener(this);
         Game.INSTANCE.initializePlayerPositions();
         findViews(view);
         setGameBoardUsername();
@@ -626,19 +624,6 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         fragmentTransaction.commit();
     }
 
-    @Override
-    public void onPlayerPositionChanged(com.example.frontend.Player player, int oldPosition, int newPosition) {
-        requireActivity().runOnUiThread(() -> {
-            if (oldPosition >= 0 && oldPosition < gameboardPositions.size() && newPosition >= 0 && newPosition < gameboardPositions.size()) {
-                ImageView oldImageView = gameboardPositions.get(oldPosition);
-                ImageView newImageView = gameboardPositions.get(newPosition);
-                updateImageViews(oldImageView, newImageView, player);
-            } else {
-                Log.e(TAG, "Invalid position(s): oldPosition=" + oldPosition + ", newPosition=" + newPosition);
-            }
-        });
-    }
-
     public void updateImageViews(ImageView oldImageView, ImageView newImageView, com.example.frontend.Player player) {
         // int playerIcon = getPlayerIcon(player);
 
@@ -683,7 +668,6 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
             //startTimer();
             Log.i(TAG, "startTimer");
         }
-        Game.INSTANCE.setGameEventListener(this);
     }
 
     @Override
