@@ -268,16 +268,12 @@ public enum Game {
         support.firePropertyChange(Property.YOUR_TURN.name(), false, true);
     }
 
-
     public void resetMyTurn(){
         myTurn = false;
     }
 
     public boolean isMyTurn() {
         return myTurn;
-    }
-
-    public void moveToStart() {
     }
 
     public void nameAlreadyExists() {
