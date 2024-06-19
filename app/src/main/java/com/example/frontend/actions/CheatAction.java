@@ -19,6 +19,6 @@ public class CheatAction implements Action {
             Log.i("App", "Player " + player.name() + " has used the cheat");
 
             game.usedCheatAction(cheatpayload, game.getCurrentPlayer());
-        } else Log.e("App", "Payload is not an instance of DicePayload");
+        } else Log.e("App", "Payload is not an instance of CheatPayload");
     }
 }
