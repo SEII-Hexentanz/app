@@ -135,6 +135,7 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
             Client.send(new Request(CommandType.CHEAT, new EmptyPayload()));
             markCheatAsUsed();
             cheatButton.setEnabled(false);
+            sendCheatUsedToServer();
         }
     }
 
@@ -176,6 +177,10 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
 
     private void sendDiceRollRequestToServer() {
         Client.send(new Request(CommandType.DICE_ROLL, new EmptyPayload()));
+    }
+
+    private void sendCheatUsedToServer() {
+        Client.send(new Request(CommandType.CHEAT_USED, new EmptyPayload()));
     }
 
     private void displayCurrentPlayer() {
