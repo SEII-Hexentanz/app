@@ -358,8 +358,8 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
             //send move request to server
             doCharacterAction(c);
         });
-        setStepCounter(Math.abs(c.position()-oldPosition));
-        Log.i(TAG,"Stepcounter" + stepCounter);
+        setStepCounter(Math.abs(c.position() - oldPosition));
+        Log.i(TAG, "Stepcounter" + stepCounter);
 
         if (moveType.equals(MoveType.MOVE_ON_FIELD) || moveType.equals(MoveType.MOVE_TO_GOAL)) {
             Log.d(TAG, "Character " + c.id() + " gets hidden on old position " + oldPosition);
@@ -368,7 +368,11 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
                 //do nothing
             });
         }
+
+        // Handle collision
+        Game.INSTANCE.handleCollision(c, c.position());
     }
+
 
     private void doCharacterAction(Character c) {
         if(Game.INSTANCE.isMyTurn()) {
@@ -438,6 +442,37 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
             }
         }
     }
+
+    private void resetPlayerHomePosition(Player player) {
+        switch (player.color()) {
+            case YELLOW:
+                resetHomeIcons(btnYelloHome);
+                break;
+            case PINK:
+                resetHomeIcons(btnRosaHome);
+                break;
+            case RED:
+                resetHomeIcons(btnRedHome);
+                break;
+            case GREEN:
+                resetHomeIcons(btnGreenHome);
+                break;
+            case LIGHT_BLUE:
+                resetHomeIcons(btnBlueHome);
+                break;
+            case DARK_BLUE:
+                resetHomeIcons(btnLilaHome);
+                break;
+        }
+    }
+
+    private void resetHomeIcons(ArrayList<ImageView> homeIcons) {
+        for (ImageView icon : homeIcons) {
+            icon.setImageResource(R.drawable.playericon);
+            icon.setVisibility(View.VISIBLE);
+        }
+    }
+
 
 
     void mapGoalPositions() {

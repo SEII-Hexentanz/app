@@ -114,25 +114,37 @@ public enum Game {
             Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), position, MoveType.MOVE_TO_GOAL, totalStep)));
         }else{
             handleCollision(c,position);
+            handleSelfCollision(c, position);
             Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), position, MoveType.MOVE_ON_FIELD,totalStep)));
         }
         resetMyTurn();
     }
 
-    private void handleCollision(Character movingChar, int newPos){
-        for(Player player: frontPlayer){
-            for(Character character : player.characters){
-                if(!character.equals(movingChar) && character.position() == newPos){
-                    Log.i(TAG,"Player "+character.id()+" will go back to start " + newPos);
+    public void handleCollision(Character movingChar, int newPos) {
+        for (Player player : frontPlayer) {
+            for (Character character : player.characters) {
+                if (!character.equals(movingChar) && character.position() == newPos) {
+                    Log.i(TAG, "Player " + character.id() + " will go back to start " + newPos);
                     moveToStart(player, character);
+                    updateCharacterPosition(character.id(),newPos,MoveType.MOVE_TO_START,0);
                     return;
                 }
             }
         }
     }
-
-
-
+    public void handleSelfCollision(Character movingChar, int newPos) {
+        Player currentPlayer = getCurrentPlayer();
+        if (currentPlayer != null) {
+            for (Character character : currentPlayer.characters) {
+                if (!character.equals(movingChar) && character.position() == newPos) {
+                    Log.i(TAG, "Player " + character.id() + " will go back to start " + newPos);
+                    moveToStart(currentPlayer, character);
+                    updateCharacterPosition(character.id(),newPos,MoveType.MOVE_TO_START,0);
+                    return;
+                }
+            }
+        }
+    }
 
 
     public com.example.frontend.Player getCurrentPlayer() {
