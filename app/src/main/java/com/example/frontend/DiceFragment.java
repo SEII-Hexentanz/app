@@ -6,6 +6,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -14,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
@@ -34,7 +34,6 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
     private SensorManager sensorManager;
     private Sensor lightSensor;
     private Sensor accelerometer;
-    private Dice dice;
     private ImageView diceImage;
     private Button continueButton, cheatButton;
     private TextView diceResult, currentPlayerName, closeButton;
@@ -70,7 +69,6 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
         sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
         sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
         this.diceThrown = false;
-        dice = new Dice();
     }
 
     @Override
@@ -129,7 +127,6 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
 
     private void checkAndPerformCheat() {
         if (isButtonLongPressed && isSensorCovered) {
-            dice.setDice(6);
             updateDiceImage(diceImage, 6);
             diceThrown = false;
             Log.i(TAG, "Set dice to 6 with sensor covered and button long pressed");

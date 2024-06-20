@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ScaleGestureDetector;
@@ -33,15 +32,11 @@ import java.util.List;
 import java.util.SortedSet;
 
 import at.aau.models.Character;
-import at.aau.models.Request;
 import at.aau.payloads.DicePayload;
-import at.aau.payloads.PlayerMovePayload;
-import at.aau.values.CharacterState;
-import at.aau.values.CommandType;
 import at.aau.values.MoveType;
 
 
-public class GameBoardFragment extends Fragment implements GameEventListener, PropertyChangeListener {
+public class GameBoardFragment extends Fragment implements PropertyChangeListener {
     public static final String TAG = "GAMEBOARD_FRAGMENT_TAG"; //helps to find it
     private Button diceBtn;
     private TextView usernameTxt, timerText;
@@ -58,7 +53,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     //private Handler timerHandler = new Handler();
     private long millisecondsTime = 0L;
     private long timeSwapBuff = 0L;
-    private final long MAX_TIMER_DURATION = 15 * 60 * 1000; //1min=60_000 // 15 minutes
+    private final long MAX_TIMER_DURATION = 15L * 60L * 1000L; //1min=60_000 // 15 minutes
     private long remainingTime = MAX_TIMER_DURATION;
     private ArrayList<ImageView> gameboardPositions;
     private ArrayList<ImageView> btnYelloHome;
@@ -99,7 +94,6 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Game.INSTANCE.setGameEventListener(this);
         //Display Gameboard only in Landscape Mode
     }
 
@@ -109,7 +103,6 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_game_board, container, false);
         Game.INSTANCE.mapStartPositions();
-        Game.INSTANCE.setGameEventListener(this);
         Game.INSTANCE.initializePlayerPositions();
         findViews(view);
         setGameBoardUsername();
@@ -644,19 +637,6 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         fragmentTransaction.commit();
     }
 
-    @Override
-    public void onPlayerPositionChanged(com.example.frontend.Player player, int oldPosition, int newPosition) {
-        requireActivity().runOnUiThread(() -> {
-            if (oldPosition >= 0 && oldPosition < gameboardPositions.size() && newPosition >= 0 && newPosition < gameboardPositions.size()) {
-                ImageView oldImageView = gameboardPositions.get(oldPosition);
-                ImageView newImageView = gameboardPositions.get(newPosition);
-                updateImageViews(oldImageView, newImageView, player);
-            } else {
-                Log.e(TAG, "Invalid position(s): oldPosition=" + oldPosition + ", newPosition=" + newPosition);
-            }
-        });
-    }
-
     public void updateImageViews(ImageView oldImageView, ImageView newImageView, com.example.frontend.Player player) {
         // int playerIcon = getPlayerIcon(player);
 
@@ -701,7 +681,6 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
             //startTimer();
             Log.i(TAG, "startTimer");
         }
-        Game.INSTANCE.setGameEventListener(this);
     }
 
     @Override
