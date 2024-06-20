@@ -28,22 +28,23 @@ import at.aau.values.MoveType;
 public enum Game {
     INSTANCE;
 
+    public static final String TAG = "GAME_TAG";
+    final HashMap<at.aau.values.Color, Integer> mapStartingPoint = new HashMap<>();
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
-    private final SortedSet<at.aau.models.Player> players = new TreeSet<>();
     private SortedSet<Player> frontPlayer = new TreeSet<>();
     private GameState gameState = GameState.LOBBY;
-    private final Map<Player, Integer> playerPositions = new HashMap<>();
     private int currentPlayerIndex = 0;
-    public static final String TAG = "GAME_TAG";
-    private final Map<Player, Boolean> canMove = new HashMap<>();
     private GameEventListener eventListener;
     private String playerName;
     private Boolean myTurn = false;
     private int setDiceVal;
-    final HashMap<Color, Integer> mapStartingPoint = new HashMap<>();
+    private final Map<com.example.frontend.Player, Integer> playerPositions = new HashMap<>();
+    private final Map<com.example.frontend.Player, Boolean> canMove = new HashMap<>();
 
     private Player currentPlayer = null;
+    private Player winner;
     private boolean characterOnBoard = false;
+
 
     public String getPlayerName() {
         return playerName;
@@ -52,8 +53,6 @@ public enum Game {
     public void setPlayerName(String playerName) {
         this.playerName = playerName;
     }
-
-    private Player winner;
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
@@ -87,7 +86,9 @@ public enum Game {
         support.firePropertyChange(Property.GAME_STATE.name(), oldGameState, gameState);
     }
 
-    public void diceRolledAction(DicePayload payload, Player currentPlayer) {
+
+    public void diceRolledAction(DicePayload payload, com.example.frontend.Player currentPlayer) {
+
         if (payload.player().name().equals(currentPlayer.getUsername())) {
             support.firePropertyChange(Property.MOVE_CHARACTER.name(), 0, payload.diceValue());
             setDiceVal = payload.diceValue();
@@ -101,7 +102,10 @@ public enum Game {
     public void sendMoveOnFieldRequest(Character c) {
         int totalStep = c.steps() + setDiceVal;
         int postition = (c.position() + setDiceVal) % 37;
+
+
         if (totalStep >= 29) {
+
             Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), postition, MoveType.MOVE_TO_GOAL, totalStep)));
         } else {
             Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), postition, MoveType.MOVE_ON_FIELD, totalStep)));
@@ -109,8 +113,8 @@ public enum Game {
         resetMyTurn();
     }
 
-
     public com.example.frontend.Player getCurrentPlayer() {
+
         if (frontPlayer.isEmpty()) {
             Log.e(TAG, "No players available.");
             return null;
@@ -267,6 +271,7 @@ public enum Game {
 
     }
 
+
     public void setMyTurn() {
         myTurn = true;
         support.firePropertyChange(Property.YOUR_TURN.name(), false, true);
@@ -298,6 +303,7 @@ public enum Game {
         return null;
     }
 
+
     public int moveCharacterToStartingPostion(Character c) {
         int position = mapStartingPoint.get(currentPlayer.color());
         Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), position, MoveType.MOVE_TO_FIELD, 1)));
@@ -324,6 +330,7 @@ public enum Game {
                     }
 
                     Character newCharacter = new Character(c.id(), i, state, steps);
+
                     p.setCharacters(p.characters.stream().map(character -> character.equals(c)
                                     ? newCharacter
                                     : character)
