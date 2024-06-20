@@ -1,8 +1,10 @@
 package com.example.frontend;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import at.aau.models.Character;
+import at.aau.values.CharacterState;
 import at.aau.values.Color;
 
 public class Player implements Comparable<Player> {
@@ -69,6 +71,12 @@ public class Player implements Comparable<Player> {
         return o.getAge() - this.getAge();
     }
 
+    public Player updateCharacterState(int characterIndex, CharacterState newState) {
+        //     Character updatedCharacter = new Character(characters.get(characterIndex).position(), newState);
+        List<Character> updatedCharacters = new ArrayList<>(characters);
+        //  updatedCharacters.set(characterIndex, updatedCharacter);
+        return new Player(username, age, updatedCharacters, color);
+    }
     public Color color() {
         return color;
     }

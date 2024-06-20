@@ -31,10 +31,10 @@ public enum Game {
     public static final String TAG = "GAME_TAG";
     final HashMap<at.aau.values.Color, Integer> mapStartingPoint = new HashMap<>();
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
+    private GameEventListener eventListener;
     private SortedSet<Player> frontPlayer = new TreeSet<>();
     private GameState gameState = GameState.LOBBY;
     private int currentPlayerIndex = 0;
-    private GameEventListener eventListener;
     private String playerName;
     private Boolean myTurn = false;
     private int setDiceVal;
@@ -193,6 +193,7 @@ public enum Game {
         frontPlayer.add(updatedPlayer);
         broadcastMove(updatedPlayer, playerPositions.get(player), playerPositions.get(updatedPlayer));
     }
+
 
     private void broadcastMove(Player player, int oldPosition, int newPosition) {
         if (player == null) {
