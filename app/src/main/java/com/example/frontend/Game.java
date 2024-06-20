@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 
 import at.aau.models.Character;
 import at.aau.models.Request;
-import at.aau.payloads.CheatPayload;
 import at.aau.payloads.DicePayload;
 import at.aau.payloads.PlayerMovePayload;
 import at.aau.values.CharacterState;
@@ -29,22 +28,23 @@ import at.aau.values.MoveType;
 public enum Game {
     INSTANCE;
 
-    private final PropertyChangeSupport support = new PropertyChangeSupport(this);
-    private final SortedSet<at.aau.models.Player> players = new TreeSet<>();
-    private SortedSet<com.example.frontend.Player> frontPlayer = new TreeSet<>();
-    private GameState gameState = GameState.LOBBY;
-    private final Map<com.example.frontend.Player, Integer> playerPositions = new HashMap<>();
-    private int currentPlayerIndex = 0;
     public static final String TAG = "GAME_TAG";
-    private final Map<com.example.frontend.Player, Boolean> canMove = new HashMap<>();
+    final HashMap<at.aau.values.Color, Integer> mapStartingPoint = new HashMap<>();
+    private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     private GameEventListener eventListener;
-    private DiceFragment diceFragment;
+    private SortedSet<Player> frontPlayer = new TreeSet<>();
+    private GameState gameState = GameState.LOBBY;
+    private int currentPlayerIndex = 0;
     private String playerName;
     private Boolean myTurn = false;
     private int setDiceVal;
-    final HashMap<at.aau.values.Color, Integer> mapStartingPoint= new HashMap<>();;
+    private final Map<com.example.frontend.Player, Integer> playerPositions = new HashMap<>();
+    private final Map<com.example.frontend.Player, Boolean> canMove = new HashMap<>();
 
     private Player currentPlayer = null;
+    private Player winner;
+    private boolean characterOnBoard = false;
+
 
     public String getPlayerName() {
         return playerName;
@@ -53,8 +53,6 @@ public enum Game {
     public void setPlayerName(String playerName) {
         this.playerName = playerName;
     }
-    private Player winner;
-    private boolean cheat_used;
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
@@ -64,7 +62,7 @@ public enum Game {
         support.removePropertyChangeListener(listener);
     }
 
-    public SortedSet<com.example.frontend.Player> FrontPlayer() {
+    public SortedSet<Player> FrontPlayer() {
         return frontPlayer;
     }
 
@@ -72,8 +70,8 @@ public enum Game {
         return frontPlayer;
     }
 
-    public void setPlayers(SortedSet<com.example.frontend.Player> players) {
-        SortedSet<com.example.frontend.Player> oldPlayers = this.frontPlayer;
+    public void setPlayers(SortedSet<Player> players) {
+        SortedSet<Player> oldPlayers = this.frontPlayer;
         this.frontPlayer = players;
         support.firePropertyChange(Property.PLAYERS.name(), oldPlayers, players);
     }
@@ -88,74 +86,43 @@ public enum Game {
         support.firePropertyChange(Property.GAME_STATE.name(), oldGameState, gameState);
     }
 
-    public void diceRolledAction(DicePayload payload, com.example.frontend.Player currentPlayer){
-        if(payload.player().name().equals(currentPlayer.getUsername())){
+
+    public void diceRolledAction(DicePayload payload, com.example.frontend.Player currentPlayer) {
+
+        if (payload.player().name().equals(currentPlayer.getUsername())) {
             support.firePropertyChange(Property.MOVE_CHARACTER.name(), 0, payload.diceValue());
             setDiceVal = payload.diceValue();
 
-        }else {
+        } else {
             support.firePropertyChange(Property.DICE_ROLLED.name(), null, payload);
 
         }
     }
 
-    public void usedCheatAction(CheatPayload cheatpayload, Player currentPlayer) {
-        if(cheatpayload.player().name().equals(currentPlayer.getUsername())){
-            support.firePropertyChange(Property.PLAYER_USED_CHEAT.name(),false, true);
-            cheat_used=cheatpayload.cheatUsed();
-        }else{
-            support.firePropertyChange(Property.PLAYER_HAS_CHEAT.name(), true, cheatpayload);
-        }
-    }
-    public void sendMoveOnFieldRequest(Character c){
-        int totalStep =c.steps() + setDiceVal;
-        int position = (c.position()+setDiceVal) % 37;
-        if(totalStep>=27){
-            Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), position, MoveType.MOVE_TO_GOAL, totalStep)));
-        }else{
-            handleCollision(c,position);
-            handleSelfCollision(c, position);
-            Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), position, MoveType.MOVE_ON_FIELD,totalStep)));
+    public void sendMoveOnFieldRequest(Character c) {
+        int totalStep = c.steps() + setDiceVal;
+        int postition = (c.position() + setDiceVal) % 37;
+
+
+        if (totalStep >= 29) {
+
+            Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), postition, MoveType.MOVE_TO_GOAL, totalStep)));
+        } else {
+            Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), postition, MoveType.MOVE_ON_FIELD, totalStep)));
         }
         resetMyTurn();
     }
 
-    public void handleCollision(Character movingChar, int newPos) {
-        for (Player player : frontPlayer) {
-            for (Character character : player.characters) {
-                if (!character.equals(movingChar) && character.position() == newPos) {
-                    Log.i(TAG, "Player " + character.id() + " will go back to start " + newPos);
-                    moveToStart(player, character);
-                    updateCharacterPosition(character.id(),newPos,MoveType.MOVE_TO_START,0);
-                    return;
-                }
-            }
-        }
-    }
-    public void handleSelfCollision(Character movingChar, int newPos) {
-        Player currentPlayer = getCurrentPlayer();
-        if (currentPlayer != null) {
-            for (Character character : currentPlayer.characters) {
-                if (!character.equals(movingChar) && character.position() == newPos) {
-                    Log.i(TAG, "Player " + character.id() + " will go back to start " + newPos);
-                    moveToStart(currentPlayer, character);
-                    updateCharacterPosition(character.id(),newPos,MoveType.MOVE_TO_START,0);
-                    return;
-                }
-            }
-        }
-    }
-
-
     public com.example.frontend.Player getCurrentPlayer() {
+
         if (frontPlayer.isEmpty()) {
             Log.e(TAG, "No players available.");
             return null;
         }
 
-        if(currentPlayer == null){
-            for(Player player : frontPlayer){
-                if(player.getUsername().equals(playerName)){
+        if (currentPlayer == null) {
+            for (Player player : frontPlayer) {
+                if (player.getUsername().equals(playerName)) {
                     return currentPlayer = player;
                 } else {
                     Log.e("App", "Player with name " + playerName + " does not exist");
@@ -165,17 +132,19 @@ public enum Game {
 
         return currentPlayer;
     }
+
     public void mapStartPositions() {
-        mapStartingPoint.put(at.aau.values.Color.YELLOW, 27);
-        mapStartingPoint.put(at.aau.values.Color.PINK, 33);
-        mapStartingPoint.put(at.aau.values.Color.RED, 15);
-        mapStartingPoint.put(at.aau.values.Color.GREEN, 21);
-        mapStartingPoint.put(at.aau.values.Color.LIGHT_BLUE, 9);
-        mapStartingPoint.put(at.aau.values.Color.DARK_BLUE, 3);
+        mapStartingPoint.put(Color.YELLOW, 27);
+        mapStartingPoint.put(Color.PINK, 33);
+        mapStartingPoint.put(Color.RED, 15);
+        mapStartingPoint.put(Color.GREEN, 21);
+        mapStartingPoint.put(Color.LIGHT_BLUE, 9);
+        mapStartingPoint.put(Color.DARK_BLUE, 3);
     }
 
+
     public void initializePlayerPositions() {
-        for (com.example.frontend.Player player : frontPlayer) {
+        for (Player player : frontPlayer) {
             Integer startPosition = mapStartingPoint.get(player.color());
             if (startPosition != null) {
                 playerPositions.put(player, startPosition);
@@ -185,13 +154,13 @@ public enum Game {
         }
     }
 
-    public void setPlayerPosition(com.example.frontend.Player player, int position) {
+    public void setPlayerPosition(Player player, int position) {
         Integer oldPosition = playerPositions.get(player);
         playerPositions.put(player, position);
         support.firePropertyChange("playerPosition", Optional.ofNullable(oldPosition), position);
     }
 
-    public int getPlayerPosition(com.example.frontend.Player player) {
+    public int getPlayerPosition(Player player) {
         return playerPositions.getOrDefault(player, 0); // Return -1 if no position set
     }
 
@@ -204,7 +173,7 @@ public enum Game {
         this.eventListener = listener;
     }
 
-    private void updateCharacterState(com.example.frontend.Player player, int characterIndex, CharacterState newState) {
+    private void updateCharacterState(Player player, int characterIndex, CharacterState newState) {
         if (player == null) {
             Log.e(TAG, "Player object is null in updateCharacterState");
             return;
@@ -215,7 +184,7 @@ public enum Game {
             return;
         }
 
-        com.example.frontend.Player updatedPlayer = player.updateCharacterState(characterIndex, newState);
+        Player updatedPlayer = player.updateCharacterState(characterIndex, newState);
         if (updatedPlayer == null) {
             Log.e(TAG, "Updated player is null after calling updateCharacterState");
             return;
@@ -225,19 +194,22 @@ public enum Game {
         broadcastMove(updatedPlayer, playerPositions.get(player), playerPositions.get(updatedPlayer));
     }
 
-    private void broadcastMove(com.example.frontend.Player player, int oldPosition, int newPosition) {
+
+    private void broadcastMove(Player player, int oldPosition, int newPosition) {
         if (player == null) {
             Log.e(TAG, "Player object is null in broadcastMove");
             return;
         }
-         //Response response = new Response(ResponseType.UPDATE_STATE, new PlayerMovePayload(oldPosition, newPosition, player.getUsername()));
+        //Response response = new Response(ResponseType.UPDATE_STATE, new PlayerMovePayload(oldPosition, newPosition, player.getUsername()));
         //ResponseHandler.execute(response.responseType(),response.payload(),Game.INSTANCE);
+
     }
-    public void addPlayers(List<com.example.frontend.Player> playersList) {
-        for (com.example.frontend.Player player : playersList) {
+
+    public void addPlayers(List<Player> playersList) {
+        for (Player player : playersList) {
             if (!frontPlayer.contains(player)) {
-               Color color = Color.values()[frontPlayer.size() % Color.values().length];
-                com.example.frontend.Player coloredPlayer = new com.example.frontend.Player(player.getUsername(), player.getAge(), player.getCharacters(),player.color());
+                Color color = Color.values()[frontPlayer.size() % Color.values().length];
+                Player coloredPlayer = new Player(player.getUsername(), player.getAge(), player.getCharacters(), player.color());
                 frontPlayer.add(coloredPlayer);
                 playerPositions.put(coloredPlayer, 0);
                 canMove.put(coloredPlayer, false);
@@ -246,7 +218,7 @@ public enum Game {
         }
     }
 
-    public void updatePlayer(com.example.frontend.Player oldPlayer, com.example.frontend.Player newPlayer) {
+    public void updatePlayer(Player oldPlayer, Player newPlayer) {
         if (frontPlayer.contains(oldPlayer)) {
             Log.i(TAG, newPlayer.getUsername() + " updatePlayerMethod");
             frontPlayer.remove(oldPlayer);
@@ -258,24 +230,18 @@ public enum Game {
 
     }
 
-    public void setMyTurn(){
+
+    public void setMyTurn() {
         myTurn = true;
         support.firePropertyChange(Property.YOUR_TURN.name(), false, true);
     }
 
-
-    public void resetMyTurn(){
+    public void resetMyTurn() {
         myTurn = false;
     }
 
     public boolean isMyTurn() {
         return myTurn;
-    }
-
-    public void moveToStart(Player player, Character character) {
-        int startPos = mapStartingPoint.get(player.color());
-        Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(character.id(),startPos,MoveType.MOVE_TO_START,0)));
-        updateCharacterPosition(character.id(),startPos,MoveType.MOVE_TO_START,0);
     }
 
     public void nameAlreadyExists() {
@@ -286,28 +252,44 @@ public enum Game {
         support.firePropertyChange(Property.PLAYER_REGISTERED.name(), false, true);
 
     }
-    public Character getNextCharacterForStart(){
-        for(Character c: Game.INSTANCE.getCurrentPlayer().characters){
-            if(c.status().equals(CharacterState.HOME)){
+
+    public Character getNextCharacterForStart() {
+        for (Character c : Game.INSTANCE.getCurrentPlayer().characters) {
+            if (c.status().equals(CharacterState.HOME)) {
                 return c;
             }
         }
         return null;
     }
 
+
     public int moveCharacterToStartingPostion(Character c) {
         int position = mapStartingPoint.get(currentPlayer.color());
-       Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), position, MoveType.MOVE_TO_FIELD,0)));
-       resetMyTurn();
+        Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), position, MoveType.MOVE_TO_FIELD, 1)));
+        characterOnBoard = true;
+        resetMyTurn();
         return position;
     }
 
-    public void updateCharacterPosition(UUID uuid, int i, MoveType moveType,int steps) {
-        for(Player p : frontPlayer){
-            for(Character c : p.characters){
-                if(c.id().equals(uuid)){
+
+    public void updateCharacterPosition(UUID uuid, int i, MoveType moveType, int steps) {
+        for (Player p : frontPlayer) {
+            for (Character c : p.characters) {
+                if (c.id().equals(uuid)) {
                     int oldPosition = c.position();
-                    Character newCharacter = new Character(c.id(), i, c.status(),steps);
+                    CharacterState state = null;
+                    if (moveType.equals(MoveType.MOVE_TO_FIELD) || moveType.equals(MoveType.MOVE_ON_FIELD)) {
+                        state = CharacterState.FIELD;
+                    } else if (moveType.equals(MoveType.MOVE_TO_GOAL)) {
+                        state = CharacterState.GOAL;
+                    /*   } else if (moveType.equals(MoveType.MOVE_TO_HOME)) {
+                        state = CharacterState.HOME;
+                    }
+                    */
+                    }
+
+                    Character newCharacter = new Character(c.id(), i, state, steps);
+
                     p.setCharacters(p.characters.stream().map(character -> character.equals(c)
                                     ? newCharacter
                                     : character)
@@ -316,20 +298,7 @@ public enum Game {
                     UpdatePositionObject upo = new UpdatePositionObject(newCharacter, p, moveType, oldPosition);
 
                     support.firePropertyChange(Property.UPDATE_CHARACTER_POSITION.name(), null, upo);
-                    handleCollision(newCharacter,i);
                     return;
-                }
-            }
-        }
-
-        throw new Resources.NotFoundException("Character not found");
-    }
-
-    private Character getCharacterById(UUID uuid) {
-        for(Player p : frontPlayer){
-            for(Character c : p.characters){
-                if(c.id().equals(uuid)){
-                    return c;
                 }
             }
         }
@@ -347,6 +316,6 @@ public enum Game {
     }
 
     enum Property {
-        PLAYERS, GAME_STATE, WINNER, DICE_ROLLED, MOVE_CHARACTER, YOUR_TURN, USERNAME_ALREADY_EXISTS, PLAYER_REGISTERED, UPDATE_CHARACTER_POSITION, DICE_THROWN, PLAYER_USED_CHEAT,PLAYER_HAS_CHEAT
+        PLAYERS, GAME_STATE, WINNER, DICE_ROLLED, MOVE_CHARACTER, YOUR_TURN, USERNAME_ALREADY_EXISTS, PLAYER_REGISTERED, UPDATE_CHARACTER_POSITION, DICE_THROWN
     }
 }

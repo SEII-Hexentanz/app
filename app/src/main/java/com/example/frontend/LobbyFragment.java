@@ -18,12 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.SortedSet;
 
 import at.aau.models.Request;
 import at.aau.payloads.EmptyPayload;
-import at.aau.values.Color;
 import at.aau.values.CommandType;
 import at.aau.values.GameState;
 
@@ -87,7 +85,6 @@ public class LobbyFragment extends Fragment implements PropertyChangeListener {
 
     private void onClickStart() {
         startGame.setOnClickListener(view -> {
-            assignColorsToPlayers(Game.INSTANCE.FrontPlayer());
             Game.INSTANCE.setGameState(GameState.RUNNING);
             Client.send(new Request(CommandType.START, new EmptyPayload()));
             showGameBoardFragment();
@@ -120,20 +117,6 @@ public class LobbyFragment extends Fragment implements PropertyChangeListener {
         fragmentTransaction.replace(android.R.id.content, rulesfragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
-    }
-
-    private void assignColorsToPlayers(SortedSet<com.example.frontend.Player> players) {
-        List<com.example.frontend.Player> playersList = new ArrayList<>(players);
-        int colorIndex = 0;
-        Color[] colors = Color.values();
-        for (com.example.frontend.Player player : playersList) {
-            Color color = colors[colorIndex % colors.length];
-            com.example.frontend.Player coloredPlayer = new com.example.frontend.Player(player.getUsername(), player.getAge(), player.getCharacters(),player.color());
-            Game.INSTANCE.updatePlayer(player, coloredPlayer);
-            Game.INSTANCE.addPlayers(playersList);
-            Log.i("LOBBY_FRAGMENT", player.getUsername()+ " got color " + color.toString());
-            colorIndex++;
-        }
     }
 
     @Override

@@ -1,35 +1,25 @@
 package com.example.frontend;
 
 
-import android.app.Activity;
 import android.content.SharedPreferences;
-import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.os.Handler;
-import android.os.Looper;
-import android.widget.Toast;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Objects;
-import java.util.concurrent.CancellationException;
 
 import at.aau.models.Request;
-import at.aau.payloads.DicePayload;
 import at.aau.payloads.RegisterPayload;
 import at.aau.values.CommandType;
 
@@ -78,14 +68,6 @@ public class MainActivity extends AppCompatActivity implements PropertyChangeLis
     private void onClickStartButton() {
         String responseUser = inputUsername.getText().toString();
         String responesAge = inputAge.getText().toString();
-
-        /*if (createLobbyFragment.getVisibility() == View.INVISIBLE) {
-            createLobbyFragment.setVisibility(View.GONE);
-        } else {
-            createLobbyFragment.setVisibility(View.VISIBLE);
-            //
-        }*/
-        //createLobbyFragment.setVisibility(View.VISIBLE);
 
         Client.send(new Request(CommandType.REGISTER, new RegisterPayload(responseUser, Integer.parseInt(responesAge))));
         Log.i("ResponseAge", responesAge);
@@ -183,7 +165,9 @@ public class MainActivity extends AppCompatActivity implements PropertyChangeLis
     }
 
     private void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+
+        InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(INPUT_METHOD_SERVICE);
+
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 

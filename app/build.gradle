@@ -5,8 +5,12 @@ plugins {
 }
 
 android {
+    lint{
+        disable "AccidentalOctal", "AndroidGradlePluginVersion", "AnnotationProcessorOnCompilePath", "BomWithoutPlatform", "UseOfBundledGooglePlayServices", "ChromeOsAbiSupport", "GradleCompatible", "CredentialDependency", "DataBindingWithoutKapt", "GradleDependency", "GradleDeprecated", "GradleDeprecatedConfiguration", "OutdatedLibrary", "DevModeObsolete", "DuplicatePlatformClasses", "EditedTargetSdkVersion", "ExpiredTargetSdkVersion", "ExpiringTargetSdkVersion", "GradleGetter", "GradlePluginVersion", "HighAppVersionCode", "GradleIdeError", "JavaPluginLanguageLevel", "JcenterRepositoryObsolete", "KaptUsageInsteadOfKsp", "KtxExtensionAvailable", "LifecycleAnnotationProcessorWithJava8", "MinSdkTooLow", "NotInterpolated", "GradlePath", "PlaySdkIndexNonCompliant", "PlaySdkIndexGenericIssues", "GradleDynamicVersion", "NewerVersionAvailable", "RiskyLibrary", "StringShouldBeInt", "UseTomlInstead", "OldTargetApi"
+    }
     namespace 'com.example.frontend'
     compileSdk 34
+
 
     defaultConfig {
         applicationId "com.example.frontend"

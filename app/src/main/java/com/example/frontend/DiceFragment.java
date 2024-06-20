@@ -6,6 +6,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -14,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
@@ -32,10 +32,10 @@ import at.aau.values.CommandType;
 
 public class DiceFragment extends Fragment implements SensorEventListener, PropertyChangeListener {
     public static final String TAG = "DICE_FRAGMENT_TAG";
+    public static final String APP_PREFS = "AppPrefs";
     private SensorManager sensorManager;
     private Sensor lightSensor;
     private Sensor accelerometer;
-    private Dice dice;
     private ImageView diceImage;
     private Button continueButton, cheatButton;
     private TextView diceResult, currentPlayerName, closeButton;
@@ -71,7 +71,6 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
         sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
         sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
         this.diceThrown = false;
-        dice = new Dice();
     }
 
     @Override
@@ -130,7 +129,6 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
 
     private void checkAndPerformCheat() {
         if (isButtonLongPressed && isSensorCovered) {
-            dice.setDice(6);
             updateDiceImage(diceImage, 6);
             diceThrown = false;
             Log.i(TAG, "Set dice to 6 with sensor covered and button long pressed");
@@ -248,17 +246,17 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
         if (getContext() == null) {
             return "defaultUsername";
         }
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(APP_PREFS, Context.MODE_PRIVATE);
         return sharedPreferences.getString("username", "defaultUsername");
     }
 
     private boolean isCheatUsed() {
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(APP_PREFS, Context.MODE_PRIVATE);
         return sharedPreferences.getBoolean("cheatUsed", false);
     }
 
     private void markCheatAsUsed() {
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(APP_PREFS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("cheatUsed", true);
         editor.apply();
@@ -284,6 +282,7 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
             int diceValue = (int) propertyChangeEvent.getNewValue();
             requireActivity().runOnUiThread(() -> {
                 diceRolledResult(diceValue);
+                closeButton.setVisibility(View.VISIBLE);
             });
         }
     }

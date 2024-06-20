@@ -21,6 +21,7 @@ public class Client extends Thread {
     private static ObjectOutputStream out;
     private static ObjectInputStream in;
     private static final Object mutex = new Object();
+    private static final ResponseHandler responseHandler = new ResponseHandler();
 
     public synchronized static void setSocket(Socket socket) {
         Client.socket = socket;
@@ -66,7 +67,7 @@ public class Client extends Thread {
                         continue;
                     }
                     Log.i(TAG, "Received response from server: " + response);
-                    ResponseHandler.execute(response.responseType(), response.payload(), Game.INSTANCE);
+                    responseHandler.execute(response.responseType(), response.payload(), Game.INSTANCE);
                 }
             } catch (UnknownHostException e) {
                 throw new IllegalArgumentException("Unknown host", e); // we can't work without a server
