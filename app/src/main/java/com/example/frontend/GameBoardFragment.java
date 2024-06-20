@@ -1,4 +1,4 @@
-
+// Path: com/example/frontend/GameBoardFragment.java
 package com.example.frontend;
 
 import android.app.Dialog;
@@ -35,22 +35,17 @@ import at.aau.models.Character;
 import at.aau.payloads.DicePayload;
 import at.aau.values.MoveType;
 
-
 public class GameBoardFragment extends Fragment implements PropertyChangeListener {
     public static final String TAG = "GAMEBOARD_FRAGMENT_TAG"; //helps to find it
     private Button diceBtn;
     private TextView usernameTxt, timerText;
     private CountDownTimer countDownTimer;
     private FragmentContainerView diceFragment;
-
     private ImageView gameBoard;
     private float mScaleFactor;
-
-
     private HashMap<at.aau.values.Color, Integer> mapGoalPoint;
     private ScaleGestureDetector scaleGestureDetector;
     private long startTime = 0L;
-    //private Handler timerHandler = new Handler();
     private long millisecondsTime = 0L;
     private long timeSwapBuff = 0L;
     private final long MAX_TIMER_DURATION = 15L * 60L * 1000L; //1min=60_000 // 15 minutes
@@ -62,7 +57,6 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
     private ArrayList<ImageView> btnGreenHome;
     private ArrayList<ImageView> btnBlueHome;
     private ArrayList<ImageView> btnLilaHome;
-
     private ArrayList<ImageView> btnYellowGoal;
     private ArrayList<ImageView> btnRosaGoal;
     private ArrayList<ImageView> btnRedGoal;
@@ -73,15 +67,13 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
     private boolean canMoveCharacter = false;
     private ArrayList<ImageView> playerHomePositions;
     private ArrayList<ImageView> playerGoalPositions;
-    //ArrayList für jedes einzelne Home und jedes einzelne Goal am Feld
 
     private boolean witchRevealVal = false;
-    private int stepCounter; //to get steps and if <36 --> move around
+    private int stepCounter;
 
     public GameBoardFragment() {
         Game.INSTANCE.addPropertyChangeListener(this);
     }
-
 
     public static GameBoardFragment newInstance(String username) {
         GameBoardFragment fragment = new GameBoardFragment();
@@ -94,37 +86,28 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Display Gameboard only in Landscape Mode
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_game_board, container, false);
         Game.INSTANCE.mapStartPositions();
         Game.INSTANCE.initializePlayerPositions();
         findViews(view);
         setGameBoardUsername();
         onRollDiceClick();
-
         scaleGestureDetector = new ScaleGestureDetector(requireContext(), new ScaleListener());
-
         initializeGameBoard(view);
         initalizePlayerGoalPositons(view);
         initalizePlayerHomePositions(view);
-
         setPlayerHomePositions(Game.INSTANCE.FrontPlayer());
         getBoardContent(gameboardPositions);
-
         return view;
     }
-
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         if (Game.INSTANCE.isMyTurn()) {
             yourTurn();
         }
@@ -143,15 +126,14 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
 
     public String getUsernameFromPreferences() {
         if (getContext() == null) {
-            return "defaultUsername"; // Return default or handle the error as appropriate
+            return "defaultUsername";
         }
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
         return sharedPreferences.getString("username", "defaultUsername");
     }
 
-
     private void setGameBoardUsername() {
-        if (usernameTxt != null) { // Add null check for safety
+        if (usernameTxt != null) {
             String name = getUsernameFromPreferences();
             usernameTxt.setText(name);
             Log.i(TAG, "USERNAME: " + name);
@@ -160,13 +142,11 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
         }
     }
 
-
     private void onRollDiceClick() {
         diceBtn.setOnClickListener(view -> {
             diceFragment.setVisibility(View.VISIBLE);
             showDiceFragment();
             diceBtn.setEnabled(false);
-
         });
     }
 
@@ -183,14 +163,11 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
         gameBoard = view.findViewById(R.id.gridLayoutGameBoard);
         diceFragment = view.findViewById(R.id.fragmentContainerDice);
 
-
-        //Yellow
         btnYelloHome = new ArrayList<>();
         btnYelloHome.add(view.findViewById(R.id.btnHomeYellow1));
         btnYelloHome.add(view.findViewById(R.id.btnHomeYellow2));
         btnYelloHome.add(view.findViewById(R.id.btnHomeYellow3));
         btnYelloHome.add(view.findViewById(R.id.btnHomeYellow4));
-
 
         btnYellowGoal = new ArrayList<>();
         btnYellowGoal.add(view.findViewById(R.id.btnGoalYellow1));
@@ -198,13 +175,11 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
         btnYellowGoal.add(view.findViewById(R.id.btnGoalYellow3));
         btnYellowGoal.add(view.findViewById(R.id.btnGoalYellow4));
 
-        //Rosa
         btnRosaHome = new ArrayList<>();
         btnRosaHome.add(view.findViewById(R.id.btnHomeRosa1));
         btnRosaHome.add(view.findViewById(R.id.btnHomeRosa2));
         btnRosaHome.add(view.findViewById(R.id.btnHomeRosa3));
         btnRosaHome.add(view.findViewById(R.id.btnHomeRosa4));
-
 
         btnRosaGoal = new ArrayList<>();
         btnRosaGoal.add(view.findViewById(R.id.btnGoalRosa1));
@@ -212,8 +187,6 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
         btnRosaGoal.add(view.findViewById(R.id.btnGoalRosa3));
         btnRosaGoal.add(view.findViewById(R.id.btnGoalRosa4));
 
-
-        //Red
         btnRedHome = new ArrayList<>();
         btnRedHome.add(view.findViewById(R.id.btnHomeRed1));
         btnRedHome.add(view.findViewById(R.id.btnHomeRed2));
@@ -226,24 +199,18 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
         btnRedGoal.add(view.findViewById(R.id.btnGoalRed3));
         btnRedGoal.add(view.findViewById(R.id.btnGoalRed4));
 
-
-        //Green
         btnGreenHome = new ArrayList<>();
         btnGreenHome.add(view.findViewById(R.id.btnHomeGreen1));
         btnGreenHome.add(view.findViewById(R.id.btnHomeGreen2));
         btnGreenHome.add(view.findViewById(R.id.btnHomeGreen3));
         btnGreenHome.add(view.findViewById(R.id.btnHomeGreen4));
 
-
         btnGreenGoal = new ArrayList<>();
-
         btnGreenGoal.add(view.findViewById(R.id.btnGoalGreen1));
         btnGreenGoal.add(view.findViewById(R.id.btnGoalGreen2));
         btnGreenGoal.add(view.findViewById(R.id.btnGoalGreen3));
         btnGreenGoal.add(view.findViewById(R.id.btnGoalGreen4));
 
-
-        //Blue
         btnBlueHome = new ArrayList<>();
         btnBlueHome.add(view.findViewById(R.id.btnHomeBlue1));
         btnBlueHome.add(view.findViewById(R.id.btnHomeBlue2));
@@ -256,9 +223,6 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
         btnBlueGoal.add(view.findViewById(R.id.btnGoalBlue3));
         btnBlueGoal.add(view.findViewById(R.id.btnGoalBlue4));
 
-
-        //LILA aka Dark_Blue
-
         btnLilaHome = new ArrayList<>();
         btnLilaHome.add(view.findViewById(R.id.btnHomeLila1));
         btnLilaHome.add(view.findViewById(R.id.btnHomeLila2));
@@ -270,8 +234,6 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
         btnLilaGoal.add(view.findViewById(R.id.btnGoalLila2));
         btnLilaGoal.add(view.findViewById(R.id.btnGoalLila3));
         btnLilaGoal.add(view.findViewById(R.id.btnGoalLila4));
-
-
     }
 
     private void setPlayerHomePositions(SortedSet<Player> players) {
@@ -279,50 +241,36 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
             Log.i(TAG, "Set PlayerHomePositions");
             switch (player.color()) {
                 case YELLOW -> {
-
                     btnYelloHome.get(0).setImageResource(R.drawable.playericon);
                     btnYelloHome.get(1).setImageResource(R.drawable.playericon);
                     btnYelloHome.get(2).setImageResource(R.drawable.playericon);
                     btnYelloHome.get(3).setImageResource(R.drawable.playericon);
                 }
-
                 case PINK -> {
-
                     btnRosaHome.get(0).setImageResource(R.drawable.playericon);
                     btnRosaHome.get(1).setImageResource(R.drawable.playericon);
                     btnRosaHome.get(2).setImageResource(R.drawable.playericon);
                     btnRosaHome.get(3).setImageResource(R.drawable.playericon);
-
-
                 }
                 case RED -> {
-
                     btnRedHome.get(0).setImageResource(R.drawable.playericon);
                     btnRedHome.get(1).setImageResource(R.drawable.playericon);
                     btnRedHome.get(2).setImageResource(R.drawable.playericon);
                     btnRedHome.get(3).setImageResource(R.drawable.playericon);
-
-
                 }
-
                 case GREEN -> {
-
                     btnRedHome.get(0).setImageResource(R.drawable.playericon);
                     btnRedHome.get(1).setImageResource(R.drawable.playericon);
                     btnRedHome.get(2).setImageResource(R.drawable.playericon);
                     btnRedHome.get(3).setImageResource(R.drawable.playericon);
-
                 }
                 case LIGHT_BLUE -> {
-
                     btnBlueHome.get(0).setImageResource(R.drawable.playericon);
                     btnBlueHome.get(1).setImageResource(R.drawable.playericon);
                     btnBlueHome.get(2).setImageResource(R.drawable.playericon);
                     btnBlueHome.get(3).setImageResource(R.drawable.playericon);
                 }
-
                 case DARK_BLUE -> {
-
                     btnLilaHome.get(0).setImageResource(R.drawable.playericon);
                     btnLilaHome.get(1).setImageResource(R.drawable.playericon);
                     btnLilaHome.get(2).setImageResource(R.drawable.playericon);
@@ -333,14 +281,12 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
     }
 
     private void moveCharacterToStartingPosition() {
-
         if (gameboardPositions.isEmpty()) {
-            throw new NullPointerException("Gameboard is not initalized yet.");
+            throw new NullPointerException("Gameboard is not initialized yet.");
         } else {
             Character c = Game.INSTANCE.getNextCharacterForStart();
             if (c != null) {
                 Game.INSTANCE.moveCharacterToStartingPostion(c);
-
             } else {
                 Toast.makeText(requireContext(), "No character in HOME left", Toast.LENGTH_SHORT).show();
                 showDialoge();
@@ -350,37 +296,41 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
 
     private void moveCharacterOnField(Character c, int oldPosition, MoveType moveType) {
         Log.d(TAG, "Character " + c.id() + " gets set to position " + c.position() + " from " + oldPosition);
-        gameboardPositions.get(c.position()).setImageResource(R.drawable.playericon);
-
-        gameboardPositions.get(c.position()).setOnClickListener(v -> {
-            //send move request to server
+        ImageView newPositionView = gameboardPositions.get(c.position());
+        newPositionView.setImageResource(R.drawable.playericon);
+        newPositionView.setOnClickListener(v -> {
             doCharacterAction(c);
-            gameboardPositions.get(c.position()).setOnClickListener(null);
+            newPositionView.setOnClickListener(null);
         });
+
+        // Re-enable the ImageView at the old position to be clickable
+        if (oldPosition >= 0 && oldPosition < gameboardPositions.size()) {
+            ImageView oldPositionView = gameboardPositions.get(oldPosition);
+            oldPositionView.setImageResource(R.drawable.hiddenimg);
+            oldPositionView.setOnClickListener(v -> {
+                if (Game.INSTANCE.isMyTurn() && !canMoveCharacter) {
+                    canMoveCharacter = true;
+                    doCharacterAction(c);
+                }
+            });
+        }
         setStepCounter(Math.abs(c.position() - oldPosition));
         Log.i(TAG, "Stepcounter" + stepCounter);
-
-        if (moveType.equals(MoveType.MOVE_ON_FIELD) || moveType.equals(MoveType.MOVE_TO_GOAL)) {
-            Log.d(TAG, "Character " + c.id() + " gets hidden on old position " + oldPosition);
-            removeOldImageResourceAtPosition(oldPosition);
-        }
     }
+
+
 
     private void removeOldImageResourceAtPosition(int oldPosition) {
         gameboardPositions.get(oldPosition).setImageResource(R.drawable.hiddenimg);
         gameboardPositions.get(oldPosition).setOnClickListener(v -> {
-            //do nothing
         });
     }
 
     private void doCharacterAction(Character c) {
         if (Game.INSTANCE.isMyTurn()) {
-
             if (witchRevealVal) {
                 Log.i(TAG, "reveal witch");
             } else {
-
-                //move command
                 if (canMoveCharacter) {
                     Game.INSTANCE.sendMoveOnFieldRequest(c);
                     canMoveCharacter = false;
@@ -394,10 +344,8 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
             List<Character> characterList = player.characters;
             return characterList.toArray(new Character[0]);
         }
-
         return new Character[0];
     }
-
 
     private void setGoalPositions(SortedSet<Player> players) {
         for (Player player : players) {
@@ -408,7 +356,6 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
                     btnYellowGoal.get(2).setImageResource(R.drawable.playericon);
                     btnYellowGoal.get(3).setImageResource(R.drawable.playericon);
                 }
-
                 case PINK -> {
                     btnRosaGoal.get(0).setImageResource(R.drawable.playericon);
                     btnRosaGoal.get(1).setImageResource(R.drawable.playericon);
@@ -421,7 +368,6 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
                     btnRedGoal.get(2).setImageResource(R.drawable.playericon);
                     btnRedGoal.get(3).setImageResource(R.drawable.playericon);
                 }
-
                 case GREEN -> {
                     btnGreenGoal.get(0).setImageResource(R.drawable.playericon);
                     btnGreenGoal.get(1).setImageResource(R.drawable.playericon);
@@ -434,7 +380,6 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
                     btnBlueGoal.get(2).setImageResource(R.drawable.playericon);
                     btnBlueGoal.get(3).setImageResource(R.drawable.playericon);
                 }
-
                 case DARK_BLUE -> {
                     btnLilaGoal.get(0).setImageResource(R.drawable.playericon);
                     btnLilaGoal.get(1).setImageResource(R.drawable.playericon);
@@ -444,7 +389,6 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
             }
         }
     }
-
 
     void mapGoalPositions() {
         mapGoalPoint = new HashMap<>();
@@ -462,27 +406,22 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
         playerHomePositions.add(view.findViewById(R.id.btnHomeRosa2));
         playerHomePositions.add(view.findViewById(R.id.btnHomeRosa3));
         playerHomePositions.add(view.findViewById(R.id.btnHomeRosa4));
-
         playerHomePositions.add(view.findViewById(R.id.btnHomeLila1));
         playerHomePositions.add(view.findViewById(R.id.btnHomeLila2));
         playerHomePositions.add(view.findViewById(R.id.btnHomeLila3));
         playerHomePositions.add(view.findViewById(R.id.btnHomeLila4));
-
         playerHomePositions.add(view.findViewById(R.id.btnHomeGreen1));
         playerHomePositions.add(view.findViewById(R.id.btnHomeGreen2));
         playerHomePositions.add(view.findViewById(R.id.btnHomeGreen3));
         playerHomePositions.add(view.findViewById(R.id.btnHomeGreen4));
-
         playerHomePositions.add(view.findViewById(R.id.btnHomeBlue1));
         playerHomePositions.add(view.findViewById(R.id.btnHomeBlue2));
         playerHomePositions.add(view.findViewById(R.id.btnHomeBlue3));
         playerHomePositions.add(view.findViewById(R.id.btnHomeBlue4));
-
         playerHomePositions.add(view.findViewById(R.id.btnHomeYellow1));
         playerHomePositions.add(view.findViewById(R.id.btnHomeYellow1));
         playerHomePositions.add(view.findViewById(R.id.btnHomeYellow1));
         playerHomePositions.add(view.findViewById(R.id.btnHomeYellow1));
-
         playerHomePositions.add(view.findViewById(R.id.btnHomeRed1));
         playerHomePositions.add(view.findViewById(R.id.btnHomeRed2));
         playerHomePositions.add(view.findViewById(R.id.btnHomeRed3));
@@ -491,37 +430,30 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
 
     private void initalizePlayerGoalPositons(View view) {
         playerGoalPositions = new ArrayList<>();
-
         playerGoalPositions.add(view.findViewById(R.id.btnGoalRosa1));
         playerGoalPositions.add(view.findViewById(R.id.btnGoalRosa2));
         playerGoalPositions.add(view.findViewById(R.id.btnGoalRosa3));
         playerGoalPositions.add(view.findViewById(R.id.btnGoalRosa4));
-
         playerGoalPositions.add(view.findViewById(R.id.btnGoalLila1));
         playerGoalPositions.add(view.findViewById(R.id.btnGoalLila2));
         playerGoalPositions.add(view.findViewById(R.id.btnGoalLila3));
         playerGoalPositions.add(view.findViewById(R.id.btnGoalLila4));
-
         playerGoalPositions.add(view.findViewById(R.id.btnGoalGreen1));
         playerGoalPositions.add(view.findViewById(R.id.btnGoalGreen2));
         playerGoalPositions.add(view.findViewById(R.id.btnGoalGreen3));
         playerGoalPositions.add(view.findViewById(R.id.btnGoalGreen4));
-
         playerGoalPositions.add(view.findViewById(R.id.btnGoalBlue1));
         playerGoalPositions.add(view.findViewById(R.id.btnGoalBlue2));
         playerGoalPositions.add(view.findViewById(R.id.btnGoalBlue3));
         playerGoalPositions.add(view.findViewById(R.id.btnGoalBlue4));
-
         playerGoalPositions.add(view.findViewById(R.id.btnGoalYellow1));
         playerGoalPositions.add(view.findViewById(R.id.btnGoalYellow1));
         playerGoalPositions.add(view.findViewById(R.id.btnGoalYellow1));
         playerGoalPositions.add(view.findViewById(R.id.btnGoalYellow1));
-
         playerGoalPositions.add(view.findViewById(R.id.btnGoalRed1));
         playerGoalPositions.add(view.findViewById(R.id.btnGoalRed2));
         playerGoalPositions.add(view.findViewById(R.id.btnGoalRed3));
         playerGoalPositions.add(view.findViewById(R.id.btnGoalRed4));
-
     }
 
     private void initializeGameBoard(View view) {
@@ -565,45 +497,11 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
 
         mapGoalPositions();
         Game.INSTANCE.mapStartPositions();
-
-
     }
 
     private void getBoardContent(ArrayList<ImageView> list) {
         Log.i(TAG, "Board Content: " + String.valueOf(list.size()));
     }
-
-    /*private Runnable updateTimeRunnable = new Runnable() {
-        public void run() {
-            long elapsedRealtime = SystemClock.elapsedRealtime();
-            remainingTime -= elapsedRealtime - startTime;
-            startTime = elapsedRealtime;
-            if (remainingTime > 0) {
-                int seconds = (int) (remainingTime / 1000);
-                int minutes = seconds / 60;
-                seconds %= 60;
-                timerText.setText(String.format("%02d:%02d", minutes, seconds));
-                timerHandler.postDelayed(this, 1000);
-                Log.i(TAG,"TIMER RUN");
-            } else {
-                timerHandler.removeCallbacks(this);
-                showEndGameFragment();
-            }
-        }
-    };
-
-    private void startTimer() {
-        startTime = SystemClock.uptimeMillis();
-        timerHandler.postDelayed(updateTimeRunnable, 0);
-    }
-
-    private void pauseTimer() {
-        timeSwapBuff = timeSwapBuff + millisecondsTime;
-
-        timerHandler.removeCallbacks(updateTimeRunnable);
-        long elapsedRealtime = SystemClock.elapsedRealtime();
-        remainingTime -= elapsedRealtime - startTime;
-    }*/
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -627,7 +525,6 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
         fragmentTransaction.commit();
     }
 
-
     private void showEndGameFragment() {
         EndGameFragment endGameFragment = new EndGameFragment();
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
@@ -638,20 +535,15 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
     }
 
     public void updateImageViews(ImageView oldImageView, ImageView newImageView, com.example.frontend.Player player) {
-        // int playerIcon = getPlayerIcon(player);
-
         if (oldImageView != null) {
-            oldImageView.setImageDrawable(null); // clear old position
+            oldImageView.setImageDrawable(null);
         }
         if (newImageView != null) {
-            //set defaultPlayerIcon because the color of the witch should not matter if part of reveal!
-            newImageView.setImageResource(R.drawable.playericon); // set new position
+            newImageView.setImageResource(R.drawable.playericon);
         }
     }
 
-    //necessary methdo for revealWitch
     private int getPlayerIcon(com.example.frontend.Player player) {
-        // Return the drawable resource id based on player details
         return switch (player.color()) {
             case YELLOW -> R.drawable.yellowhat;
             case PINK -> R.drawable.pinkhat;
@@ -659,10 +551,8 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
             case GREEN -> R.drawable.greenhat;
             case LIGHT_BLUE -> R.drawable.lightbluehat;
             case DARK_BLUE -> R.drawable.bluehat;
-
         };
     }
-
 
     @Override
     public void onDestroy() {
@@ -675,10 +565,8 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
     @Override
     public void onResume() {
         super.onResume();
-        // Set screen orientation to landscape when GameBoardFragment is resumed
         requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         if (remainingTime > 0) {
-            //startTimer();
             Log.i(TAG, "startTimer");
         }
     }
@@ -686,9 +574,7 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
     @Override
     public void onPause() {
         super.onPause();
-        // Reset screen orientation to portrait when GameBoardFragment is paused
         requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        //pauseTimer();
     }
 
     private void updateCharacterPosition(UpdatePositionObject upo) {
@@ -706,7 +592,6 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
 
     private void moveCharacterToGoal(UpdatePositionObject upo) {
         Log.i(TAG, "Character gets relocated from field to goal");
-
         switch (upo.getPlayer().color()) {
             case YELLOW:
                 moveToGoalPosition(upo, btnYellowGoal);
@@ -727,9 +612,7 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
                 moveToGoalPosition(upo, btnLilaGoal);
                 break;
         }
-
     }
-
 
     private void moveToGoalPosition(UpdatePositionObject upo, ArrayList<ImageView> goalPositions) {
         for (ImageView goalPosition : goalPositions) {
@@ -742,11 +625,9 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
         }
     }
 
-
     private void moveCharacterToField(UpdatePositionObject upo) {
         Log.i(TAG, "Character gets relocated from home to field");
         moveCharacterOnField(upo.getCharacter(), upo.getOldPosition(), upo.getMoveType());
-
         Log.i(TAG, "Character will be hidden from home");
         switch (upo.getPlayer().color()) {
             case YELLOW:
@@ -780,7 +661,6 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
         }
     }
 
-
     private void showDialoge() {
         Dialog dialog = new Dialog(requireActivity());
         dialog.setContentView(R.layout.dialog_layout);
@@ -792,10 +672,7 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
         revealWitchBtn.setVisibility(View.GONE);
         moveOnFieldBtn.setVisibility(View.GONE);
 
-
         moveToStartBtn.setOnClickListener(v -> {
-            //send request to server
-            //Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload()));
             moveCharacterToStartingPosition();
             dialog.dismiss();
             Log.i(TAG, "MoveToStart Request will be sent now");
@@ -812,9 +689,8 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
             });
 
             moveOnFieldBtn.setOnClickListener(v -> {
-                // Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload()));
                 dialog.dismiss();
-                Log.i(TAG, "Move Command  will be sent now");
+                Log.i(TAG, "Move Command will be sent now");
             });
         }
 
@@ -834,7 +710,6 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
     }
 
     private void diceRolled(DicePayload payload) {
-
         if (!isAdded()) {
             return;
         }
@@ -850,7 +725,6 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
         return stepCounter;
     }
 
-    // Setter for stepCounter
     public void setStepCounter(int stepCounter) {
         this.stepCounter = stepCounter;
     }
@@ -859,12 +733,10 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
         Log.i(TAG, "PropertyChangeEvent received: " + propertyChangeEvent.getPropertyName());
 
-        // Check if the fragment is attached before proceeding
         if (!isAdded()) {
             return;
         }
 
-        // Using a switch statement to handle different property names
         switch (Game.Property.valueOf(propertyChangeEvent.getPropertyName())) {
             case MOVE_CHARACTER:
                 int diceValue = (int) propertyChangeEvent.getNewValue();
@@ -892,10 +764,8 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
                 break;
 
             default:
-                // Handle any unexpected properties if needed
                 Log.w(TAG, "Unhandled property: " + propertyChangeEvent.getPropertyName());
                 break;
         }
     }
-
 }
