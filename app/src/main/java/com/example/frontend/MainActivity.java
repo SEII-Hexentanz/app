@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements PropertyChangeLis
 
     private void hideKeyboard(View view) {
 
-        InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(INPUT_METHOD_SERVICE);
 
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
