@@ -75,6 +75,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     private ArrayList<ImageView> btnBlueGoal;
     private ArrayList<ImageView> btnLilaGoal;
     private boolean characterOnBoard = false;
+    private boolean canMoveCharacter = false;
     private ArrayList<ImageView> playerHomePositions;
     private ArrayList<ImageView> playerGoalPositions;
     //ArrayList für jedes einzelne Home und jedes einzelne Goal am Feld
@@ -361,6 +362,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         gameboardPositions.get(c.position()).setOnClickListener(v -> {
             //send move request to server
             doCharacterAction(c);
+            gameboardPositions.get(c.position()).setOnClickListener(null);
         });
         setStepCounter(Math.abs(c.position() - oldPosition));
         Log.i(TAG, "Stepcounter" + stepCounter);
@@ -381,12 +383,15 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     private void doCharacterAction(Character c) {
         if (Game.INSTANCE.isMyTurn()) {
 
-            if (witchRevealVal == true) {
+            if (witchRevealVal) {
                 Log.i(TAG, "reveal witch");
             } else {
 
                 //move command
-                Game.INSTANCE.sendMoveOnFieldRequest(c);
+                if(canMoveCharacter){
+                    Game.INSTANCE.sendMoveOnFieldRequest(c);
+                    canMoveCharacter = false;
+                }
             }
         }
     }
@@ -846,6 +851,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
             }
             Toast.makeText(requireContext(), "Your dice has been rolled", Toast.LENGTH_SHORT).show();
         }
+        canMoveCharacter = true;
     }
 
     private void diceRolled(DicePayload payload) {
