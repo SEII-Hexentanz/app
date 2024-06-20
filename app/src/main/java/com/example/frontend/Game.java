@@ -110,7 +110,7 @@ public enum Game {
     }
 
 
-    public Player getCurrentPlayer() {
+    public com.example.frontend.Player getCurrentPlayer() {
         if (frontPlayer.isEmpty()) {
             Log.e(TAG, "No players available.");
             return null;
@@ -298,15 +298,6 @@ public enum Game {
         return null;
     }
 
-    public Character getNextCharacterForGoal() {
-        for (Character c : Game.INSTANCE.getCurrentPlayer().characters) {
-            if (c.status().equals(CharacterState.FIELD)) {
-                return c;
-            }
-        }
-        return null;
-    }
-
     public int moveCharacterToStartingPostion(Character c) {
         int position = mapStartingPoint.get(currentPlayer.color());
         Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), position, MoveType.MOVE_TO_FIELD, 1)));
@@ -326,9 +317,12 @@ public enum Game {
                         state = CharacterState.FIELD;
                     } else if (moveType.equals(MoveType.MOVE_TO_GOAL)) {
                         state = CharacterState.GOAL;
-                    } else if (moveType.equals(MoveType.MOVE_TO_HOME)) {
+                    /*   } else if (moveType.equals(MoveType.MOVE_TO_HOME)) {
                         state = CharacterState.HOME;
                     }
+                    */
+                    }
+
                     Character newCharacter = new Character(c.id(), i, state, steps);
                     p.setCharacters(p.characters.stream().map(character -> character.equals(c)
                                     ? newCharacter
