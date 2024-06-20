@@ -74,6 +74,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
     private ArrayList<ImageView> btnGreenGoal;
     private ArrayList<ImageView> btnBlueGoal;
     private ArrayList<ImageView> btnLilaGoal;
+    private boolean characterOnBoard = false;
     private ArrayList<ImageView> playerHomePositions;
     private ArrayList<ImageView> playerGoalPositions;
     //ArrayList für jedes einzelne Home und jedes einzelne Goal am Feld
@@ -107,7 +108,6 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_game_board, container, false);
         Game.INSTANCE.mapStartPositions();
-        Game.INSTANCE.mapGoalPoint();
         Game.INSTANCE.setGameEventListener(this);
         Game.INSTANCE.initializePlayerPositions();
         findViews(view);
@@ -172,6 +172,7 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
             diceFragment.setVisibility(View.VISIBLE);
             showDiceFragment();
             diceBtn.setEnabled(false);
+
         });
     }
 
@@ -804,17 +805,9 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
         Button revealWitchBtn = dialog.findViewById(R.id.revealCharcter);
         Button moveOnFieldBtn = dialog.findViewById(R.id.moveOnField);
 
-        moveOnFieldBtn.setOnClickListener(v -> {
-            // Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload()));
-            dialog.dismiss();
-            Log.i(TAG, "Move Command  will be sent now");
-        });
-        revealWitchBtn.setOnClickListener(v -> {
-            witchRevealVal = true;
-            revealWitchFunct();
-            dialog.dismiss();
-            Log.i(TAG, "RevealWitch Request will be sent now + move request will be sent then");
-        });
+        revealWitchBtn.setVisibility(View.GONE);
+        moveOnFieldBtn.setVisibility(View.GONE);
+
 
         moveToStartBtn.setOnClickListener(v -> {
             //send request to server
@@ -823,6 +816,23 @@ public class GameBoardFragment extends Fragment implements GameEventListener, Pr
             dialog.dismiss();
             Log.i(TAG, "MoveToStart Request will be sent now");
         });
+
+        if(stepCounter >=1) {
+            revealWitchBtn.setVisibility(View.VISIBLE);
+            moveOnFieldBtn.setVisibility(View.VISIBLE);
+            revealWitchBtn.setOnClickListener(v -> {
+                witchRevealVal = true;
+                revealWitchFunct();
+                dialog.dismiss();
+                Log.i(TAG, "RevealWitch Request will be sent now + move request will be sent then");
+            });
+
+            moveOnFieldBtn.setOnClickListener(v -> {
+                // Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload()));
+                dialog.dismiss();
+                Log.i(TAG, "Move Command  will be sent now");
+            });
+        }
 
         dialog.show();
     }

@@ -277,6 +277,7 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
             int diceValue = (int) propertyChangeEvent.getNewValue();
             requireActivity().runOnUiThread(() -> {
                 diceRolledResult(diceValue);
+                closeButton.setVisibility(View.VISIBLE);
             });
         }
     }

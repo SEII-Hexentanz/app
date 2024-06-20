@@ -37,15 +37,13 @@ public enum Game {
     public static final String TAG = "GAME_TAG";
     private final Map<Player, Boolean> canMove = new HashMap<>();
     private GameEventListener eventListener;
-    private DiceFragment diceFragment;
     private String playerName;
     private Boolean myTurn = false;
     private int setDiceVal;
-    final HashMap<Color, Integer> mapStartingPoint= new HashMap<>();
-    final HashMap<Color, Integer> mapGoalPoint= new HashMap<>();
-
+    final HashMap<Color, Integer> mapStartingPoint = new HashMap<>();
 
     private Player currentPlayer = null;
+    private boolean characterOnBoard = false;
 
     public String getPlayerName() {
         return playerName;
@@ -54,6 +52,7 @@ public enum Game {
     public void setPlayerName(String playerName) {
         this.playerName = playerName;
     }
+
     private Player winner;
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -88,23 +87,24 @@ public enum Game {
         support.firePropertyChange(Property.GAME_STATE.name(), oldGameState, gameState);
     }
 
-    public void diceRolledAction(DicePayload payload, Player currentPlayer){
-        if(payload.player().name().equals(currentPlayer.getUsername())){
+    public void diceRolledAction(DicePayload payload, Player currentPlayer) {
+        if (payload.player().name().equals(currentPlayer.getUsername())) {
             support.firePropertyChange(Property.MOVE_CHARACTER.name(), 0, payload.diceValue());
             setDiceVal = payload.diceValue();
 
-        }else {
+        } else {
             support.firePropertyChange(Property.DICE_ROLLED.name(), null, payload);
 
         }
     }
-    public void sendMoveOnFieldRequest(Character c){
-        int totalStep =c.steps() + setDiceVal;
-        int postition = (c.position()+setDiceVal) % 37;
-        if(totalStep>=29){
+
+    public void sendMoveOnFieldRequest(Character c) {
+        int totalStep = c.steps() + setDiceVal;
+        int postition = (c.position() + setDiceVal) % 37;
+        if (totalStep >= 29) {
             Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), postition, MoveType.MOVE_TO_GOAL, totalStep)));
-        }else{
-            Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), postition, MoveType.MOVE_ON_FIELD,totalStep)));
+        } else {
+            Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), postition, MoveType.MOVE_ON_FIELD, totalStep)));
         }
         resetMyTurn();
     }
@@ -116,9 +116,9 @@ public enum Game {
             return null;
         }
 
-        if(currentPlayer == null){
-            for(Player player : frontPlayer){
-                if(player.getUsername().equals(playerName)){
+        if (currentPlayer == null) {
+            for (Player player : frontPlayer) {
+                if (player.getUsername().equals(playerName)) {
                     return currentPlayer = player;
                 } else {
                     Log.e("App", "Player with name " + playerName + " does not exist");
@@ -128,6 +128,7 @@ public enum Game {
 
         return currentPlayer;
     }
+
     public void mapStartPositions() {
         mapStartingPoint.put(Color.YELLOW, 27);
         mapStartingPoint.put(Color.PINK, 33);
@@ -135,14 +136,6 @@ public enum Game {
         mapStartingPoint.put(Color.GREEN, 21);
         mapStartingPoint.put(Color.LIGHT_BLUE, 9);
         mapStartingPoint.put(Color.DARK_BLUE, 3);
-    }
-    public void mapGoalPoint(){
-        mapStartingPoint.put(Color.YELLOW, 18);
-        mapStartingPoint.put(Color.PINK, 24);
-        mapStartingPoint.put(Color.RED, 6);
-        mapStartingPoint.put(Color.GREEN, 12);
-        mapStartingPoint.put(Color.LIGHT_BLUE, 0);
-        mapStartingPoint.put(Color.DARK_BLUE, 30);
     }
 
 
@@ -202,7 +195,7 @@ public enum Game {
             Log.e(TAG, "Player object is null in broadcastMove");
             return;
         }
-         //Response response = new Response(ResponseType.UPDATE_STATE, new PlayerMovePayload(oldPosition, newPosition, player.getUsername()));
+        //Response response = new Response(ResponseType.UPDATE_STATE, new PlayerMovePayload(oldPosition, newPosition, player.getUsername()));
         //ResponseHandler.execute(response.responseType(),response.payload(),Game.INSTANCE);
 
     }
@@ -214,13 +207,13 @@ public enum Game {
             return;
         }
         boolean hasAnotherTurn = false;
-        int newPosition=0;
+        int newPosition = 0;
         int currentPosition = getPlayerPosition(currentPlayer);
-        Log.i(TAG,"CurrentPosition: " + currentPosition);
+        Log.i(TAG, "CurrentPosition: " + currentPosition);
         // Check if the player is at "Home" and the dice result allows moving out
         if (currentPosition == getPlayerPosition(currentPlayer)) {
             if (diceResult == 6) { // Assuming 6 is required to start
-               currentPosition = mapStartingPoint.get(currentPlayer.color());
+                currentPosition = mapStartingPoint.get(currentPlayer.color());
                 setPlayerPosition(currentPlayer, currentPosition);
                 Log.i(TAG, "Player " + currentPlayer.getUsername() + " moves from Home to position " + currentPosition);
                 eventListener.onPlayerPositionChanged(currentPlayer, 0, currentPosition);
@@ -236,7 +229,7 @@ public enum Game {
             setPlayerPosition(currentPlayer, newPosition);
             Log.i(TAG, "Player " + currentPlayer.getUsername() + " moved to position " + newPosition);
             eventListener.onPlayerPositionChanged(currentPlayer, currentPosition, newPosition);
-       //     Client.send(new Request(CommandType.PLAYER_MOVE,new PlayerMovePayload(currentPosition,newPosition, currentPlayer.getUsername())));
+            //     Client.send(new Request(CommandType.PLAYER_MOVE,new PlayerMovePayload(currentPosition,newPosition, currentPlayer.getUsername())));
             broadcastMove(currentPlayer, currentPosition, newPosition);
             if (diceResult == 6) {
                 hasAnotherTurn = true; // Player gets another turn
@@ -252,8 +245,8 @@ public enum Game {
     public void addPlayers(List<Player> playersList) {
         for (Player player : playersList) {
             if (!frontPlayer.contains(player)) {
-               Color color = Color.values()[frontPlayer.size() % Color.values().length];
-                Player coloredPlayer = new Player(player.getUsername(), player.getAge(), player.getCharacters(),player.color());
+                Color color = Color.values()[frontPlayer.size() % Color.values().length];
+                Player coloredPlayer = new Player(player.getUsername(), player.getAge(), player.getCharacters(), player.color());
                 frontPlayer.add(coloredPlayer);
                 playerPositions.put(coloredPlayer, 0);
                 canMove.put(coloredPlayer, false);
@@ -274,12 +267,12 @@ public enum Game {
 
     }
 
-    public void setMyTurn(){
+    public void setMyTurn() {
         myTurn = true;
         support.firePropertyChange(Property.YOUR_TURN.name(), false, true);
     }
 
-    public void resetMyTurn(){
+    public void resetMyTurn() {
         myTurn = false;
     }
 
@@ -295,17 +288,19 @@ public enum Game {
         support.firePropertyChange(Property.PLAYER_REGISTERED.name(), false, true);
 
     }
-    public Character getNextCharacterForStart(){
-        for(Character c: Game.INSTANCE.getCurrentPlayer().characters){
-            if(c.status().equals(CharacterState.HOME)){
+
+    public Character getNextCharacterForStart() {
+        for (Character c : Game.INSTANCE.getCurrentPlayer().characters) {
+            if (c.status().equals(CharacterState.HOME)) {
                 return c;
             }
         }
         return null;
     }
-    public Character getNextCharacterForGoal(){
-        for(Character c: Game.INSTANCE.getCurrentPlayer().characters){
-            if(c.status().equals(CharacterState.FIELD)){
+
+    public Character getNextCharacterForGoal() {
+        for (Character c : Game.INSTANCE.getCurrentPlayer().characters) {
+            if (c.status().equals(CharacterState.FIELD)) {
                 return c;
             }
         }
@@ -314,27 +309,27 @@ public enum Game {
 
     public int moveCharacterToStartingPostion(Character c) {
         int position = mapStartingPoint.get(currentPlayer.color());
-       Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), position, MoveType.MOVE_TO_FIELD,1)));
-       resetMyTurn();
+        Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), position, MoveType.MOVE_TO_FIELD, 1)));
+        characterOnBoard = true;
+        resetMyTurn();
         return position;
     }
 
 
-
-    public void updateCharacterPosition(UUID uuid, int i, MoveType moveType,int steps) {
-        for(Player p : frontPlayer){
-            for(Character c : p.characters){
-                if(c.id().equals(uuid)){
+    public void updateCharacterPosition(UUID uuid, int i, MoveType moveType, int steps) {
+        for (Player p : frontPlayer) {
+            for (Character c : p.characters) {
+                if (c.id().equals(uuid)) {
                     int oldPosition = c.position();
                     CharacterState state = null;
-                    if (moveType.equals(MoveType.MOVE_TO_FIELD) ||moveType.equals(MoveType.MOVE_ON_FIELD) ) {
+                    if (moveType.equals(MoveType.MOVE_TO_FIELD) || moveType.equals(MoveType.MOVE_ON_FIELD)) {
                         state = CharacterState.FIELD;
-                    }else if(moveType.equals(MoveType.MOVE_TO_GOAL)){
+                    } else if (moveType.equals(MoveType.MOVE_TO_GOAL)) {
                         state = CharacterState.GOAL;
-                    }else if(moveType.equals(MoveType.MOVE_TO_HOME)){
+                    } else if (moveType.equals(MoveType.MOVE_TO_HOME)) {
                         state = CharacterState.HOME;
                     }
-                    Character newCharacter = new Character(c.id(), i, state,steps);
+                    Character newCharacter = new Character(c.id(), i, state, steps);
                     p.setCharacters(p.characters.stream().map(character -> character.equals(c)
                                     ? newCharacter
                                     : character)
