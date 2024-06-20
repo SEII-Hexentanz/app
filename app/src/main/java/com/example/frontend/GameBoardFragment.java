@@ -296,6 +296,7 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
 
     private void moveCharacterOnField(Character c, int oldPosition, MoveType moveType) {
         Log.d(TAG, "Character " + c.id() + " gets set to position " + c.position() + " from " + oldPosition);
+
         ImageView newPositionView = gameboardPositions.get(c.position());
         newPositionView.setImageResource(R.drawable.playericon);
         newPositionView.setOnClickListener(v -> {
@@ -303,7 +304,6 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
             newPositionView.setOnClickListener(null);
         });
 
-        // Re-enable the ImageView at the old position to be clickable
         if (oldPosition >= 0 && oldPosition < gameboardPositions.size()) {
             ImageView oldPositionView = gameboardPositions.get(oldPosition);
             oldPositionView.setImageResource(R.drawable.hiddenimg);
@@ -314,6 +314,7 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
                 }
             });
         }
+
         setStepCounter(Math.abs(c.position() - oldPosition));
         Log.i(TAG, "Stepcounter" + stepCounter);
     }
