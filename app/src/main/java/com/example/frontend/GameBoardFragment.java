@@ -381,7 +381,7 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
             } else {
 
                 //move command
-                if(canMoveCharacter){
+                if (canMoveCharacter) {
                     Game.INSTANCE.sendMoveOnFieldRequest(c);
                     canMoveCharacter = false;
                 }
@@ -801,7 +801,7 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
             Log.i(TAG, "MoveToStart Request will be sent now");
         });
 
-        if(stepCounter >=1) {
+        if (stepCounter >= 1) {
             revealWitchBtn.setVisibility(View.VISIBLE);
             moveOnFieldBtn.setVisibility(View.VISIBLE);
             revealWitchBtn.setOnClickListener(v -> {
@@ -834,21 +834,12 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
     }
 
     private void diceRolled(DicePayload payload) {
-        // Ensure the fragment is attached before proceeding
+
         if (!isAdded()) {
             return;
         }
-
-        Context context = requireContext();
-
-        // Format the toast message using String.format for better readability
-        String toastMessage = String.format("Player %d has rolled %d", payload.player(), payload.diceValue());
-
-        // Show the toast message
-        Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show();
-
-        // Log the player and dice value using formatted string
-        Log.i(TAG, String.format("%s: %d", payload.player(), payload.diceValue()));
+        Toast.makeText(requireContext(), "Player" + payload.player() + " has rolled " + payload.diceValue(), Toast.LENGTH_SHORT).show();
+        Log.i(TAG, payload.player() + ": " + payload.diceValue());
     }
 
     private void revealWitchFunct() {
