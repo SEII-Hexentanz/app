@@ -69,14 +69,6 @@ public class MainActivity extends AppCompatActivity implements PropertyChangeLis
         String responseUser = inputUsername.getText().toString();
         String responesAge = inputAge.getText().toString();
 
-        /*if (createLobbyFragment.getVisibility() == View.INVISIBLE) {
-            createLobbyFragment.setVisibility(View.GONE);
-        } else {
-            createLobbyFragment.setVisibility(View.VISIBLE);
-            //
-        }*/
-        //createLobbyFragment.setVisibility(View.VISIBLE);
-
         Client.send(new Request(CommandType.REGISTER, new RegisterPayload(responseUser, Integer.parseInt(responesAge))));
         Log.i("ResponseAge", responesAge);
 
@@ -166,7 +158,9 @@ public class MainActivity extends AppCompatActivity implements PropertyChangeLis
     }
 
     private void hideKeyboard(View view) {
+
         InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(INPUT_METHOD_SERVICE);
+
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 

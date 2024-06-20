@@ -31,6 +31,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:text="@string/currPlayer"
+            android:visibility="invisible"
             android:textSize="18sp"
             android:gravity="center" />
 
@@ -56,7 +57,7 @@
             android:text="X"
             android:textColor="#FF0000"
             android:textSize="18sp"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/diceImage"
