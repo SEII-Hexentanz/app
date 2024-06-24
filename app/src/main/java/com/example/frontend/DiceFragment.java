@@ -262,19 +262,9 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
         editor.apply();
     }
 
-    private void showGameBoardFragment() {
-        String name = getUsernameFromPreferences();
-        GameBoardFragment gameBoardFragment = GameBoardFragment.newInstance(name);
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(android.R.id.content, gameBoardFragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
-
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-        Log.i("DiceFragment", "PropertyChangeEvent received: " + propertyChangeEvent.getPropertyName());
+        Log.i(TAG, "PropertyChangeEvent received: " + propertyChangeEvent.getPropertyName());
         if (!isAdded()) {
             return;
         }
@@ -290,7 +280,7 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
     private void diceRolledResult(int diceValue) {
         if (isAdded()) {
             updateDiceImage(diceImage, diceValue);
-            Log.i("DiceFragment", "dice roll ");
+            Log.i(TAG, "dice roll ");
         }
     }
 }
