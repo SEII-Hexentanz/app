@@ -14,8 +14,9 @@ public class CheatAction implements Action {
     public void execute(Game game, Payload payload) {
         if (payload instanceof CheatPayload cheatpayload) {
             Player player = cheatpayload.player();
+            boolean cheat=player.usedCheat();
 
-            Log.i("App", "Player " + player.name() + " has used the cheat");
+            Log.i("App", "Player " + player.name() + " has used the cheat" + cheat);
 
             game.INSTANCE.usedCheatAction(cheatpayload, game.getCurrentPlayer());
         } else Log.e("App", "Payload is not an instance of CheatPayload");
