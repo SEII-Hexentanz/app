@@ -34,7 +34,7 @@ public class UpdateStateActionTest {
     @org.junit.jupiter.api.Test
     public void execute_updatesGameStateAndPlayers_whenPayloadIsUpdateStatePayload() {
         var players = new TreeSet<Player>();
-        var player = new Player("Player", 20, Color.RED, new ArrayList<>());
+        var player = new Player("Player", 20, Color.RED, false, new ArrayList<>());
         players.add(player);
         var gameData = new GameData(players, GameState.RUNNING, 2);
         var payload = new UpdateStatePayload(gameData);
