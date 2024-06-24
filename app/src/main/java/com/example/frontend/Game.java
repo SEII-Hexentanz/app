@@ -255,7 +255,7 @@ public enum Game {
         return position;
     }
 
-    public void updateCharacterPosition(UUID uuid, int newPosition, MoveType moveType, int steps) {
+    public void updateCharacterPosition(UUID uuid, int i, MoveType moveType, int steps) {
         for (Player p : frontPlayer) {
             for (Character c : p.characters) {
                 if (c.id().equals(uuid)) {
@@ -265,13 +265,13 @@ public enum Game {
                         state = CharacterState.FIELD;
                     } else if (moveType.equals(MoveType.MOVE_TO_GOAL)) {
                         state = CharacterState.GOAL;
+                    /*   } else if (moveType.equals(MoveType.MOVE_TO_HOME)) {
+                        state = CharacterState.HOME;
+                    }
+                    */
                     }
 
-                    // Check for overlapping player icons
-                    checkAndResetOverlappingPositions(newPosition);
-
-                    // Create a new Character instance with the updated position
-                    Character newCharacter = c.withPosition(newPosition).withStatus(state).withSteps(steps);
+                    Character newCharacter = new Character(c.id(), i, state, steps);
 
                     p.setCharacters(p.characters.stream().map(character -> character.equals(c)
                                     ? newCharacter
@@ -279,32 +279,14 @@ public enum Game {
                             .collect(Collectors.toCollection(ArrayList::new)));
 
                     UpdatePositionObject upo = new UpdatePositionObject(newCharacter, p, moveType, oldPosition);
+
                     support.firePropertyChange(Property.UPDATE_CHARACTER_POSITION.name(), null, upo);
                     return;
                 }
             }
         }
+
         throw new Resources.NotFoundException("Character not found");
-    }
-
-    private void checkAndResetOverlappingPositions(int newPosition) {
-        for (Map.Entry<com.example.frontend.Player, Integer> entry : playerPositions.entrySet()) {
-            com.example.frontend.Player player = entry.getKey();
-            int position = entry.getValue();
-            if (position == newPosition) {
-                resetPlayerToHome(player);
-                canMove.put(player, true);  // Ensure the player can move again after being reset
-            }
-        }
-    }
-
-    private void resetPlayerToHome(com.example.frontend.Player player) {
-        int homePosition = mapStartingPoint.get(player.color());
-        setPlayerPosition(player, homePosition);
-        player.setCharacters(player.getCharacters().stream()
-                .map(character -> character.withPosition(homePosition))
-                .collect(Collectors.toList()));
-        canMove.put(player, true);  // Ensure the player can move again after being reset
     }
 
 
@@ -327,6 +309,6 @@ public enum Game {
     }
 
     enum Property {
-        playerPosition, PLAYER_HAS_CHEAT,PLAYER_USED_CHEAT,PLAYERS, GAME_STATE, WINNER, DICE_ROLLED, MOVE_CHARACTER, YOUR_TURN, USERNAME_ALREADY_EXISTS, PLAYER_REGISTERED, UPDATE_CHARACTER_POSITION, DICE_THROWN,PLAYER_POSITION;
+        PLAYER_HAS_CHEAT,PLAYER_USED_CHEAT,PLAYERS, GAME_STATE, WINNER, DICE_ROLLED, MOVE_CHARACTER, YOUR_TURN, USERNAME_ALREADY_EXISTS, PLAYER_REGISTERED, UPDATE_CHARACTER_POSITION, DICE_THROWN,PLAYER_POSITION;
     }
 }

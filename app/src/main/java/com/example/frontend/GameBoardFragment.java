@@ -535,15 +535,6 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
         fragmentTransaction.commit();
     }
 
-    public void updateImageViews(ImageView oldImageView, ImageView newImageView, com.example.frontend.Player player) {
-        if (oldImageView != null) {
-            oldImageView.setImageDrawable(null);
-        }
-        if (newImageView != null) {
-            newImageView.setImageResource(R.drawable.playericon);
-        }
-    }
-
     private int getPlayerIcon(com.example.frontend.Player player) {
         return switch (player.color()) {
             case YELLOW -> R.drawable.yellowhat;
@@ -720,10 +711,6 @@ public class GameBoardFragment extends Fragment implements PropertyChangeListene
 
     private void revealWitchFunct() {
         Log.i(TAG, "Reveal Witch Function");
-    }
-
-    public int getStepCounter() {
-        return stepCounter;
     }
 
     public void setStepCounter(int stepCounter) {
