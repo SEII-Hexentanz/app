@@ -303,6 +303,7 @@ public enum Game {
         if(cheatpayload.player().name().equals(currentPlayer.getUsername())){
             support.firePropertyChange(Property.PLAYER_USED_CHEAT.name(),false, true);
             cheat_used=cheatpayload.cheatUsed();
+            Log.i(TAG,"Cheat was used by player " + cheatpayload.player().name());
         }else{
             support.firePropertyChange(Property.PLAYER_HAS_CHEAT.name(), true, cheatpayload);
         }
