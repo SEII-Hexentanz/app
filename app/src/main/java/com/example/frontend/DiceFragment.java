@@ -24,7 +24,9 @@ import androidx.fragment.app.FragmentTransaction;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import at.aau.models.Character;
 import at.aau.models.Request;
+import at.aau.payloads.CheatPayload;
 import at.aau.payloads.EmptyPayload;
 import at.aau.values.CommandType;
 
@@ -133,6 +135,7 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
             Client.send(new Request(CommandType.CHEAT, new EmptyPayload()));
             markCheatAsUsed();
             cheatButton.setEnabled(false);
+            sendCheatUsedToServer();
         }
     }
 
@@ -174,6 +177,11 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
 
     private void sendDiceRollRequestToServer() {
         Client.send(new Request(CommandType.DICE_ROLL, new EmptyPayload()));
+    }
+
+    private void sendCheatUsedToServer() {
+        CheatPayload cheatpayload = null;
+        Client.send(new Request(CommandType.CHEAT_USED, new CheatPayload(true, cheatpayload.player())));
     }
 
     private void displayCurrentPlayer() {
@@ -254,19 +262,9 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
         editor.apply();
     }
 
-    private void showGameBoardFragment() {
-        String name = getUsernameFromPreferences();
-        GameBoardFragment gameBoardFragment = GameBoardFragment.newInstance(name);
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(android.R.id.content, gameBoardFragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
-
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-        Log.i("DiceFragment", "PropertyChangeEvent received: " + propertyChangeEvent.getPropertyName());
+        Log.i(TAG, "PropertyChangeEvent received: " + propertyChangeEvent.getPropertyName());
         if (!isAdded()) {
             return;
         }
@@ -282,7 +280,7 @@ public class DiceFragment extends Fragment implements SensorEventListener, Prope
     private void diceRolledResult(int diceValue) {
         if (isAdded()) {
             updateDiceImage(diceImage, diceValue);
-            Log.i("DiceFragment", "dice roll ");
+            Log.i(TAG, "dice roll ");
         }
     }
 }

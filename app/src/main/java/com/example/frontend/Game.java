@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 import at.aau.models.Character;
 import at.aau.models.Request;
+import at.aau.payloads.CheatPayload;
 import at.aau.payloads.DicePayload;
 import at.aau.payloads.PlayerMovePayload;
 import at.aau.values.CharacterState;
@@ -44,7 +45,6 @@ public enum Game {
     private Player currentPlayer = null;
     private Player winner;
     private boolean characterOnBoard = false;
-
 
     public String getPlayerName() {
         return playerName;
@@ -86,16 +86,12 @@ public enum Game {
         support.firePropertyChange(Property.GAME_STATE.name(), oldGameState, gameState);
     }
 
-
     public void diceRolledAction(DicePayload payload, com.example.frontend.Player currentPlayer) {
-
         if (payload.player().name().equals(currentPlayer.getUsername())) {
             support.firePropertyChange(Property.MOVE_CHARACTER.name(), 0, payload.diceValue());
             setDiceVal = payload.diceValue();
-
         } else {
             support.firePropertyChange(Property.DICE_ROLLED.name(), null, payload);
-
         }
     }
 
@@ -103,9 +99,7 @@ public enum Game {
         int totalStep = c.steps() + setDiceVal;
         int postition = (c.position() + setDiceVal) % 37;
 
-
         if (totalStep >= 29) {
-
             Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), postition, MoveType.MOVE_TO_GOAL, totalStep)));
         } else {
             Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), postition, MoveType.MOVE_ON_FIELD, totalStep)));
@@ -114,7 +108,6 @@ public enum Game {
     }
 
     public com.example.frontend.Player getCurrentPlayer() {
-
         if (frontPlayer.isEmpty()) {
             Log.e(TAG, "No players available.");
             return null;
@@ -141,7 +134,6 @@ public enum Game {
         mapStartingPoint.put(Color.LIGHT_BLUE, 9);
         mapStartingPoint.put(Color.DARK_BLUE, 3);
     }
-
 
     public void initializePlayerPositions() {
         for (Player player : frontPlayer) {
@@ -194,57 +186,11 @@ public enum Game {
         broadcastMove(updatedPlayer, playerPositions.get(player), playerPositions.get(updatedPlayer));
     }
 
-
     private void broadcastMove(Player player, int oldPosition, int newPosition) {
         if (player == null) {
             Log.e(TAG, "Player object is null in broadcastMove");
             return;
         }
-        //Response response = new Response(ResponseType.UPDATE_STATE, new PlayerMovePayload(oldPosition, newPosition, player.getUsername()));
-        //ResponseHandler.execute(response.responseType(),response.payload(),Game.INSTANCE);
-
-    }
-
-    public void movePlayer(int diceResult) {
-        Player currentPlayer = getCurrentPlayer();
-        if (currentPlayer == null) {
-            Log.e(TAG, "No current player found. Cannot move.");
-            return;
-        }
-        boolean hasAnotherTurn = false;
-        int newPosition = 0;
-        int currentPosition = getPlayerPosition(currentPlayer);
-        Log.i(TAG, "CurrentPosition: " + currentPosition);
-        // Check if the player is at "Home" and the dice result allows moving out
-        if (currentPosition == getPlayerPosition(currentPlayer)) {
-            if (diceResult == 6) { // Assuming 6 is required to start
-                currentPosition = mapStartingPoint.get(currentPlayer.color());
-                setPlayerPosition(currentPlayer, currentPosition);
-                Log.i(TAG, "Player " + currentPlayer.getUsername() + " moves from Home to position " + currentPosition);
-                eventListener.onPlayerPositionChanged(currentPlayer, 0, currentPosition);
-                broadcastMove(currentPlayer, 0, currentPosition);
-                hasAnotherTurn = true; // Player gets another turn
-                //diceFragment.setDiceToDefault();
-            } else {
-                Log.i(TAG, "Player " + currentPlayer.getUsername() + " needs a 6 to leave Home. His color is" + currentPlayer.color());
-                return; // Player cannot move out of Home without rolling a 6
-            }
-        } else {
-            newPosition = currentPosition + diceResult;
-            setPlayerPosition(currentPlayer, newPosition);
-            Log.i(TAG, "Player " + currentPlayer.getUsername() + " moved to position " + newPosition);
-            eventListener.onPlayerPositionChanged(currentPlayer, currentPosition, newPosition);
-            //     Client.send(new Request(CommandType.PLAYER_MOVE,new PlayerMovePayload(currentPosition,newPosition, currentPlayer.getUsername())));
-            broadcastMove(currentPlayer, currentPosition, newPosition);
-            if (diceResult == 6) {
-                hasAnotherTurn = true; // Player gets another turn
-            }
-        }
-
-        if (!hasAnotherTurn) {
-            nextPlayer(); // Move to the next player only if the current player does not get another turn
-        }
-
     }
 
     public void addPlayers(List<Player> playersList) {
@@ -269,9 +215,7 @@ public enum Game {
             canMove.put(newPlayer, canMove.getOrDefault(oldPlayer, false)); // Bewegungsstatus beibehalten
             support.firePropertyChange("players", oldPlayer, newPlayer); // Benachrichtigen der Listener
         }
-
     }
-
 
     public void setMyTurn() {
         myTurn = true;
@@ -292,7 +236,6 @@ public enum Game {
 
     public void playerRegistered() {
         support.firePropertyChange(Property.PLAYER_REGISTERED.name(), false, true);
-
     }
 
     public Character getNextCharacterForStart() {
@@ -304,7 +247,6 @@ public enum Game {
         return null;
     }
 
-
     public int moveCharacterToStartingPostion(Character c) {
         int position = mapStartingPoint.get(currentPlayer.color());
         Client.send(new Request(CommandType.PLAYER_MOVE, new PlayerMovePayload(c.id(), position, MoveType.MOVE_TO_FIELD, 1)));
@@ -312,7 +254,6 @@ public enum Game {
         resetMyTurn();
         return position;
     }
-
 
     public void updateCharacterPosition(UUID uuid, int i, MoveType moveType, int steps) {
         for (Player p : frontPlayer) {
@@ -348,6 +289,7 @@ public enum Game {
         throw new Resources.NotFoundException("Character not found");
     }
 
+
     public Player winner() {
         return winner;
     }
@@ -356,8 +298,18 @@ public enum Game {
         this.winner = winner;
         support.firePropertyChange(Property.WINNER.name(), null, winner);
     }
+    public boolean cheat_used;
+    public void usedCheatAction(CheatPayload cheatpayload, Player currentPlayer) {
+        if(cheatpayload.player().name().equals(currentPlayer.getUsername())){
+            support.firePropertyChange(Property.PLAYER_USED_CHEAT.name(),false, true);
+            cheat_used=cheatpayload.cheatUsed();
+            Log.i(TAG,"Cheat was used by player " + cheatpayload.player().name());
+        }else{
+            support.firePropertyChange(Property.PLAYER_HAS_CHEAT.name(), true, cheatpayload);
+        }
+    }
 
     enum Property {
-        PLAYERS, GAME_STATE, WINNER, DICE_ROLLED, MOVE_CHARACTER, YOUR_TURN, USERNAME_ALREADY_EXISTS, PLAYER_REGISTERED, UPDATE_CHARACTER_POSITION, DICE_THROWN
+        PLAYER_HAS_CHEAT,PLAYER_USED_CHEAT,PLAYERS, GAME_STATE, WINNER, DICE_ROLLED, MOVE_CHARACTER, YOUR_TURN, USERNAME_ALREADY_EXISTS, PLAYER_REGISTERED, UPDATE_CHARACTER_POSITION, DICE_THROWN,PLAYER_POSITION;
     }
 }

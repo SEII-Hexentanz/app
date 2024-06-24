@@ -83,12 +83,19 @@ public class MainActivity extends AppCompatActivity implements PropertyChangeLis
 
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-                if (charSequence.length() < 3) {
+                // Regex to allow only letters (both uppercase and lowercase)
+                String regex = "^[a-zA-Z]*$";
+
+                if (!charSequence.toString().matches(regex)) {
+                    inputUsername.setError("Input darf nur Buchstaben enthalten");
+                } else if (charSequence.length() < 3) {
                     inputUsername.setError("Input sollte mindestens 3 Zeichen lang sein");
                 } else {
                     inputUsername.setError(null);
                 }
             }
+
+
 
             @Override
             public void afterTextChanged(Editable editable) {
